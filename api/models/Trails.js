@@ -14,6 +14,7 @@ const TrailSchema = new mongoose.Schema({
         lat: { type: Number, required: true },
         lng: { type: Number, required: true }
     },
+    packages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Package' }]
 }, {
     timestamps: true,
 });

@@ -16,6 +16,11 @@ const featuresRoute = require('./routes/featureRoute');
 const  signUpRoute = require('./routes/TravelAgency/signUp');
 const trailsRoute = require('./routes/trailsRoute');
 const bookingListRoute = require('./routes/bookingListRoute');
+const uploadRoute = require('./routes/uploadRoute');
+const customerPackagesRoute = require('./routes/Customer/packages');
+const bookingRoute = require('./routes/Customer/joinerDetails'); //public view
+const joinerBookingsRoute = require('./routes/Customer/userBookings');
+
 
 const app = express();
 
@@ -40,9 +45,14 @@ app.use('/api/admin', travel_agencyRoute);
 app.use(user_dashboardRoute); // For user account
 app.use(packageRoute); // For package routing
 app.use('/api', featuresRoute); // Prefix with '/api'
-app.use(signUpRoute);
+app.use('/api',signUpRoute);
 app.use('/api', trailsRoute);
 app.use( bookingListRoute );
+app.use(uploadRoute);
+app.use('/api', customerPackagesRoute);
+app.use('/api', bookingRoute);
+app.use('/api', joinerBookingsRoute);
+
 
 
 // Start the server

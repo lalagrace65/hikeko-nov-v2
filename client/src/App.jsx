@@ -24,6 +24,9 @@ import EventsPage from "./pages/admin-page/EventsPage";
 import StaffPage from "./pages/staff-page/StaffPage";
 import AdminBookingList from "./pages/admin-page/AdminBookingList";
 import EventArchivesPage from "./pages/admin-page/EventArchivesPage";
+import AgencyCredentialsProcess from "./components/forms/AgencyCredentialsProcess";
+import CustomerPackageDetails from "./pages/user-page/CustomerPackageDetails";
+import CustomerBookPage from "./pages/user-page/CustomerBookPage";
 
 // Set default axios settings
 axios.defaults.baseURL = 'http://127.0.0.1:4000';
@@ -43,9 +46,12 @@ function App() {
             <Route path="/trails/:id" element={<TrailDetail />} />
             <Route path="/trails/adminPackage/:id" element={<AdminTrailDetails />} />
             <Route path="/travelAgencySignUp" element={<TravelAgencySignUp />} />
+            <Route path="/travelAgencySignUp/credentialsProcess" element={<AgencyCredentialsProcess />} />
             <Route path="/travelAgencySignUp/businessDetails" element={<BusinessDetails />} />
+            <Route path="/bookings/packages/:packageId" element={<CustomerPackageDetails />}/>
             <Route path="/account/:subpage?/:action?" element={<AccountPage />} />
             <Route path="/account/events/adminTrails" element={<AddPackageTrails />} />
+            <Route path="/book" element={<CustomerBookPage />}/>
 
             {/* Protect Admin Routes */}
             <Route

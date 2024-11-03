@@ -7,6 +7,7 @@ const router = express.Router();
 
 // POST request for signup
 router.post('/signup', async (req,res) => {
+  console.log('Received signup data:', req.body);
   try {
    
     // Parse the request body
@@ -20,21 +21,22 @@ router.post('/signup', async (req,res) => {
       businessAddress,
       businessType,
       businessBranch,
-      contactNumber,
+      businessContactNo,
       termsAccepted,
-      birCertificatePhoto,
-      dtiPermitPhoto,
-      businessPermitPhoto,
-      mayorsPermitPhoto,
+      birCertificateDocu,
+      dtiPermitDocu,
+      businessPermitDocu,
+      mayorsPermitDocu,
     } = req.body;
 
     // Basic input validation
-    if (!businessEmail || !termsAccepted || !ownerFirstName || !ownerLastName || !businessName || !businessAddress || !businessType || !contactNumber) {
+    if (!businessEmail || !termsAccepted || !ownerFirstName || !ownerLastName || 
+      !businessName || !businessAddress || !businessType || !businessContactNo) {
         return res.status(400).json({ error: 'All fields are required.' });
     }
 
     // Create the new sign-up entry
-    const signUp = await TravelAgencySignUp.create({
+    const signUpData = {
       ownerFirstName,
       ownerLastName,
       businessEmail,
@@ -44,15 +46,18 @@ router.post('/signup', async (req,res) => {
       businessAddress,
       businessType,
       businessBranch,
-      contactNumber,
+      businessContactNo,
       termsAccepted,
-      birCertificatePhoto,
-      dtiPermitPhoto,
-      businessPermitPhoto,
-      mayorsPermitPhoto,
-    });
+      birCertificateDocu: birCertificateDocu.link || [],
+      dtiPermitDocu: dtiPermitDocu.link || [],
+      businessPermitDocu: businessPermitDocu.link || [],
+      mayorsPermitDocu: mayorsPermitDocu.link || [],
+    };
+    // You can choose to exclude sensitive information in the response
+    const signUp = await TravelAgencySignUp.create(signUpData);
     
-    return res.json({ signUp, message: 'Verification email sent!' });
+    // Return a response to the client
+    return res.json({ message: 'Verification email sent!', signUpId: signUp._id }); // Send only the ID or essential info
   } catch (error) {
     console.error('Error creating signup:', error);
     return res.status(500).json({ error: error.message || 'Failed to create signup' });

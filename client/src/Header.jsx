@@ -20,6 +20,11 @@ export default function Header() {
     const exploreDropdownRef = useRef(null);
     const navigate = useNavigate();
 
+    //notification
+    const [notificationOpen, setNotificationOpen] = useState(false);
+    const notificationRef = useRef(null);
+
+    
     // Function to handle logout
     async function handleLogout() {
         await axios.post('http://localhost:4000/logout', {}, { withCredentials: true });
@@ -65,6 +70,25 @@ export default function Header() {
         };
     }, [exploreDropdownOpen]);
 
+    // Handle closing notification dropdown on clicking outside
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+                setNotificationOpen(false);
+            }
+        }
+
+        if (notificationOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+        } else {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [notificationOpen]);
+
     return (
         <div>
             <header className="py-6 px-20 flex justify-between">
@@ -72,7 +96,7 @@ export default function Header() {
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-8 -rotate-90">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
                     </svg>
-                    <span className="font-bold text-xl">hello</span>
+                    <span className="font-bold text-xl">Hikeko</span>
                 </Link>
                 <div className="flex gap-2 border border-gray-300 rounded-full py-2 px-4 shadow-md shadow-gray-300">
                     <div>Anywhere</div>
@@ -109,6 +133,27 @@ export default function Header() {
 
                         <Link to="/book" className=" hover:text-primary">Book</Link>
                         <Link to="/about" className=" hover:text-primary">About</Link>
+                    
+                        {/* Notification dropdown */}
+                        <div ref={notificationRef} className="relative">
+                            <button onClick={() => setNotificationOpen(!notificationOpen)} className="relative">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-gray-500 hover:text-primary">
+                                    <path d="M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2Zm8-6V11a8 8 0 1 0-16 0v5l-2 2v1h20v-1l-2-2ZM18 17H6v-.235l.965-1.145A1 1 0 0 0 7 14v-3a5 5 0 0 1 10 0v3a1 1 0 0 0 .035.62L18 16.765V17Z" />
+                                </svg>
+                                <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">3</span>
+                            </button>
+                            {notificationOpen && (
+                                <div className="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-2 border">
+                                    <div className="px-4 py-2 text-gray-700 font-semibold">Notifications</div>
+                                    <div className="border-t">
+                                        <div className="px-4 py-2 text-gray-700 hover:bg-gray-100">New booking request from John Doe</div>
+                                        <div className="px-4 py-2 text-gray-700 hover:bg-gray-100">Your booking is confirmed</div>
+                                        <div className="px-4 py-2 text-gray-700 hover:bg-gray-100">New message from the admin</div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    
                     </nav>
 
                     {/* User icon and dropdown */}

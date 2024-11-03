@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Trails = require('../models/Trails');
+const Package = require('../models/Package.js');
+
 
 // Route to get trail by ID or all trails for customers
 router.get('/trails', async (req, res) => {
@@ -8,7 +10,9 @@ router.get('/trails', async (req, res) => {
     try {
         const { id } = req.query; // Extract id from query params
         if (id) {
-            const trail = await Trails.findById(id);
+            const trail = await Trails.findById(id).populate('packages');
+            console.log('Fetched trail:', trail);
+            console.log('Trail packages:', trail.packages); 
             if (!trail) {
                 return res.status(404).json({ message: 'Trail not found' });
             }

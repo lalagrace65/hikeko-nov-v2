@@ -1,7 +1,7 @@
 // routes/bookingListRoute.js
 const express = require('express');
 const router = express.Router();
-const Booking = require('../models/Bookings'); // Adjust the path as needed
+const Booking = require('../models/Booking'); // Adjust the path as needed
 
 // GET route to retrieve the list of bookings
 router.get('/booking-list', async (req, res) => {
