@@ -5,6 +5,10 @@
   "main": "index.js",
   "type": "commonjs",
 
+  "scripts": {
+    "start": "node index.js"
+  },
+
   "keywords": [],
   "author": "",
   "license": "ISC",

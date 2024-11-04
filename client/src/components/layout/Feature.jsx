@@ -16,6 +16,7 @@ export default function FeaturePage() {
         if (!response.ok) throw new Error("Failed to fetch feature data");
         const data = await response.json();
         setFeature(data);
+        console.log("Feature Data:", data);
       } catch (error) {
         console.error('Error fetching feature:', error);
       } finally {
