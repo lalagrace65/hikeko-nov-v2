@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import { baseUrl } from '@/Url';
 
 // Main FeaturePage Component
 export default function FeaturePage() {
@@ -12,7 +13,7 @@ export default function FeaturePage() {
   useEffect(() => {
     const fetchFeature = async () => {
       try {
-        const response = await fetch('https://hikeko-nov-v2-api.vercel.app/api/features');
+        const response = await fetch(`${baseUrl}/api/features`);
         if (!response.ok) throw new Error("Failed to fetch feature data");
         const data = await response.json();
         setFeature(data);

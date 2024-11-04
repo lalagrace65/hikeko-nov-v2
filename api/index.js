@@ -62,6 +62,7 @@ app.use('/api', joinerBookingsRoute);
 const startServer = async () => {
     try {
         mongoose.connect(process.env.MONGO_URL);
+        console.log("Connected to MongoDB");
 
         app.listen(4000, () =>
             console.log("Server is running on http://localhost:4000"),
