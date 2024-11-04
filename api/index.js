@@ -32,8 +32,9 @@ app.use(express.json());
 
 app.use(cors({
     credentials: true,
-    origin: ['https://hikeko.netlify.app', 'https://hikeko-nov-v2.onrender.com'],
+    origin: ['https://hikeko-nov-v2-client.onrender.com/'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Connect to MongoDB
