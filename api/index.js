@@ -33,7 +33,11 @@ app.use(cors({
 }));
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URL);
+// mongoose.connect(process.env.MONGO_URL);
+
+app.get("/", (req, res) => {
+    res.send({ message: "Hello World!" });
+});
 
 // Use the routes
 app.use(loginRoute); // For login
@@ -54,8 +58,16 @@ app.use('/api', bookingRoute);
 app.use('/api', joinerBookingsRoute);
 
 
+const startServer = async () => {
+    try {
+        mongoose.connect(process.env.MONGO_URL);
 
-// Start the server
-app.listen(4000, () => {
-    console.log("Server is running on http://localhost:4000");
-});
+        app.listen(4000, () =>
+            console.log("Server is running on http://localhost:4000"),
+        );
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+startServer();
