@@ -12,7 +12,7 @@ export default function FeaturePage() {
   useEffect(() => {
     const fetchFeature = async () => {
       try {
-        const response = await fetch('https://hikeko-nov-v2.onrender.com/api/features');
+        const response = await fetch('https://hikeko-nov-v2-api.vercel.app/api/features');
         if (!response.ok) throw new Error("Failed to fetch feature data");
         const data = await response.json();
         setFeature(data);
