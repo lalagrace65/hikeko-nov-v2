@@ -9,8 +9,8 @@ import {
 } from "@material-tailwind/react";
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { baseUrl } from '@/Url';
 
-axios.defaults.baseURL = 'https://hikeko-nov-v2.onrender.com';
 
 export default function CustomerBookPage() {
   const { id } = useParams(); 
@@ -20,7 +20,7 @@ export default function CustomerBookPage() {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await axios.get('/api/joiner/bookings'); // Make sure this matches your API endpoint
+        const response = await axios.get(`${baseUrl}/api/joiner/bookings`); // Make sure this matches your API endpoint
         setBookings(response.data); // Set the bookings from the response
       } catch (error) {
         console.error('Error fetching bookings:', error);

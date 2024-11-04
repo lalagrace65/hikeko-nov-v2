@@ -8,6 +8,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import  emailjs  from '@emailjs/browser';
 import { useNavigate } from 'react-router-dom';
+import { baseUrl } from '@/Url';
 
 export default function BusDets() {
     const navigate = useNavigate();
@@ -70,7 +71,7 @@ export default function BusDets() {
 
           setIsUploading(true);
           try {
-              const response = await axios.post('/api/upload', data, {
+              const response = await axios.post(`${baseUrl}/api/upload`, data, {
                   headers: {
                       'Content-Type': 'multipart/form-data',
                   },
@@ -143,7 +144,7 @@ export default function BusDets() {
             await emailjs.send('service_ehzzg2c', 'template_xc2nmxt', emailData, 'XczVijVc-NaoUCGic');
 
              // Here, you can also send submissionData to your server if needed
-            const signupResult = await axios.post('/api/signup', submissionData);
+            const signupResult = await axios.post(`${baseUrl}/api/signup`, submissionData);
             console.log("Signup successful:", signupResult.data);
             toast.success("Signup Credentials submitted successfully.");
 

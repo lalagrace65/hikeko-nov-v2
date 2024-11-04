@@ -3,8 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import JoinerDetailsForm from '@/components/forms/JoinerDetailsForm';
 import { Typography } from '@material-tailwind/react';
-
-
+import { baseUrl } from '@/Url';
 
 function CustomerPackageDetails() {
     const { packageId } = useParams(); // Get package ID from the URL
@@ -13,7 +12,7 @@ function CustomerPackageDetails() {
     useEffect(() => {
         const fetchPackageDetail = async () => {
             try {
-                const response = await axios.get(`/api/packages/${packageId}`);
+                const response = await axios.get(`${baseUrl}/api/packages/${packageId}`);
                 setPackageDetail(response.data);
             } catch (error) {
                 console.error('Error fetching package details:', error);

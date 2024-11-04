@@ -1,3 +1,4 @@
+import { baseUrl } from "@/Url";
 import axios from "axios";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -12,7 +13,7 @@ export default function RegisterPage() {
     async function registerUser(ev) {
         ev.preventDefault();
         try {
-            await axios.post('/register', {
+            await axios.post(`${baseUrl}/register`, {
                 name,
                 email,
                 password,

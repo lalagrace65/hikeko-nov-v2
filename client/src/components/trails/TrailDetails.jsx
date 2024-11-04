@@ -3,8 +3,8 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Button } from '@material-tailwind/react';
 import { useNavigate } from 'react-router-dom';
+import { baseUrl } from '@/Url';
 
-axios.defaults.baseURL = 'https://hikeko-nov-v2.onrender.com';
 
 function TrailDetail() {
   const { id } = useParams(); 
@@ -15,7 +15,7 @@ function TrailDetail() {
   useEffect(() => {
     const fetchTrailData = async () => {
       try {
-        const response = await axios.get(`/api/trails?id=${id}`);
+        const response = await axios.get(`${baseUrl}/api/trails?id=${id}`);
         setTrail(response.data);
       } catch (error) {
         console.error('Error fetching trail details:', error);
@@ -28,7 +28,7 @@ function TrailDetail() {
     const fetchPackages = async () => {
         if (trail) {
             try {
-                const response = await axios.get(`/api/trails/${trail._id}/packages`);
+                const response = await axios.get(`${baseUrl}/api/trails/${trail._id}/packages`);
                 setPackages(response.data);
             } catch (error) {
                 console.error('Error fetching packages:', error);

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { baseUrl } from '@/Url';
 
 axios.defaults.baseURL = 'https://hikeko-nov-v2.onrender.com';
 
@@ -12,7 +13,7 @@ function AdminTrailDetails() {
   useEffect(() => {
     const fetchTrailData = async () => {
       try {
-        const response = await axios.get(`/api/trails/adminPackage/${id}`);
+        const response = await axios.get(`${baseUrl}/api/trails/adminPackage/${id}`);
         setTrail(response.data);
       } catch (error) {
         console.error('Error fetching trail details:', error);

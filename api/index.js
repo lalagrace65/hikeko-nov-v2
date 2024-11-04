@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
+const morgan = require('morgan');
 require('dotenv').config();
 
 //imported routes
@@ -24,6 +25,7 @@ const joinerBookingsRoute = require('./routes/Customer/userBookings');
 
 const app = express();
 
+app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(express.json());
 
@@ -34,7 +36,17 @@ app.use(cors({
 }));
 
 // Connect to MongoDB
-// mongoose.connect(process.env.MONGO_URL);
+const startServer = async () => {
+    try {
+        await mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+        console.log("Connected to MongoDB");
+
+        app.listen(4000, () => console.log("Server is running on http://localhost:4000"));
+    } catch (error) {
+        console.error("MongoDB connection error:", error);
+    }
+};
+
 
 app.get("/", (req, res) => {
     res.send({ message: "Hello World!" });
@@ -58,18 +70,10 @@ app.use('/api', customerPackagesRoute);
 app.use('/api', bookingRoute);
 app.use('/api', joinerBookingsRoute);
 
-
-const startServer = async () => {
-    try {
-        mongoose.connect(process.env.MONGO_URL);
-        console.log("Connected to MongoDB");
-
-        app.listen(4000, () =>
-            console.log("Server is running on http://localhost:4000"),
-        );
-    } catch (error) {
-        console.log(error);
-    }
-};
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
 
 startServer();

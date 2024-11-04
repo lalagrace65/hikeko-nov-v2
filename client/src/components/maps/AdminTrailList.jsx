@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminTrailItem from './AdminTrailItem';
 import axios from 'axios';
+import { baseUrl } from '@/Url';
 
 axios.defaults.baseURL = 'https://hikeko-nov-v2.onrender.com';
 
@@ -23,7 +24,7 @@ export default function AdminTrailList() {
    useEffect(() => {
     const fetchData = async () => {
         try {
-            const response = await axios.get('/api/trails');
+            const response = await axios.get(`${baseUrl}/api/trails`);
             console.log('Received trail data:', response.data);
             setTrailData(response.data);
         } catch (error) {
