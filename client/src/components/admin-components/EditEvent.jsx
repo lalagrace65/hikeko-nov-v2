@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Packages from '../admin-components/Packages'; // Import the Packages component
+import { baseUrl } from '@/Url';
 
 export default function EditEvent({ updatedData, setUpdatedData, setEditMode, packageId }) {
     const [trails, setTrails] = useState([]);
@@ -8,7 +9,7 @@ export default function EditEvent({ updatedData, setUpdatedData, setEditMode, pa
     useEffect(() => {
         const fetchPackageData = async () => {
             try {
-                const response = await axios.get(`https://hikeko-nov-v2.onrender.com/packages/${packageId}`, { withCredentials: true });
+                const response = await axios.get(`${baseUrl}/packages/${packageId}`, { withCredentials: true });
                 setUpdatedData(response.data);
             } catch (err) {
                 console.error('Error fetching package data:', err);
@@ -26,7 +27,7 @@ export default function EditEvent({ updatedData, setUpdatedData, setEditMode, pa
     useEffect(() => {
         const fetchTrails = async () => {
             try {
-                const response = await axios.get('https://hikeko-nov-v2.onrender.com/api/trails');
+                const response = await axios.get(`${baseUrl}/api/trails`);
                 setTrails(response.data);
             } catch (err) {
                 console.error('Error fetching trails:', err);
@@ -43,7 +44,7 @@ export default function EditEvent({ updatedData, setUpdatedData, setEditMode, pa
                 return;
             }
             // Make the API call to update the package
-            const response = await axios.put(`http://localhost:4000/packages/${packageId}`, updatedData, { withCredentials: true });
+            const response = await axios.put(`${baseUrl}/packages/${packageId}`, updatedData, { withCredentials: true });
             if (response.status === 200) {
                 alert('Package updated successfully!');
                 setEditMode(false); // Exit edit mode after saving

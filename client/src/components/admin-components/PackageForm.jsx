@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import Packages from "../admin-components/Packages";
 import { MultiLevelSidebar } from "../admin-components/AdminSidebar";
 import toast from "react-hot-toast";
+import { baseUrl } from "@/Url";
 
 export default function PackageForm() {
     const [trails, setTrails] = useState([]);
@@ -65,7 +66,7 @@ export default function PackageForm() {
             const formattedDate = dayjs(selectedDate).format('YYYY-MM-DD');
             const dateCreated = new Date();
 
-            await axios.post('https://hikeko-nov-v2.onrender.com/packages', {
+            await axios.post(`${baseUrl}/packages`, {
                 trailId: selectedTrail,
                 packages,
                 additionalPackages,
@@ -110,7 +111,7 @@ export default function PackageForm() {
     useEffect(() => {
         async function fetchTrails() {
             try {
-                const response = await axios.get('https://hikeko-nov-v2.onrender.com/api/trails'); // Adjust the endpoint if necessary
+                const response = await axios.get(`${baseUrl}/api/trails`); // Adjust the endpoint if necessary
                 setTrails(response.data);
             } catch (err) {
                 console.error('Error fetching trails:', err);

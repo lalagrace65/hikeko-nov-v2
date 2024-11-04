@@ -4,7 +4,6 @@ import AdminTrailItem from './AdminTrailItem';
 import axios from 'axios';
 import { baseUrl } from '@/Url';
 
-axios.defaults.baseURL = 'https://hikeko-nov-v2.onrender.com';
 
 export default function AdminTrailList() {
   const [trailData, setTrailData] = useState([]);

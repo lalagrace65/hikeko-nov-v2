@@ -5,6 +5,7 @@ import EditEvent from "../../components/admin-components/EditEvent";
 import { MultiLevelSidebar } from "@/components/admin-components/AdminSidebar";
 import PackageModal from "@/components/admin-components/AdminEventModal";
 import toast from "react-hot-toast";
+import { baseUrl } from "@/Url";
 
 export default function EventsPage() {
     const [open, setOpen] = React.useState(false);
@@ -34,7 +35,7 @@ export default function EventsPage() {
     }    
 
     useEffect(() => {
-        axios.get('http://localhost:4000/packages?includeArchived=false', { withCredentials: true })
+        axios.get(`${baseUrl}/packages?includeArchived=false`, { withCredentials: true })
             .then(({ data }) => {
                 console.log("Fetched packages:", data);
                 setPackages(data); 
@@ -67,7 +68,7 @@ export default function EventsPage() {
 
     const handleSaveEdit = (e) => {
         e.preventDefault();
-        axios.put(`http://localhost:4000/packages/${selectedPackageId}`, updatedData, { withCredentials: true })
+        axios.put(`${baseUrl}/packages/${selectedPackageId}`, updatedData, { withCredentials: true })
             .then((response) => {
                 console.log("Package updated:", response.data);
                 setEditMode(false);
@@ -83,7 +84,7 @@ export default function EventsPage() {
     const handleArchive = (id) => {
         const archivedTimestamp = dayjs().format('YYYY-MM-DD HH:mm:ss'); // Current timestamp
     
-        axios.put(`http://localhost:4000/packages/${id}/archive`, { archivedTimestamp }, { withCredentials: true })
+        axios.put(`${baseUrl}/packages/${id}/archive`, { archivedTimestamp }, { withCredentials: true })
             .then((response) => {
                 console.log("Package archived:", response.data);
                 // Remove the archived package from the state

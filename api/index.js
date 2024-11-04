@@ -24,6 +24,7 @@ const joinerBookingsRoute = require('./routes/Customer/userBookings');
 
 
 const app = express();
+const port = process.env.PORT || 4000;
 
 app.use(morgan('dev'));
 app.use(cookieParser());
@@ -31,7 +32,7 @@ app.use(express.json());
 
 app.use(cors({
     credentials: true,
-    origin: 'https://hikeko.netlify.app',
+    origin: ['https://hikeko.netlify.app', 'https://hikeko-nov-v2.onrender.com'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
 

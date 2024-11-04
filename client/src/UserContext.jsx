@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
+import { baseUrl } from "./Url";
 
 export const UserContext = createContext();
 
@@ -10,7 +11,7 @@ export function UserContextProvider({ children }) {
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
-                const { data } = await axios.get('https://hikeko-nov-v2.onrender.com/profile', { withCredentials: true });
+                const { data } = await axios.get(`${baseUrl}/profile`, { withCredentials: true });
                 setUser(data); // Store user data if available
                 localStorage.setItem('user', JSON.stringify(data)); // Persist user data in local storage
                 console.log("User data:", data); // Log user data

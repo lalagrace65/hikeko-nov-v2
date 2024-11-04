@@ -3,6 +3,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import { MultiLevelSidebar } from "@/components/admin-components/AdminSidebar";
 import toast from "react-hot-toast";
+import { baseUrl } from "@/Url";
 
 export default function EventArchivesPage() {
     const [archivedPackages, setArchivedPackages] = useState([]);
@@ -12,7 +13,7 @@ export default function EventArchivesPage() {
     }
 
     const handleDelete = (id) => {
-        axios.delete(`http://localhost:4000/packages/${id}`, { withCredentials: true })
+        axios.delete(`${baseUrl}/packages/${id}`, { withCredentials: true })
             .then((response) => {
                 console.log("Package deleted:", response.data);
                 // Update archivedPackages state to remove the deleted package
@@ -28,7 +29,7 @@ export default function EventArchivesPage() {
 
     useEffect(() => {
         // Fetch archived packages from the API
-        axios.get('http://localhost:4000/packages?includeArchived=true', { withCredentials: true })
+        axios.get(`${baseUrl}/packages?includeArchived=true`, { withCredentials: true })
             .then(({ data }) => {
                 // Assuming that the data returned are archived packages only
                 const archivedOnly = data.filter(pkg => pkg.isArchived); // Apply further filtering if necessary

@@ -1,7 +1,8 @@
+import { baseUrl } from '@/Url';
 import axios from 'axios';
 
 const getGooglePlace = (category, radius, lat, lng) => {
-    return axios.get('/api/google-place?' + 
+    return axios.get(`${baseUrl}/api/google-place?` + 
         'category=' + category + 
         '&radius=' + radius + 
         '&lat=' + lat + 

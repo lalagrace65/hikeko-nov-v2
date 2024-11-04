@@ -3,8 +3,6 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { baseUrl } from '@/Url';
 
-axios.defaults.baseURL = 'https://hikeko-nov-v2.onrender.com';
-
 function AdminTrailDetails() {
   const { id } = useParams(); // Get trail ID from the URL
   const [trail, setTrail] = useState(null);

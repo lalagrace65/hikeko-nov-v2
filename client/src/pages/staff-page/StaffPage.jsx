@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate
 import axios from "axios";
 import UpdateStaff_Admin from "../../components/admin-components/UpdateStaff_Admin";
 import { MultiLevelSidebar } from "@/components/admin-components/AdminSidebar";
+import { baseUrl } from "@/Url";
 
 export default function StaffPage() { 
     const navigate = useNavigate(); // Initialize useNavigate
@@ -23,7 +24,7 @@ export default function StaffPage() {
     };
 
     useEffect(() => {
-        axios.get('http://localhost:4000/create-staff', { withCredentials: true })
+        axios.get(`${baseUrl}/create-staff`, { withCredentials: true })
             .then(({ data }) => {
                 setStaff(data);
             })
@@ -47,7 +48,7 @@ export default function StaffPage() {
 
     const handleSaveEdit = (e) => {
         e.preventDefault();
-        axios.put(`http://localhost:4000/create-staff/${selectedStaffId}`, {
+        axios.put(`${baseUrl}/create-staff/${selectedStaffId}`, {
             ...updatedData,
             oldPassword,
             newPassword,
@@ -67,7 +68,7 @@ export default function StaffPage() {
     };
 
     const handleDelete = (id) => {
-        axios.delete(`http://localhost:4000/create-staff/${id}`, { withCredentials: true })
+        axios.delete(`${baseUrl}/create-staff/${id}`, { withCredentials: true })
             .then((response) => {
                 console.log("Staff deleted:", response.data);
                 setStaff(staff.filter(s => s._id !== id));

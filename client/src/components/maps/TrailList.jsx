@@ -2,8 +2,7 @@ import React, { useRef, useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TrailItem from './TrailItem';
 import axios from 'axios';
-
-axios.defaults.baseURL = 'https://hikeko-nov-v2.onrender.com';
+import { baseUrl } from '@/Url';
 
 export default function TrailList() {
   const [trailData, setTrailData] = useState([]);
@@ -23,7 +22,7 @@ export default function TrailList() {
    useEffect(() => {
     const fetchData = async () => {
         try {
-            const response = await axios.get('/api/trails');
+            const response = await axios.get(`${baseUrl}/api/trails`);
             console.log('Received trail data:', response.data);
             setTrailData(response.data);
         } catch (error) {

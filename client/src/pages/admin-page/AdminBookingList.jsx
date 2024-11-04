@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import EditEvent from "../../components/admin-components/EditEvent";
 import { MultiLevelSidebar } from "@/components/admin-components/AdminSidebar";
+import { baseUrl } from "@/Url";
 
 export default function AdminBookingList() {
     const [bookings, setBookings] = useState([]);
@@ -28,7 +29,7 @@ export default function AdminBookingList() {
     const [selectedBookingId, setSelectedBookingId] = useState(null);    
 
     useEffect(() => {
-        axios.get('http://localhost:4000/booking-list', { withCredentials: true })
+        axios.get(`${baseUrl}/booking-list`, { withCredentials: true })
             .then(({ data }) => {
                 console.log("Fetched bookings:", data);
                 setBookings(data); 
@@ -67,7 +68,7 @@ export default function AdminBookingList() {
 
     const handleSaveEdit = (e) => {
         e.preventDefault();
-        axios.put(`http://localhost:4000/booking-list/${selectedBookingId}`, updatedData, { withCredentials: true })
+        axios.put(`${baseUrl}/booking-list/${selectedBookingId}`, updatedData, { withCredentials: true })
             .then((response) => {
                 console.log("Booking updated:", response.data);
                 setEditMode(false);
@@ -81,7 +82,7 @@ export default function AdminBookingList() {
     };
 
     const handleDelete = (id) => {
-        axios.delete(`http://localhost:4000/booking-list/${id}`, { withCredentials: true })
+        axios.delete(`${baseUrl}/booking-list/${id}`, { withCredentials: true })
             .then((response) => {
                 console.log("Booking deleted:", response.data);
                 setBookings(bookings.filter(b => b._id !== id));
