@@ -8,7 +8,7 @@ export default function EditEvent({ updatedData, setUpdatedData, setEditMode, pa
     useEffect(() => {
         const fetchPackageData = async () => {
             try {
-                const response = await axios.get(`http://localhost:4000/packages/${packageId}`, { withCredentials: true });
+                const response = await axios.get(`https://hikeko-nov-v2.onrender.com/packages/${packageId}`, { withCredentials: true });
                 setUpdatedData(response.data);
             } catch (err) {
                 console.error('Error fetching package data:', err);
@@ -26,7 +26,7 @@ export default function EditEvent({ updatedData, setUpdatedData, setEditMode, pa
     useEffect(() => {
         const fetchTrails = async () => {
             try {
-                const response = await axios.get('http://localhost:4000/api/trails');
+                const response = await axios.get('https://hikeko-nov-v2.onrender.com/api/trails');
                 setTrails(response.data);
             } catch (err) {
                 console.error('Error fetching trails:', err);

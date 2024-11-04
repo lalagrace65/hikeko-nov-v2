@@ -44,7 +44,7 @@ export default function JoinerForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:4000/api/bookings', formData);
+      const response = await axios.post('https://hikeko-nov-v2.onrender.com/api/bookings', formData);
       alert(response.data.message);
       setFormData({
         joinerName: '',

@@ -65,7 +65,7 @@ export default function PackageForm() {
             const formattedDate = dayjs(selectedDate).format('YYYY-MM-DD');
             const dateCreated = new Date();
 
-            await axios.post('http://localhost:4000/packages', {
+            await axios.post('https://hikeko-nov-v2.onrender.com/packages', {
                 trailId: selectedTrail,
                 packages,
                 additionalPackages,
@@ -110,7 +110,7 @@ export default function PackageForm() {
     useEffect(() => {
         async function fetchTrails() {
             try {
-                const response = await axios.get('http://localhost:4000/api/trails'); // Adjust the endpoint if necessary
+                const response = await axios.get('https://hikeko-nov-v2.onrender.com/api/trails'); // Adjust the endpoint if necessary
                 setTrails(response.data);
             } catch (err) {
                 console.error('Error fetching trails:', err);

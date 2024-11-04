@@ -10,7 +10,7 @@ export function UserContextProvider({ children }) {
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
-                const { data } = await axios.get('http://localhost:4000/profile', { withCredentials: true });
+                const { data } = await axios.get('https://hikeko-nov-v2.onrender.com/profile', { withCredentials: true });
                 setUser(data); // Store user data if available
                 localStorage.setItem('user', JSON.stringify(data)); // Persist user data in local storage
                 console.log("User data:", data); // Log user data

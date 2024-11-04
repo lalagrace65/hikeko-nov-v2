@@ -29,7 +29,7 @@ import CustomerPackageDetails from "./pages/user-page/CustomerPackageDetails";
 import CustomerBookPage from "./pages/user-page/CustomerBookPage";
 
 // Set default axios settings
-axios.defaults.baseURL = 'http://127.0.0.1:4000';
+axios.defaults.baseURL = 'https://hikeko-nov-v2.onrender.com';
 axios.defaults.withCredentials = true;
 
 function App() {

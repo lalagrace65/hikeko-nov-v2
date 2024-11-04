@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import TrailItem from './TrailItem';
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:4000';
+axios.defaults.baseURL = 'https://hikeko-nov-v2.onrender.com';
 
 export default function TrailList() {
   const [trailData, setTrailData] = useState([]);

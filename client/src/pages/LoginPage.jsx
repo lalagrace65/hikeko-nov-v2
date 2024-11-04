@@ -13,7 +13,7 @@ export default function LoginPage() {
     async function handleLoginSubmit(ev) {
         ev.preventDefault();
         try {
-            const { data } = await axios.post('http://localhost:4000/login', { email, password }, { withCredentials: true });
+            const { data } = await axios.post('https://hikeko-nov-v2.onrender.com/login', { email, password }, { withCredentials: true });
             setUser(data);  // This should include name, email, id, and role
             
             alert('Login successful');

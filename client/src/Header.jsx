@@ -27,7 +27,7 @@ export default function Header() {
     
     // Function to handle logout
     async function handleLogout() {
-        await axios.post('http://localhost:4000/logout', {}, { withCredentials: true });
+        await axios.post('https://hikeko-nov-v2.onrender.com/logout', {}, { withCredentials: true });
         setUser(null);
         navigate('/');
     }

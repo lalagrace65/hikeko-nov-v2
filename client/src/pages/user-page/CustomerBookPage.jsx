@@ -10,7 +10,7 @@ import {
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
-axios.defaults.baseURL = 'http://localhost:4000';
+axios.defaults.baseURL = 'https://hikeko-nov-v2.onrender.com';
 
 export default function CustomerBookPage() {
   const { id } = useParams(); 

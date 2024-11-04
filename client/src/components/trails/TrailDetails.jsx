@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Button } from '@material-tailwind/react';
 import { useNavigate } from 'react-router-dom';
 
-axios.defaults.baseURL = 'http://localhost:4000';
+axios.defaults.baseURL = 'https://hikeko-nov-v2.onrender.com';
 
 function TrailDetail() {
   const { id } = useParams(); 

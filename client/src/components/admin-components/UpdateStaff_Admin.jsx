@@ -47,7 +47,7 @@ export default function UpdateStaff_Admin({ updatedData, setUpdatedData, setEdit
 
         try {
             // Send request to update staff data, including password if applicable
-            const response = await axios.put(`http://localhost:4000/create-staff/${staffId}`, updatePayload, { withCredentials: true });
+            const response = await axios.put(`https://hikeko-nov-v2.onrender.com/create-staff/${staffId}`, updatePayload, { withCredentials: true });
             console.log('Update successful:', response.data);
 
             // Optionally, reset password fields after successful update

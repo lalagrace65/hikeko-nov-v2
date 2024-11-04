@@ -37,7 +37,7 @@ export default function CreateStaffAccount() {
     async function addNewStaff(ev) {
         ev.preventDefault();
         try {
-            await axios.post('http://localhost:4000/create-staff', {
+            await axios.post('https://hikeko-nov-v2.onrender.com/create-staff', {
                 name,
                 email,
                 password,
