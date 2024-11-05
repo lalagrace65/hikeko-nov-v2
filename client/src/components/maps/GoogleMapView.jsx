@@ -1,52 +1,77 @@
-import { LoadScript, GoogleMap, MarkerF } from '@react-google-maps/api';
-import React, { useContext } from 'react';
-import { UserLocationContext } from '@/context/UserLocationContext';
-import Markers from './Markers';
+import { LoadScript, GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
+import React, { useState } from 'react';
 
-function GoogleMapView({trailList}) {
-    const { userLocation } = useContext(UserLocationContext);
+function GoogleMapView({ trails }) { 
+    const [selectedTrail, setSelectedTrail] = useState(null);
+
     const containerStyle = {
         width: '100%',
         height: '70vh'
     };
-    
-    const coordinate = {
+
+    const centerCoordinates = { //Manila
         lat: 14.42972,
         lng: 120.93667
     };
+    const handleMarkerClick = (trail) => {
+        console.log("Marker clicked:", trail); 
+        setSelectedTrail(trail); // Set the selected trail
+    };
 
-    const centerCoordinates = userLocation || coordinate; // Fallback to default coordinates
+    const handleCloseInfoWindow = () => {
+        setSelectedTrail(null); // Close the info window
+    };
 
     return (
         <div>
-            <LoadScript
-                googleMapsApiKey={"AIzaSyBm4BzQu1OZU5qB77IpAqr-lt21E21ctvU"}
-                mapId={'16b2c61749498632'}
+            <GoogleMap 
+                mapContainerStyle={containerStyle}
+                center={centerCoordinates}
+                options={{ mapId: '16b2c61749498632' }}
+                zoom={8}
+
             >
-                <GoogleMap 
-                    mapContainerStyle={containerStyle}
-                    center={centerCoordinates}
-                    options={{ mapId: '16b2c61749498632' }}
-                    zoom={15}
-                >
-                    <MarkerF
-                        position={userLocation}
-                        icon={{
-                            url: '/marker.png',
-                            scaledSize: {
-                                width: 50,
-                                height: 50,
-                            }
-                        }}
-                    />
-                    {trailList.map((item,index) => (
-                        <Markers
-                            trail={item} 
-                            key={index}
+                {/* Check if trails is defined and has items before mapping */}
+                {Array.isArray(trails) && trails.length > 0 ? (
+                    trails.map((trail) => (
+                        <MarkerF
+                            icon={{
+                                url: '/marker.png',
+                                scaledSize: {
+                                    width: 50,
+                                    height: 50,
+                                }
+                            }}
+                            key={trail._id}
+                            position={{
+                                lat: trail.coordinates?.lat || 0,
+                                lng: trail.coordinates?.lng || 0
+                            }}
+                            title={trail.title}
+                            onClick={() => handleMarkerClick(trail)} // Handle marker click
                         />
-                    ))}
-                </GoogleMap>
-            </LoadScript>
+                    ))
+                ) : (
+                    // Optional: You can add a message when there are no trails
+                    <div>No trails available</div>
+                )}
+                {/* Info Window for displaying selected trail details */}
+                {selectedTrail && (
+                    <InfoWindow 
+                        position={{
+                            lat: selectedTrail.coordinates?.lat || 0,
+                            lng: selectedTrail.coordinates?.lng || 0
+                        }}
+                        onCloseClick={handleCloseInfoWindow} // Handle info window close
+                    >
+                        <div>
+                            <h2>{selectedTrail.title}</h2>
+                            <p>{selectedTrail.description || 'No description available.'}</p>
+                            {/* You can add more details as needed */}
+                        </div>
+                    </InfoWindow>
+                )}
+            </GoogleMap>
         </div>
     );
 }

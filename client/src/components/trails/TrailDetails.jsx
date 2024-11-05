@@ -49,18 +49,46 @@ const formatDate = (dateString) => {
 
   return (
     <>
-      <div className="p-4 max-w-2xl mx-auto">
-        <h1 className="text-3xl font-bold mb-4">{trail.title}</h1>
-        <img
-          src={trail.trailImages[0]}
-          alt={trail.title}
-          className="w-full h-[300px] object-cover rounded-lg mb-4"
-        />
-        <p className="text-lg">Trail Class: {trail.trailClass}</p>
-        <p className="text-lg">Difficulty Level: {trail.difficultyLevel}/9</p>
-        <p className="text-lg">Elevation: {trail.elevation} MASL</p>
-        <p className="text-lg">Location: {trail.trailLocation}</p>
-        <p className="text-lg mt-4 text-justify">{trail.description}</p>
+      <div className="p-4 max-w-3xl mx-auto">
+        <div className="relative">
+          {/* Background image with overlay */}
+          <img
+            src={trail.trailImages[0]}
+            alt={trail.title}
+            className="w-full h-[400px] object-cover rounded-lg"
+          />
+          {/* Floating text overlay */}
+          <div className="absolute inset-0 bg-black bg-opacity-30 rounded-lg flex items-end p-6">
+            <div>
+              <h1 className="text-4xl font-bold text-white">{trail.title}</h1>
+              <div className="flex items-center gap-2 mt-2">
+              <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                Trail Class: {trail.trailClass}
+              </span>
+              <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                Difficulty Level: {trail.difficultyLevel}/9
+              </span>
+            </div>
+              <p className="text-lg text-white mt-2">{trail.trailLocation}</p>
+            </div>
+          </div>
+        </div>
+        
+        {/* Trail details and description in two columns */}
+        <div className="flex flex-col md:flex-row gap-6 mt-6">
+          {/* Left Column for Trail Details */}
+          <div className="md:w-1/2">
+            <p className="text-lg mb-2">Trail Class: {trail.trailClass}</p>
+            <p className="text-lg mb-2">Difficulty Level: {trail.difficultyLevel}/9</p>
+            <p className="text-lg mb-2">Elevation: {trail.elevation} MASL</p>
+            <p className="text-lg mb-2">Location: {trail.trailLocation}</p>
+          </div>
+          
+          {/* Right Column for Description */}
+          <div className="md:w-1/2">
+            <p className="text-lg text-justify">{trail.description}</p>
+          </div>
+        </div>
       </div>
 
       <div className="mt-6">

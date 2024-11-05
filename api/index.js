@@ -32,15 +32,15 @@ app.use(express.json());
 
 app.use(cors({
     credentials: true,
-    origin: ['http://localhost:5173'],
+    origin: ['https://hikeko-nov-v2-client.onrender.com'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    // allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Connect to MongoDB
 const startServer = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_URL);
+        await mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true });
         console.log("Connected to MongoDB");
 
         app.listen(4000, () => console.log("Server is running on http://localhost:4000"));
@@ -68,7 +68,7 @@ app.use('/api', featuresRoute); // Prefix with '/api'
 app.use('/api',signUpRoute);
 app.use('/api', trailsRoute);
 app.use( bookingListRoute );
-app.use('/api', uploadRoute);
+app.use( uploadRoute);
 app.use('/api', customerPackagesRoute);
 app.use('/api', bookingRoute);
 app.use('/api', joinerBookingsRoute);
