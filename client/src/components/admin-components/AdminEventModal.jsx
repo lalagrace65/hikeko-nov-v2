@@ -25,7 +25,7 @@ const PackageModal = ({ open, handleClose, packageData }) => {
             <Card className="mt-20 border mx-auto h-[800px] w-[800px]">
                 <CardBody className="flex flex-col">
                     {/*Package Details Header*/}
-                    <div className="p-4 border rounded-xl w-auto bg-adminModalHeader">
+                    <div className="p-4 border rounded-xl w-auto bg-adminModal">
                         <Typography className="mb-4" variant="h4" color="blue-gray">
                             Package Details
                         </Typography>

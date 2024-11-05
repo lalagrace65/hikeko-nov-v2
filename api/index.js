@@ -40,7 +40,7 @@ app.use(cors({
 // Connect to MongoDB
 const startServer = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+        await mongoose.connect(process.env.MONGO_URL);
         console.log("Connected to MongoDB");
 
         app.listen(4000, () => console.log("Server is running on http://localhost:4000"));
@@ -48,6 +48,7 @@ const startServer = async () => {
         console.error("MongoDB connection error:", error);
     }
 };
+
 
 
 app.get("/", (req, res) => {

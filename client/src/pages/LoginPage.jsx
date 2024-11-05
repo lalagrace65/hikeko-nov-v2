@@ -2,6 +2,7 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { UserContext } from "../UserContext.jsx";  
+import { baseUrl } from "@/Url.jsx";
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -13,7 +14,7 @@ export default function LoginPage() {
     async function handleLoginSubmit(ev) {
         ev.preventDefault();
         try {
-            const { data } = await axios.post('https://hikeko-nov-v2.onrender.com/login', { email, password }, { withCredentials: true });
+            const { data } = await axios.post(`${baseUrl}/login`, { email, password }, { withCredentials: true });
             setUser(data);  // This should include name, email, id, and role
             
             alert('Login successful');

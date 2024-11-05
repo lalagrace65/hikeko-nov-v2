@@ -10,7 +10,11 @@ export default {
     theme: {
         extend: {
             colors: {
-                adminModalHeader: '#e0b99f',
+                adminModal: '#f0ba7d',
+                primary: '#cf740e',
+                trColor: '#e6a65e',
+                tdColor: '#edd7be',
+                hoverColor: '#9e5809',
 			}
         }
     },

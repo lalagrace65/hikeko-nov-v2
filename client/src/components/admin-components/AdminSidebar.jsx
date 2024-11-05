@@ -11,6 +11,7 @@ import axios from 'axios';
 
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "@/UserContext";
+import { baseUrl } from "@/Url";
 
 export function MultiLevelSidebar() {
   const [open, setOpen] = React.useState(0);
@@ -24,7 +25,7 @@ export function MultiLevelSidebar() {
   // Function to handle logout
   const handleLogout = async () => {
     try {
-      await axios.post('https://hikeko-nov-v2.onrender.com/logout', {}, { withCredentials: true });
+      await axios.post(`${baseUrl}/logout`, {}, { withCredentials: true });
       setUser(null);
       navigate('/'); // Redirect to the index after logout
     } catch (error) {
