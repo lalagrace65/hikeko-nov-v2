@@ -9,7 +9,7 @@ export function FooterWithLogo() {
           <li>
             <Typography
               as="a"
-              href="/about"
+              href='/about'
               color="blue-gray"
               className="font-normal transition-colors hover:text-blue-500 focus:text-blue-500"
             >
