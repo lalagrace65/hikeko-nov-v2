@@ -27,6 +27,8 @@ import EventArchivesPage from "./pages/admin-page/EventArchivesPage";
 import AgencyCredentialsProcess from "./components/forms/AgencyCredentialsProcess";
 import CustomerPackageDetails from "./pages/user-page/CustomerPackageDetails";
 import CustomerBookPage from "./pages/user-page/CustomerBookPage";
+import { AboutHikeko } from "./components/layout/index/AboutHikeko";
+import AboutPage from "./pages/AboutPage";
 
 // Set default axios settings
 axios.defaults.baseURL = 'https://hikeko-nov-v2.onrender.com';
@@ -52,6 +54,7 @@ function App() {
             <Route path="/account/:subpage?/:action?" element={<AccountPage />} />
             <Route path="/account/events/adminTrails" element={<AddPackageTrails />} />
             <Route path="/book" element={<CustomerBookPage />}/>
+            <Route path="/about" element={<AboutPage />}/>
 
             {/* Protect Admin Routes */}
             <Route
