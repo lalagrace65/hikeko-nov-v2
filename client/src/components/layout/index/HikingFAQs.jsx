@@ -3,7 +3,7 @@ import SectionHeaders from "./SectionHeaders"
 
 export default function HikingFAQs() {
   return (
-    <div className="py-6 px-60 mt-10">
+    <div className="py-6 mt-10" style={{ paddingLeft: '184px', paddingRight: '180px' }}>
         <div className="text-center mb-4">
         <SectionHeaders
           subHeader={''}
