@@ -7,7 +7,7 @@ import {
    
   export function AboutHikeko() {
     return (
-    <div className="flex justify-center items-center mt-20 bg-about" style={{paddingLeft: "160px", paddingRight: "155px", paddingTop: "40px", paddingBottom: "40px"  }}>
+    <div className="flex justify-center items-center mt-20 bg-about" style={{paddingLeft: "165px", paddingRight: "155px", paddingTop: "40px", paddingBottom: "40px"  }}>
         <CardHeader shadow={false}  floated={false}
           className=" w-2/5 shrink-0 rounded-r-none" 
         >
