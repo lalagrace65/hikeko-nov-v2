@@ -32,9 +32,9 @@ app.use(express.json());
 
 app.use(cors({
     credentials: true,
-    origin: ['https://hikeko-nov-v2-client.onrender.com'],
+    origin: ['http://localhost:5173'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    // allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Connect to MongoDB
@@ -67,7 +67,7 @@ app.use('/api', featuresRoute); // Prefix with '/api'
 app.use('/api',signUpRoute);
 app.use('/api', trailsRoute);
 app.use( bookingListRoute );
-app.use(uploadRoute);
+app.use('/api', uploadRoute);
 app.use('/api', customerPackagesRoute);
 app.use('/api', bookingRoute);
 app.use('/api', joinerBookingsRoute);
