@@ -50,6 +50,7 @@ const startServer = async () => {
 };
 
 
+
 app.get("/", (req, res) => {
     res.send({ message: "Hello World!" });
 });
@@ -67,7 +68,7 @@ app.use('/api', featuresRoute); // Prefix with '/api'
 app.use('/api',signUpRoute);
 app.use('/api', trailsRoute);
 app.use( bookingListRoute );
-app.use(uploadRoute);
+app.use( uploadRoute);
 app.use('/api', customerPackagesRoute);
 app.use('/api', bookingRoute);
 app.use('/api', joinerBookingsRoute);
