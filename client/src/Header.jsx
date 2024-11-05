@@ -5,8 +5,9 @@ import axios from 'axios';
 import { baseUrl } from "./Url.jsx";
 
 export default function Header() {
-    const { user, setUser } = useContext(UserContext);
-    
+    const { user, setUser, ready } = useContext(UserContext);
+    console.log("Header: Current user:", user); // Log user to check
+
     // Check if the user is an admin or staff
     const isAdminOrStaff = user && (user.role === 'admin' || user.role === 'staff');
 
@@ -24,6 +25,8 @@ export default function Header() {
     // Function to handle logout
     async function handleLogout() {
         await axios.post(`${baseUrl}/logout`, {}, { withCredentials: true });
+        localStorage.removeItem('token');
+        localStorage.removeItem('user'); // Clear local storage on logout
         setUser(null);
         navigate('/');
     }

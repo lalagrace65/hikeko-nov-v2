@@ -71,7 +71,7 @@ export default function BusDets() {
 
           setIsUploading(true);
           try {
-              const response = await axios.post('/api/upload', data, {
+              const response = await axios.post(`${baseUrl}/api/upload`, data, {
                   headers: {
                       'Content-Type': 'multipart/form-data',
                   },

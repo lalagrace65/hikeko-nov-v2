@@ -12,26 +12,34 @@ export function UserContextProvider({ children }) {
         const fetchUserProfile = async () => {
             try {
                 const { data } = await axios.get(`${baseUrl}/profile`, { withCredentials: true });
-                setUser(data); // Store user data if available
-                localStorage.setItem('user', JSON.stringify(data)); // Persist user data in local storage
-                console.log("User data:", data); // Log user data
+                if (data) {
+                    console.log("Fetched user profile:", data);
+                    setUser(data);
+                    localStorage.setItem('user', JSON.stringify(data));
+                } else {
+                    setUser(null);
+                    localStorage.removeItem('user');
+                }
             } catch (err) {
-                setUser(null); // Set user to null if not authenticated
-                localStorage.removeItem('user'); // Remove user data from local storage if not authenticated
+                console.error("Error fetching user profile:", err);
+                setUser(null);
+                localStorage.removeItem('user');
             } finally {
-                setReady(true); // Indicate that loading is complete
+                setReady(true);
             }
         };
-
-        // Check local storage for user data on initial load
+    
         const storedUser = localStorage.getItem('user');
+        console.log("Stored user from localStorage:", storedUser);  // Add this line
         if (storedUser) {
-            setUser(JSON.parse(storedUser)); // Set user from local storage if available
-            setReady(true); // Mark as ready since we got user from local storage
+            setUser(JSON.parse(storedUser));
+            setReady(true);
         } else {
-            fetchUserProfile(); // Fetch profile from API if not found in local storage
+            fetchUserProfile();
         }
-    }, []);  // Run this only once on component mount    
+    }, []);
+    
+    
 
     return (
         <UserContext.Provider value={{ user, setUser, ready }}>

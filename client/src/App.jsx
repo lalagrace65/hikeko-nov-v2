@@ -29,9 +29,10 @@ import CustomerPackageDetails from "./pages/user-page/CustomerPackageDetails";
 import CustomerBookPage from "./pages/user-page/CustomerBookPage";
 import { AboutHikeko } from "./components/layout/index/AboutHikeko";
 import AboutPage from "./pages/AboutPage";
+import { baseUrl } from "./Url";
 
 // Set default axios settings
-axios.defaults.baseURL = 'https://hikeko-nov-v2.onrender.com';
+axios.defaults.baseURL = `${baseUrl}`;
 axios.defaults.withCredentials = true;
 
 function App() {

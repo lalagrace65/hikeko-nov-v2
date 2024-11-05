@@ -3,6 +3,7 @@ import { useState } from "react";
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import { MultiLevelSidebar } from "../admin-components/AdminSidebar";
+import { baseUrl } from "@/Url";
 
 export default function CreateStaffAccount() {
     const [name, setStaffName] = useState('');
@@ -37,7 +38,7 @@ export default function CreateStaffAccount() {
     async function addNewStaff(ev) {
         ev.preventDefault();
         try {
-            await axios.post('https://hikeko-nov-v2.onrender.com/create-staff', {
+            await axios.post(`${baseUrl}/create-staff`, {
                 name,
                 email,
                 password,

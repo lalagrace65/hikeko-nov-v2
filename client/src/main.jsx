@@ -5,13 +5,16 @@ import './index.css'
 import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from '@material-tailwind/react'
 import { Toaster } from 'react-hot-toast'
+import { UserContextProvider } from './UserContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ThemeProvider>
       <BrowserRouter>
-        <App />
-        <Toaster />
+        <UserContextProvider>
+          <App />
+          <Toaster />
+        </UserContextProvider>
       </BrowserRouter>
     </ThemeProvider>
   </StrictMode>,

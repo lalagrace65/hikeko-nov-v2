@@ -6,17 +6,26 @@ const { jwtSecret } = require('../middleware/auth'); // Adjust path as needed
 const router = express.Router();
 
 // Profile route
-router.get('/profile', (req, res) => {
+router.get('/profile', async (req, res) => {
     const { token } = req.cookies;
 
     if (token) {
-        jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-            if (err) throw err;
-            const { name, email, _id, role } = await User.findById(userData.id);
-            res.json({ name, email, _id, role });
-        });
+        try {
+            const userData = jwt.verify(token, jwtSecret);
+            const user = await User.findById(userData.id);
+
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            }
+
+            const { name, email, _id, role } = user;
+            return res.json({ name, email, _id, role });
+        } catch (err) {
+            console.error("Error verifying token or fetching user:", err);
+            return res.status(401).json({ message: "Unauthorized" }); // Token verification error
+        }
     } else {
-        res.json(null);
+        return res.status(401).json({ message: "No token provided" }); // No token found
     }
 });
 

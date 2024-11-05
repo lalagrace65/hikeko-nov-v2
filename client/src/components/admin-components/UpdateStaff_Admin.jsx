@@ -2,6 +2,7 @@ import { useState } from 'react';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import axios from 'axios';
+import { baseUrl } from '@/Url';
 
 export default function UpdateStaff_Admin({ updatedData, setUpdatedData, setEditMode, staffId }) {
     const [contactNo, setContactNo] = useState(updatedData.contactNo);
@@ -47,7 +48,7 @@ export default function UpdateStaff_Admin({ updatedData, setUpdatedData, setEdit
 
         try {
             // Send request to update staff data, including password if applicable
-            const response = await axios.put(`https://hikeko-nov-v2.onrender.com/create-staff/${staffId}`, updatePayload, { withCredentials: true });
+            const response = await axios.put(`${baseUrl}/create-staff/${staffId}`, updatePayload, { withCredentials: true });
             console.log('Update successful:', response.data);
 
             // Optionally, reset password fields after successful update
