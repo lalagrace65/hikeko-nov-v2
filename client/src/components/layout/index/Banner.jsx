@@ -17,7 +17,7 @@ const Banner = () => {
             <div className="absolute inset-0 flex flex-col justify-center text-white"
                 style={{
                     padding: '20px',         
-                    marginLeft: '260px',      
+                    marginLeft: '160px',      
                     borderRadius: '8px',
                     maxWidth: '600px',      
                 }}>
@@ -40,7 +40,7 @@ const Banner = () => {
 
             {/* Image Slider */}
             <div className="relative inset-0 transform"
-                style={{ marginLeft: '1125px', marginTop: '35px' }}
+                style={{ marginLeft: '940px', marginTop: '35px' }}
             >
                 <CarouselDefault className="rounded-xl w-full "/>
             </div>
