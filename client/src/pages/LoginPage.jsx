@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { UserContext } from "../UserContext.jsx";  
 import { baseUrl } from "@/Url.jsx";
+import toast from 'react-hot-toast';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -11,13 +12,36 @@ export default function LoginPage() {
     const [redirectPath, setRedirectPath] = useState('/'); // Default redirect path
     const { setUser } = useContext(UserContext);
     
+    // Check if the user is already logged in when the component mounts
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        const storedUser = localStorage.getItem('user');
+
+        if (token && storedUser) {
+            setUser(JSON.parse(storedUser));
+            setRedirect(true); // Automatically redirect if already logged in
+            const parsedUser = JSON.parse(storedUser);
+
+            // Set the redirect path based on user role
+            if (parsedUser.role === 'admin') {
+                setRedirectPath('/admin');
+            } else {
+                setRedirectPath('/');
+            }
+        }
+    }, [setUser]);
+
     async function handleLoginSubmit(ev) {
         ev.preventDefault();
         try {
             const { data } = await axios.post(`${baseUrl}/login`, { email, password }, { withCredentials: true });
             setUser(data);  // This should include name, email, id, and role
             
-            alert('Login successful');
+              // Store token and user info in localStorage
+              localStorage.setItem('token', data.token);
+              localStorage.setItem('user', JSON.stringify(data));
+
+            toast.success('Login successful');
 
             // Check user role to set redirect path
             if (data.role === 'admin') {

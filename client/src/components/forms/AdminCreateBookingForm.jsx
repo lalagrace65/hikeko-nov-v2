@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
+import { baseUrl } from '@/Url';
 
 export default function JoinerForm() {
   const [formData, setFormData] = useState({
@@ -44,7 +45,7 @@ export default function JoinerForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://hikeko-nov-v2.onrender.com/api/bookings', formData);
+      const response = await axios.post(`${baseUrl}/api/bookings`, formData);
       alert(response.data.message);
       setFormData({
         joinerName: '',

@@ -26,10 +26,12 @@ export function MultiLevelSidebar() {
   const handleLogout = async () => {
     try {
       await axios.post(`${baseUrl}/logout`, {}, { withCredentials: true });
+      localStorage.removeItem('token');
+      localStorage.removeItem('user'); // Clear local storage on logout
       setUser(null);
       navigate('/'); // Redirect to the index after logout
     } catch (error) {
-      console.error("Logout failed:", error);
+      console.error('Error logging out:', error);
     }
   };
 
