@@ -28,6 +28,7 @@ router.post('/create-staff', requireRole(['admin']), async(req, res) => {
                 address,
                 contactNo,
                 role: 'staff',
+                suspended: false,
                 adminId: userData.id // Save the admin's ID who created the staff
             });
 
@@ -90,6 +91,28 @@ router.put('/create-staff/:id', requireRole(['admin']), async (req, res) => {
     } catch (err) {
         console.error('Error updating staff:', err);
         res.status(500).json({ message: 'Error updating staff', error: err.message });
+    }
+});
+
+// Suspend Staff
+router.put('/create-staff/suspend/:id', async (req, res) => {
+    try {
+        const staff = await User.findByIdAndUpdate(req.params.id, { suspended: true }, { new: true });
+        res.status(200).json(staff);
+    } catch (error) {
+        console.error('Error suspending staff account:', error);
+        res.status(500).json({ message: 'Error suspending staff account' });
+    }
+});
+
+
+// Retrieve Staff
+router.put('/create-staff/retrieve/:id', async (req, res) => {
+    try {
+        const staff = await User.findByIdAndUpdate(req.params.id, { suspended: false }, { new: true });
+        res.status(200).json(staff);
+    } catch (error) {
+        res.status(500).json({ message: 'Error retrieving staff account' });
     }
 });
 

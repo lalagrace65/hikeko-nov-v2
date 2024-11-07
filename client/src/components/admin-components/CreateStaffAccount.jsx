@@ -1,9 +1,10 @@
 import axios from "axios";
 import { useState } from "react";
-import PhoneInput from 'react-phone-number-input';
+import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import { MultiLevelSidebar } from "../admin-components/AdminSidebar";
 import { baseUrl } from "@/Url";
+import toast from "react-hot-toast";
 
 export default function CreateStaffAccount() {
     const [name, setStaffName] = useState('');
@@ -11,7 +12,8 @@ export default function CreateStaffAccount() {
     const [email, setStaffEmail] = useState('');
     const [address, setAddress] = useState('');
     const [contactNo, setContactNo] = useState('');
-    const [role] = useState('staff');  
+    const [role] = useState('staff');
+    const [error, setError] = useState('');  
 
     function inputHeader(text) {
         return (
@@ -44,20 +46,38 @@ export default function CreateStaffAccount() {
                 password,
                 address,
                 contactNo,
+                suspended: false,
                 role 
             });
-            alert('Staff Account Created Successfully!. Now you can log in');
+            toast.success('Staff Account Created Successfully!');
+
+            setStaffName('');
+            setStaffPassword('');
+            setStaffEmail('');
+            setAddress('');
+            setContactNo('');   
         } catch (e) {
-            alert('Staff Account Createion failed. Please try again later');
+            toast.error('Staff Account Createion failed. Please try again later');
         }
     }
+
+    const handlePhoneNumberChange = (value) => {
+        setContactNo(value);
+        
+        // Validate the phone number based on the country
+        if (value && !isValidPhoneNumber(value)) {
+            setError("Invalid phone number format for the selected country.");
+        } else {
+            setError('');
+        }
+    };
 
     return (
         <div className="flex min-h-screen">
             <MultiLevelSidebar className="min-h-screen" />
             <div className="flex-1 p-8">
-                <div className="border bg-white shadow-lg rounded-xl p-6 flex gap-8">
-                    <div className="flex flex-col w-1/2">
+                <div className="border bg-white shadow-lg rounded-xl p-6 flex gap-8 w-1/2">
+                    <div className="flex flex-col w-full">
                         {preInput('Username', 'Input staff username')}
                         <input
                             type="text"
@@ -67,6 +87,7 @@ export default function CreateStaffAccount() {
                             onChange={ev => setStaffName(ev.target.value)}
                         />
         
+                        {/* hide pass for now. dapat generate code for pass then send sa email ni staff yung one-time pass*/}
                         {preInput('Password', 'Input staff password')}
                         <input
                             type="password"
@@ -75,9 +96,6 @@ export default function CreateStaffAccount() {
                             value={password}
                             onChange={ev => setStaffPassword(ev.target.value)}
                         />
-                    </div>
-        
-                    <div className="flex-grow w-1/2">
                         {preInput('Email', 'Input staff email')}
                         <input
                             type="email"
@@ -102,8 +120,9 @@ export default function CreateStaffAccount() {
                             defaultCountry="PH"
                             placeholder="Enter phone number"
                             value={contactNo}
-                            onChange={setContactNo}
-                        />
+                            onChange={handlePhoneNumberChange}
+                        />{error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+                        
                         <button onClick={addNewStaff} className="w-full p-2 bg-primary text-white rounded-2xl"> Register </button>
                     </div>
                 </div>

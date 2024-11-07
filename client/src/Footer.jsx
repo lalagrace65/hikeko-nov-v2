@@ -1,9 +1,16 @@
 import { Typography } from "@material-tailwind/react";
 import { useNavigate } from 'react-router-dom';
-import { baseUrl } from "./Url";
+import { UserContext } from "./UserContext.jsx";
+import { useContext } from 'react';
  
 export function FooterWithLogo() {
+  const {user} = useContext(UserContext);
   const navigate = useNavigate();
+
+  if (user?.role === 'admin' || user?.role === 'staff') {
+    return null;
+  }
+
   return (
     <footer className="w-full bg-white p-8 mt-20">
       <div className="flex flex-row flex-wrap items-center justify-center gap-y-6 gap-x-12 bg-white text-center md:justify-between">

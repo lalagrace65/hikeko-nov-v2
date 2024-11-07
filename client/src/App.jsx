@@ -30,6 +30,8 @@ import CustomerBookPage from "./pages/user-page/CustomerBookPage";
 import { AboutHikeko } from "./components/layout/index/AboutHikeko";
 import AboutPage from "./pages/AboutPage";
 import { baseUrl } from "./Url";
+import Dashboard_StaffPage from "./pages/staff-page/Dashboard_StaffPage";
+import AdminDashboard from "./pages/admin-page/AdminDashboard";
 
 // Set default axios settings
 axios.defaults.baseURL = `${baseUrl}`;
@@ -56,6 +58,8 @@ function App() {
             <Route path="/account/events/adminTrails" element={<AddPackageTrails />} />
             <Route path="/book" element={<CustomerBookPage />}/>
             <Route path="/about" element={<AboutPage />}/>
+
+            <Route path="/staff-db" element={<Dashboard_StaffPage />} />
 
             {/* Protect Admin Routes */}
             <Route
@@ -114,7 +118,7 @@ function App() {
                 </ProtectRoute>
               }
             />
-          </Route>
+            </Route>
         </Routes>
       </UserLocationProvider>
     </UserContextProvider>

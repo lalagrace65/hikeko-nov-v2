@@ -3,6 +3,7 @@ import { useContext, useState, useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { UserContext } from "../UserContext.jsx";
 import { baseUrl } from "@/Url.jsx";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -41,18 +42,28 @@ export default function LoginPage() {
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data));
 
-            alert('Login successful');
+            toast.success('Login successful');
 
             // Set redirect path based on user role
             if (data.role === 'admin') {
                 setRedirectPath('/admin');
+            } else if (data.role === 'staff') {
+                setRedirectPath('/staff-db');
             } else {
                 setRedirectPath('/');
             }
 
             setRedirect(true);
         } catch (e) {
-            alert('Login failed');
+            if (e.response && e.response.status === 403) {
+                toast.error('Your account is suspended');
+            } else if (e.response && e.response.status === 422) {
+                toast.error('Invalid email or password');
+            } else if (e.response && e.response.status === 404) {
+                toast.error('User not found');
+            } else {
+                toast.error('Login failed');
+            }
         }
     }
 

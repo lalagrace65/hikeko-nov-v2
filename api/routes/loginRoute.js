@@ -12,6 +12,11 @@ router.post('/login', async (req, res) => {
     const userDoc = await User.findOne({ email });
 
     if (userDoc) {
+        // Check if the account is suspended
+        if (userDoc.suspended) {
+            return res.status(403).json('Account is suspended');
+        }
+
         const passOk = bcrypt.compareSync(password, userDoc.password);
         if (passOk) {
             jwt.sign(

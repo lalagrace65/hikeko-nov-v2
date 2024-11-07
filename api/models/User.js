@@ -7,7 +7,8 @@ const UserSchema = new mongoose.Schema({
     address: String,
     contactNo: String,
     role: { type: String, enum: ['user', 'admin', 'staff'] },
-    adminId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' } 
+    adminId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, 
+    suspended: { type: Boolean, default: false } 
 });
 
 const UserModel = mongoose.model('User', UserSchema);

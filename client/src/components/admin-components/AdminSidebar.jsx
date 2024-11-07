@@ -35,6 +35,9 @@ export function MultiLevelSidebar() {
     }
   };
 
+  const handleAnalytics = () => {
+    navigate('/admin/dashboard'); 
+  };
   const handleEvent = () => {
     navigate('/admin/events'); 
   };
@@ -95,7 +98,7 @@ export function MultiLevelSidebar() {
           
           <AccordionBody className="py-1">
             <List className="p-0">
-              <ListItem>
+              <ListItem onClick={handleAnalytics}>
                 <ListItemPrefix>
                   <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                 </ListItemPrefix>
@@ -199,6 +202,8 @@ export function MultiLevelSidebar() {
           </AccordionBody>
         </Accordion>
 
+        {/*staff tab is hidden in the staff account upon login*/} 
+        {user && user.role === 'admin' && (  
         <Accordion
           open={open === 4}
           icon={
@@ -234,8 +239,8 @@ export function MultiLevelSidebar() {
               </ListItem>
             </List>
           </AccordionBody>
-        </Accordion>
-
+        </Accordion>)}
+        
         <ListItem>
           <ListItemPrefix>
             <InboxIcon className="h-5 w-5 mr-2" />
