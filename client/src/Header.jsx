@@ -3,32 +3,47 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext.jsx";
 import axios from 'axios';
 import { baseUrl } from "./Url.jsx";
+import SignUpModal from "./components/SignupModal.jsx";
+
 
 export default function Header() {
     const { user, setUser, ready } = useContext(UserContext);
-    console.log("Header: Current user:", user); // Log user to check
-
-    // Check if the user is an admin or staff
-    const isAdminOrStaff = user && (user.role === 'admin' || user.role === 'staff');
-
-    // If the user is an admin or staff, return null to hide the header
-    if (isAdminOrStaff) {
-        return null; // Do not render the Header
-    }
-
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [exploreDropdownOpen, setExploreDropdownOpen] = useState(false);
+    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false); // State for the login modal
+    const [email, setEmail] = useState(""); // Email state
+    const [password, setPassword] = useState(""); // Password state
     const dropdownRef = useRef(null);
     const exploreDropdownRef = useRef(null);
     const navigate = useNavigate();
+
+    // Check if the user is an admin or staff
+    const isAdminOrStaff = user && (user.role === 'admin' || user.role === 'staff');
+    if (isAdminOrStaff) return null;
 
     // Function to handle logout
     async function handleLogout() {
         await axios.post(`${baseUrl}/logout`, {}, { withCredentials: true });
         localStorage.removeItem('token');
-        localStorage.removeItem('user'); // Clear local storage on logout
+        localStorage.removeItem('user');
         setUser(null);
         navigate('/');
+    }
+
+    // Function to handle login submission
+    async function handleLogin(event) {
+        event.preventDefault();
+        try {
+            const response = await axios.post(`${baseUrl}/login`, { email, password }, { withCredentials: true });
+            setUser(response.data.user);
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('user', JSON.stringify(response.data.user));
+            setIsLoginModalOpen(false); // Close modal after login
+            navigate('/'); // Redirect to home or desired page
+        } catch (error) {
+            console.error("Login error:", error);
+            alert("Invalid email or password.");
+        }
     }
 
     // Handle closing user dropdown on clicking outside
@@ -38,7 +53,6 @@ export default function Header() {
                 setDropdownOpen(false);
             }
         }
-
         if (dropdownOpen) {
             document.addEventListener("mousedown", handleClickOutside);
         } else {
@@ -57,7 +71,6 @@ export default function Header() {
                 setExploreDropdownOpen(false);
             }
         }
-
         if (exploreDropdownOpen) {
             document.addEventListener("mousedown", handleClickOutside);
         } else {
@@ -71,7 +84,7 @@ export default function Header() {
 
     return (
         <div className="sticky top-0 z-50">
-            <header  className="py-6 px-44 flex justify-between bg-white shadow-lg text-primary">
+            <header className="py-6 px-44 flex justify-between bg-white shadow-lg text-primary">
                 <Link to={'/'} className="flex items-center gap-1 hover:text-hoverColor">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-8 -rotate-90">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
@@ -79,12 +92,9 @@ export default function Header() {
                     <span className="font-bold text-xl">HIKEKO</span>
                 </Link>
 
-                {/* Navigation and User menu */}
                 <div className="flex items-center gap-6">
                     <nav className="flex gap-6">
                         <Link to="/" className=" hover:text-hoverColor">Home</Link>
-                        
-                        {/* Explore dropdown */}
                         <div ref={exploreDropdownRef} className="relative">
                             <Link onClick={() => setExploreDropdownOpen(!exploreDropdownOpen)} className="hover:text-hoverColor inline-flex">Explore
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-3 mt-2 ml-1">
@@ -103,7 +113,6 @@ export default function Header() {
                         <Link to="/about" className=" hover:text-hoverColor">About</Link>
                     </nav>
 
-                    {/* User icon and dropdown */}
                     <div onClick={() => setDropdownOpen(!dropdownOpen)} className="relative" ref={dropdownRef}>
                         <div className="flex gap-2 border border-gray-300 rounded-full py-2 px-4 cursor-pointer shadow-none hover:shadow-md hover:shadow-gray-300 transition-shadow ">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -115,11 +124,10 @@ export default function Header() {
                                 </svg>
                             </div>
                             {!!user && (
-                                <div>{user.name}</div>
+                                <div>{user.firstName}</div>
                             )}
                         </div>
 
-                        {/* Dropdown menu */}
                         {dropdownOpen && (
                             <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 border">
                                 {!!user ? (
@@ -130,8 +138,8 @@ export default function Header() {
                                     </>
                                 ) : (
                                     <>
-                                        <Link to="/login" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Login</Link>
-                                        <Link to="/register" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Register</Link>
+                                        <button onClick={() => setIsLoginModalOpen(true)} className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Login</button>
+                                        <button onClick={() => setIsSignUpModalOpen(true)} className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Register</button> {/* Trigger Register modal */}
                                     </>
                                 )}
                             </div>
@@ -139,6 +147,15 @@ export default function Header() {
                     </div>
                 </div>
             </header>
+
+            {/* Add the SignUpModal component here */}
+            {isLoginModalOpen && (
+                <SignUpModal
+                    isOpen={isLoginModalOpen}
+                    onClose={() => setIsLoginModalOpen(false)}
+                    onSubmit={handleLogin}
+                />
+            )}
         </div>
     );
 }

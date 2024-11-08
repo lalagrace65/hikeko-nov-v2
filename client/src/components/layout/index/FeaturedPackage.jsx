@@ -30,8 +30,8 @@ import {
           <CardBody className="relative p-4">
             <div className="absolute top-3 left-3 text-left">
               <Typography color="white">
-                <p className="text-xl font-bold">MT. Palemlem</p>
-                <p className="text-sm font-bold">Day hike</p>
+                <span className="text-xl font-bold">MT. Palemlem</span>
+                <span className="text-sm font-bold">Day hike</span>
               </Typography>
             </div>
             <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2">
@@ -60,8 +60,8 @@ import {
           <CardBody className="relative p-4">
             <div className="absolute top-3 left-3 text-left">
               <Typography color="white">
-                <p className="text-xl font-bold">MT. Sicapoo</p>
-                <p className="text-sm font-bold">Day hike</p>
+                <span className="text-xl font-bold">MT. Sicapoo</span>
+                <span className="text-sm font-bold">Day hike</span>
               </Typography>
             </div>
             <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2">
@@ -90,8 +90,8 @@ import {
           <CardBody className="relative p-4">
             <div className="absolute top-3 left-3 text-left">
               <Typography color="white">
-                <p className="text-xl font-bold">MT. Timarid</p>
-                <p className="text-sm font-bold">Day hike</p>
+                <span className="text-xl font-bold">MT. Timarid</span>
+                <span className="text-sm font-bold">Day hike</span>
               </Typography>
             </div>
             <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2">
@@ -120,8 +120,8 @@ import {
           <CardBody className="relative p-4">
             <div className="absolute top-3 left-3 text-left">
               <Typography color="white">
-                <p className="text-xl font-bold">MT. Simagaysay</p>
-                <p className="text-sm font-bold">Day hike</p>
+                <span className="text-xl font-bold">MT. Simagaysay</span>
+                <span className="text-sm font-bold">Day hike</span>
               </Typography>
             </div>
             <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2">

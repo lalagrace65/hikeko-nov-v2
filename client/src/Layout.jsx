@@ -1,6 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
 import Header from "./Header";
-import { FooterWithLogo } from "./Footer";
+import { FooterWithSocialLinks } from "./Footer";
 export default function Layout() {
     const location = useLocation();
 
@@ -13,7 +13,7 @@ export default function Layout() {
         <div className=" flex flex-col min-h-screen">
             {!shouldHideHeader && <Header />}
             <Outlet />
-            <FooterWithLogo />
+            <FooterWithSocialLinks />
         </div>
     );
 }

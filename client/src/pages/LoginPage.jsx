@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useContext, useState, useEffect } from "react";
+import { Button, Card, CardBody, CardFooter, Typography } from "@material-tailwind/react";
 import { Link, Navigate } from "react-router-dom";
 import { UserContext } from "../UserContext.jsx";
 import { baseUrl } from "@/Url.jsx";
@@ -19,12 +20,16 @@ export default function LoginPage() {
 
         if (token && storedUser) {
             setUser(JSON.parse(storedUser));
-            setRedirect(true); // Automatically redirect if already logged in
+            setRedirect(true);
             const parsedUser = JSON.parse(storedUser);
 
             // Set the redirect path based on user role
             if (parsedUser.role === 'admin') {
                 setRedirectPath('/admin');
+            } else if (parsedUser.role === 'staff') {
+                setRedirectPath('/staff-db');
+            } else if (parsedUser.role === 'user') {
+                setRedirectPath('/profile');
             } else {
                 setRedirectPath('/');
             }
@@ -32,7 +37,7 @@ export default function LoginPage() {
     }, [setUser]);
 
     async function handleLoginSubmit(ev) {
-        ev.preventDefault();
+        ev.preventDefault(); // Prevent form default submission behavior
         try {
             const { data } = await axios.post(`${baseUrl}/login`, { email, password }, { withCredentials: true });
             
@@ -49,6 +54,8 @@ export default function LoginPage() {
                 setRedirectPath('/admin');
             } else if (data.role === 'staff') {
                 setRedirectPath('/staff-db');
+            } else if (data.role === 'user') {
+                setRedirectPath('/profile');
             } else {
                 setRedirectPath('/');
             }
@@ -74,25 +81,39 @@ export default function LoginPage() {
 
     return (
         <div className="mt-4 grow flex items-center justify-around">
-            <div className="mb-64">
-                <h1 className="text-4xl text-center mb-4">Login</h1>
-                <form className="max-w-md mx-auto" onSubmit={handleLoginSubmit}>
-                    <input type="email"
-                        placeholder="your@email.com"
-                        value={email}
-                        onChange={ev => setEmail(ev.target.value)}
-                    />
-                    <input type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={ev => setPassword(ev.target.value)}
-                    />
-                    <button className="primary">Login</button>
-                    <div className="text-center py-2 text-gray-500">
-                        Don't have an account? <Link className="underline text-black" to={'/register'}>Register now</Link>
+            <Card className="mx-auto w-full max-w-[24rem]">
+                <CardBody className="flex flex-col gap-2"> 
+                    <div>
+                    <Typography variant="h6" className="text-2xl text-center">Login</Typography>
+                    <hr className="w-full border-t-1 border-gray-300 mx-auto mt-4 mb-4" />
+                        <form className="max-w-md mx-auto" >
+                            <input 
+                                type="email"
+                                placeholder="your@email.com"
+                                value={email}
+                                onChange={ev => setEmail(ev.target.value)}
+                                required
+                            />
+                            <input 
+                                type="password"
+                                placeholder="Password"
+                                value={password}
+                                onChange={ev => setPassword(ev.target.value)}
+                                required
+                            />
+                        </form>
                     </div>
-                </form>
-            </div>
+                </CardBody>
+                <CardFooter className="pt-0">
+                    <div className="text-center py-2 text-gray-500 mt-2">
+                    <Button className="primary" type="submit" onClick={handleLoginSubmit}>Login</Button>
+                        <Typography variant="small" className="font-normal mt-4">
+                            Don't have an account? 
+                            <Link className="text-black font-semibold" to={'/register'}> Register now</Link>
+                        </Typography>
+                    </div>
+                </CardFooter>
+            </Card>
         </div>
     );
 }

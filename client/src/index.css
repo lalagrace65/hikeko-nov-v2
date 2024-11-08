@@ -19,6 +19,12 @@ button {
   background-color: #1d402f;
 }
 
+.profile-container {
+  margin-top: 50px; /* Adds space from the top */
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%; /* Optional: set width for better control */
+}
 
 button.primary {
   background-color: #f59b42;

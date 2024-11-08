@@ -23,7 +23,8 @@ router.post('/login', async (req, res) => {
                 {
                     email: userDoc.email,
                     id: userDoc._id,
-                    name: userDoc.name,
+                    firstName: userDoc.firstName,
+                    lastName: userDoc.lastName,
                     role: userDoc.role
                 },
                 jwtSecret,
@@ -33,7 +34,8 @@ router.post('/login', async (req, res) => {
                     res.cookie('token', token).json({
                         email: userDoc.email,
                         id: userDoc._id,
-                        name: userDoc.name,
+                        firstName: userDoc.firstName,
+                        lastName: userDoc.lastName,
                         role: userDoc.role
                     });
                 }

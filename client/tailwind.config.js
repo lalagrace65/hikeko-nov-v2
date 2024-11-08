@@ -15,6 +15,7 @@ export default {
                 trColor: '#e6a65e',
                 tdColor: '#edd7be',
                 hoverColor: '#9e5809',
+                profileContainer: '#efe7da',
 			}
         }
     },

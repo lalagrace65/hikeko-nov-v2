@@ -18,8 +18,8 @@ router.get('/profile', async (req, res) => {
                 return res.status(404).json({ message: "User not found" });
             }
 
-            const { name, email, _id, role } = user;
-            return res.json({ name, email, _id, role });
+            const { firstName, email, _id, role } = user;
+            return res.json({ firstName, email, _id, role });
         } catch (err) {
             console.error("Error verifying token or fetching user:", err);
             return res.status(401).json({ message: "Unauthorized" }); // Token verification error

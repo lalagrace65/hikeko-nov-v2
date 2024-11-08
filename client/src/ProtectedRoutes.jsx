@@ -13,9 +13,12 @@ function ProtectRoute({ children }) {
     if (!user || user.role !== "admin") {
         console.log("User not authenticated or not an admin, redirecting to login."); // Add this line
         return <Navigate to="/login" />;
+    }  
+
+    if (!user) {
+        return <Navigate to="/login" />; // Redirect to login if the user is not authenticated
     }
     
-
     // If user is an admin, render the protected route's children
     return children;
 }

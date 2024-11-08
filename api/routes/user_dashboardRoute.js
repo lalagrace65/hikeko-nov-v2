@@ -8,5 +8,4 @@ router.get('/user-dashboard', requireRole('user'), (req, res) => {
     res.json({ message: 'Welcome, User!' });
 });
 
-
 module.exports = router;

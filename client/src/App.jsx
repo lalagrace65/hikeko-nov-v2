@@ -32,6 +32,7 @@ import AboutPage from "./pages/AboutPage";
 import { baseUrl } from "./Url";
 import Dashboard_StaffPage from "./pages/staff-page/Dashboard_StaffPage";
 import AdminDashboard from "./pages/admin-page/AdminDashboard";
+import ProfilePage from "./pages/user-page/ProfilePage";
 
 // Set default axios settings
 axios.defaults.baseURL = `${baseUrl}`;
@@ -58,6 +59,7 @@ function App() {
             <Route path="/account/events/adminTrails" element={<AddPackageTrails />} />
             <Route path="/book" element={<CustomerBookPage />}/>
             <Route path="/about" element={<AboutPage />}/>
+            <Route path="/profile" element={<ProfilePage />}/>
 
             <Route path="/staff-db" element={<Dashboard_StaffPage />} />
 
