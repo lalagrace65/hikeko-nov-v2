@@ -23,7 +23,8 @@ button {
   margin-top: 50px; /* Adds space from the top */
   margin-left: auto;
   margin-right: auto;
-  width: 80%; /* Optional: set width for better control */
+  width: 30%; /* Adjusts the container's width to 60% of the parent */
+  height: 300px; /* Sets a fixed height */
 }
 
 button.primary {

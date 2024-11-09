@@ -26,7 +26,7 @@ export function GeneralQuestion() {
   const handleOpen = (value) => setOpen(open === value ? 0 : value);
  
   return (
-    <div className="px-10">
+    <div className="">
       <Accordion open={open === 1} icon={<Icon id={1} open={open} />}>
         <AccordionHeader onClick={() => handleOpen(1)} className="bg-transparent ">What is Hiking?</AccordionHeader>
         <AccordionBody>

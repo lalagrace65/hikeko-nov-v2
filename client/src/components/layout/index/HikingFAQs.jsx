@@ -3,7 +3,8 @@ import SectionHeaders from "./SectionHeaders"
 
 export default function HikingFAQs() {
   return (
-    <div className="py-6 px-60 mt-10">
+    <div className="">
+        <div className="py-6 mt-10">
         <div className="text-center mb-4">
         <SectionHeaders
           subHeader={''}
@@ -15,19 +16,18 @@ export default function HikingFAQs() {
         </div>
 
         {/* Trail Difficulty and Classification */}
-        <div className="mt-10 mb-4 px-10">
-        <h2 className="text-2xl font-bold mb-2">Trail Difficulty and Classification</h2>
-            <h3 className="font-bold mb-1"> Why are hiking difficulties ranked from 1-9?</h3>
-            <p className="text-gray-800">Most hiking difficulty ratings use a scale of 1-9 to indicate the level of challenge involved. 
-                A rating of 1 is typically for easy trails suitable for beginners, while a rating of 9 is for extremely difficult trails requiring advanced skills and physical fitness. 
-                Factors considered in difficulty ratings include elevation gain, terrain, trail conditions, and exposure to hazards.</p>
-        
-        {/* Three Cards in a Row */}
+        <div className="mt-10 mb-4">
+            <h2 className="text-2xl font-bold mb-2">Trail Difficulty and Classification</h2>
+                <h3 className="font-bold mb-1"> Why are hiking difficulties ranked from 1-9?</h3>
+                <p className="text-gray-800">Most hiking difficulty ratings use a scale of 1-9 to indicate the level of challenge involved. 
+                    A rating of 1 is typically for easy trails suitable for beginners, while a rating of 9 is for extremely difficult trails requiring advanced skills and physical fitness. 
+                    Factors considered in difficulty ratings include elevation gain, terrain, trail conditions, and exposure to hazards.</p>
             
+            {/* Three Cards in a Row */}         
         </div>        
 
        {/* Skill Levels Explained */}
-       <div className="mt-10 px-10 ">
+       <div className="mt-10 ">
                 <h2 className="text-2xl font-bold mb-4">Skill Levels Explained – Day Hike</h2>
                 <table className="min-w-full bg-gray-200 ">
                     <thead>
@@ -79,8 +79,8 @@ export default function HikingFAQs() {
                     </tbody>
                 </table>
         </div>
-
-        
     </div>
+    </div>
+    
   )
 }
