@@ -1,3 +1,5 @@
+import card from '@material-tailwind/react/theme/components/card';
+
 /** @type {import('tailwindcss').Config} */
 export default {
     darkMode: ["class"],
@@ -10,12 +12,10 @@ export default {
     theme: {
         extend: {
             colors: {
-                adminModal: '#f0ba7d',
-                primary: '#cf740e',
-                trColor: '#e6a65e',
-                tdColor: '#edd7be',
                 hoverColor: '#9e5809',
                 profileContainer: '#efe7da',
+                cardPrice: '#faf9f5',
+                primary: '#C7622B',
 			}
         }
     },
