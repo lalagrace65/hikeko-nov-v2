@@ -10,6 +10,9 @@ import { baseUrl } from "@/Url";
 export default function EventsPage() {
     const [open, setOpen] = React.useState(false);
     const [selectedPackage, setSelectedPackage] = useState(null);
+    const [editMode, setEditMode] = useState(false);
+    const [filter, setFilter] = useState("");
+    const [selectedPackageId, setSelectedPackageId] = useState(null); 
     const [packages, setPackages] = useState([]); 
     const [updatedData, setUpdatedData] = useState({
         trailId: '',
@@ -25,10 +28,9 @@ export default function EventsPage() {
         checkOut: '',
         maxGuests: '',
         dpPolicy: '',
-        date: '', 
-    });
-    const [editMode, setEditMode] = useState(false);
-    const [selectedPackageId, setSelectedPackageId] = useState(null);  
+        date: '',
+        status: ''
+    }); 
 
     function formatTimestamp(dateCreated) {
         return dayjs(dateCreated).format('YYYY-MM-DD HH:mm:ss');
@@ -63,6 +65,7 @@ export default function EventsPage() {
             maxGuests: pkg.maxGuests,
             dpPolicy: pkg.dpPolicy,
             date: pkg.date,
+            status: pkg.status
         });
     };
 
@@ -96,7 +99,38 @@ export default function EventsPage() {
                 toast.error('Event archived failed!');
             });
     };
-        
+
+    const handleStatusChange = (pkgId, newStatus) => {
+        const timestampField = newStatus === 'ongoing' ? 'ongoingTimestamp' : newStatus === 'ended' ? 'endedTimestamp' : null;
+        const updateData = { status: newStatus };
+
+        if (timestampField) {
+            updateData[timestampField] = dayjs().toDate();
+        }
+
+        axios.put(`${baseUrl}/packages/${pkgId}`, updateData, { withCredentials: true })
+        .then((response) => {
+            setPackages(packages.map(pkg => 
+                pkg._id === pkgId ? { ...pkg, ...updateData } : pkg
+            ));
+            toast.success("Status updated successfully!");
+        })
+        .catch((error) => {
+            console.error("Error updating status:", error);
+            toast.error("Failed to update status.");
+        });
+    };
+    
+    const filteredPackages = packages.filter(pkg => {
+        const mountainName = pkg.trailId?.title || '';
+        const coordinatorName = pkg.coordinatorName || '';
+        const price = pkg.price || '';
+        return (
+            mountainName.toLowerCase().includes(filter.toLowerCase()) ||
+            coordinatorName.toLowerCase().includes(filter.toLowerCase()) ||
+            price.toLowerCase().includes(filter.toLowerCase())
+        );
+    });
 
     const handleOpen = (pkg) => {
         setSelectedPackage(pkg); // Set the selected package
@@ -111,6 +145,7 @@ export default function EventsPage() {
             <MultiLevelSidebar className="min-h-screen" />
             <div className="flex-1 p-8 flex flex-col">
                 <div className="flex-grow">
+                
                     {editMode ? (
                         <form onSubmit={handleSaveEdit} className="mb-6">
                             <EditEvent 
@@ -122,8 +157,17 @@ export default function EventsPage() {
                     ) : (
                         <div>
                             <div className="overflow-x-auto border bg-white shadow-lg rounded-xl p-6">  
-                                <h2 className="text-xl mb-4">Event List</h2>  
-                                {packages.length > 0 ? (
+                                <h2 className="text-xl mb-4">Event List</h2> 
+                                <div className="mb-4">
+                                <input
+                                    type="text"
+                                    placeholder="Search by Mountain Name, Coordinator, or Price"
+                                    value={filter}
+                                    onChange={(e) => setFilter(e.target.value)}
+                                    className="p-2 border rounded w-full"
+                                />
+                            </div>
+                                {filteredPackages.length > 0 ? (
                                     <table className="min-w-full">
                                         <thead className="bg-gray-100">
                                             <tr>
@@ -134,11 +178,13 @@ export default function EventsPage() {
                                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Event Date</th>
                                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time Created</th>
                                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ongoing</th>
+                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ended</th>
                                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-gray-100">
-                                            {packages.map((pkg) => {
+                                            {filteredPackages.map((pkg) => {
                                                 const formattedDate = dayjs(pkg.date).format('MM-DD-YYYY');
                                                 return (
                                                     <tr key={pkg._id}>
@@ -156,7 +202,19 @@ export default function EventsPage() {
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{pkg.price}</td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{formattedDate}</td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{formatTimestamp(pkg.dateCreated)}</td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600"></td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                                            <select 
+                                                            value={pkg.status}
+                                                            onChange={(e) => handleStatusChange(pkg._id, e.target.value)}
+                                                            className="border rounded p-1"
+                                                        >
+                                                            <option value="upcoming">Upcoming</option>
+                                                            <option value="ongoing">Ongoing</option>
+                                                            <option value="ended">Ended</option>
+                                                        </select>
+                                                        </td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{pkg.ongoingTimestamp ? dayjs(pkg.ongoingTimestamp).format('YYYY-MM-DD HH:mm:ss') : 'N/A'}</td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{pkg.endedTimestamp ? dayjs(pkg.endedTimestamp).format('YYYY-MM-DD HH:mm:ss') : 'N/A'}</td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                                                             <div className="flex flex-col items-start space-y-2">
                                                                 <button 

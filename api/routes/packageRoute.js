@@ -152,6 +152,7 @@ router.put('/packages/:id', requireRole(['admin', 'staff']), async (req, res) =>
         maxGuests,
         dpPolicy, 
         date,  
+        status,
     } = req.body;
 
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
@@ -183,6 +184,14 @@ router.put('/packages/:id', requireRole(['admin', 'staff']), async (req, res) =>
             packageDoc.maxGuests = maxGuests || packageDoc.maxGuests;
             packageDoc.dpPolicy = dpPolicy || packageDoc.dpPolicy;
             packageDoc.date = date || packageDoc.date;
+            packageDoc.status = status || packageDoc.status;
+
+            if (status === 'ongoing') {
+                packageDoc.ongoingTimestamp = new Date();
+            } else if (status === 'ended') {
+                packageDoc.endedTimestamp = new Date();
+            }
+
             await packageDoc.save();
             res.json(packageDoc);
         } catch (err) {
