@@ -1,7 +1,11 @@
 import TravelAgencyCredentialsHome from '@/components/layout/TravelAgency/TravelAgencyCredentialsHome'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 export default function TravelAgencySignUp() {
+  useEffect(() => {
+    // Scroll to top on component mount
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div>
         <TravelAgencyCredentialsHome />

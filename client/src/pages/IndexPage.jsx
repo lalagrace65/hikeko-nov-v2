@@ -1,9 +1,14 @@
-import { AboutHikeko } from "@/components/layout/index/AboutHikeko";
+import { AboutHikeko } from "@/components/layout/about/AboutHikeko";
 import Banner from "@/components/layout/index/Banner";
 import { FeaturedPackage } from "@/components/layout/index/FeaturedPackage";
 import HikingFAQs from "@/components/layout/index/HikingFAQs";
+import { useEffect } from "react";
 
 export default function IndexPage() {
+    useEffect(() => {
+        // Scroll to top on component mount
+        window.scrollTo(0, 0);
+      }, []);
     return (
         <div>
             <Banner />
@@ -12,8 +17,10 @@ export default function IndexPage() {
                 Set out on a journey suitable to your preferences. 
                 Whether you seek breathtaking landscapes or challenging terrains, HikeKo offers hikes for every adventurer.</h3>
             <FeaturedPackage />
-            <AboutHikeko/>
-            <HikingFAQs />
+            <div className="ml-60 mr-60">
+                <AboutHikeko/>
+                <HikingFAQs />
+            </div>
         </div>
     );
 }

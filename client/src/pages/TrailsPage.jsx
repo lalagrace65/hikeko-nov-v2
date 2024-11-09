@@ -15,18 +15,22 @@ export default function TrailsPage() {
   const [trailList, setTrailList] = useState([]);
   const [loading,setLoading]=useState(true);
 
+  useEffect(() => {
+    // Scroll to top on component mount
+    window.scrollTo(0, 0);
+  }, []);
 
-useEffect(()=>{
-  getGooglePlace();
-},[category,radius])
+  useEffect(()=>{
+    getGooglePlace();
+  },[category,radius])
 
-  const getGooglePlace=()=>{
-    setLoading(true)
-  GlobalApi.getGooglePlace(category,radius).then((res)=>{
-    console.log(res.data.product.results);
-    setLoading(false)
-  })
-}
+    const getGooglePlace=()=>{
+      setLoading(true)
+    GlobalApi.getGooglePlace(category,radius).then((res)=>{
+      console.log(res.data.product.results);
+      setLoading(false)
+    })
+  }
 
   return (
     <div className="grid grid-cols-1 h-screen md:grid-cols-4 justify-center">
