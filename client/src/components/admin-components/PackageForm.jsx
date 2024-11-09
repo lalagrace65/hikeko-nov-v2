@@ -52,6 +52,26 @@ export default function PackageForm() {
         return { hours, minutes };
     }
 
+    function isEndTimeValid(startTime, endTime) {
+        const start = timeStringToObject(startTime);
+        const end = timeStringToObject(endTime);
+    
+        // Compare hours and minutes
+        if (end.hours > start.hours) return true;
+        if (end.hours === start.hours && end.minutes >= start.minutes) return true;
+    
+        return false;
+    }
+
+    const handleEndTimeChange = (ev) => {
+        const newEndTime = ev.target.value;
+        if (isEndTimeValid(checkIn, newEndTime)) {
+            setCheckOut(newEndTime);
+        } else {
+            toast.error("End time cannot be earlier than start time.");
+        }
+    };
+
     async function addNewPackage(ev) {
         ev.preventDefault();
         try {
@@ -196,7 +216,6 @@ export default function PackageForm() {
                                     <input type="time"
                                         value={checkIn}
                                         onChange={ev => setCheckIn(ev.target.value)}
-                                        placeholder="14:00"
                                         className="w-full border p-2 rounded"
                                     />
                                 </div>
@@ -204,8 +223,7 @@ export default function PackageForm() {
                                     <h3 className="mt-2 -mb-1">End</h3>
                                     <input type="time"
                                         value={checkOut}
-                                        onChange={ev => setCheckOut(ev.target.value)}
-                                        placeholder="11:00"
+                                        onChange={handleEndTimeChange}
                                         className="w-full border p-2 rounded"
                                     />
                                 </div>
