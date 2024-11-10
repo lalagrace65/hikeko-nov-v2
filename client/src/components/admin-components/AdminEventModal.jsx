@@ -20,9 +20,9 @@ const PackageModal = ({ open, handleClose, packageData }) => {
             size="xs"
             open={open}
             handler={handleClose}
-            className="bg-transparent shadow-none"
+            className="bg-transparent shadow-none flex items-center justify-center"
         >
-            <Card className="mt-20 border mx-auto h-[800px] w-[800px]">
+            <Card className="border mx-auto h-[800px] w-[800px]">
                 <CardBody className="flex flex-col">
                     {/*Package Details Header*/}
                     <div className="p-4 border rounded-xl w-auto bg-adminModal">
@@ -34,6 +34,9 @@ const PackageModal = ({ open, handleClose, packageData }) => {
                         </Typography>
                         <Typography className="custom-paragraph font-normal" variant="paragraph" color="gray">
                             <p><b>Slot:</b> </p>
+                        </Typography>
+                        <Typography className="custom-paragraph font-normal" variant="paragraph" color="gray">
+                            <p><b>Status:</b> {packageData ? packageData.status : 'N/A'}</p>
                         </Typography>
                         <Typography className="custom-paragraph font-normal" variant="paragraph" color="gray">
                             <p><b>Packages:</b> </p>
