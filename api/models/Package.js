@@ -24,6 +24,8 @@ const packageSchema = mongoose.Schema({
     date: { type: Date, required: true },        
     dateCreated: { type: Date, required: true },
     status: { type: String, enum: ['upcoming','ongoing', 'ended'], default: null },
+    ongoingTimestamp: { type: Date, required: false },
+    endedTimestamp: { type: Date, required: false },
     isArchived: { type: Boolean, default: false },
     archivedTimestamp: { type: Date, required: false },   
 });
