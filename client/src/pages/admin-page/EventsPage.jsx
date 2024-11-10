@@ -125,10 +125,12 @@ export default function EventsPage() {
         const mountainName = pkg.trailId?.title || '';
         const coordinatorName = pkg.coordinatorName || '';
         const price = pkg.price || '';
+        const status = pkg.status || '';
         return (
             mountainName.toLowerCase().includes(filter.toLowerCase()) ||
             coordinatorName.toLowerCase().includes(filter.toLowerCase()) ||
-            price.toLowerCase().includes(filter.toLowerCase())
+            price.toLowerCase().includes(filter.toLowerCase()) ||
+            status.toLowerCase().includes(filter.toLowerCase())
         );
     });
 
@@ -161,7 +163,7 @@ export default function EventsPage() {
                                 <div className="mb-4">
                                 <input
                                     type="text"
-                                    placeholder="Search by Mountain Name, Coordinator, or Price"
+                                    placeholder="Search by Mountain Name, Coordinator, Price, or Status"
                                     value={filter}
                                     onChange={(e) => setFilter(e.target.value)}
                                     className="p-2 border rounded w-full"
@@ -213,8 +215,8 @@ export default function EventsPage() {
                                                             <option value="ended">Ended</option>
                                                         </select>
                                                         </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{pkg.ongoingTimestamp ? dayjs(pkg.ongoingTimestamp).format('YYYY-MM-DD HH:mm:ss') : 'N/A'}</td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{pkg.endedTimestamp ? dayjs(pkg.endedTimestamp).format('YYYY-MM-DD HH:mm:ss') : 'N/A'}</td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{pkg.ongoingTimestamp ? dayjs(pkg.ongoingTimestamp).format('HH:mm:ss') : 'N/A'}</td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{pkg.endedTimestamp ? dayjs(pkg.endedTimestamp).format('HH:mm:ss') : 'N/A'}</td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                                                             <div className="flex flex-col items-start space-y-2">
                                                                 <button 
