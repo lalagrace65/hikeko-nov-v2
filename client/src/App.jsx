@@ -27,12 +27,11 @@ import EventArchivesPage from "./pages/admin-page/EventArchivesPage";
 import AgencyCredentialsProcess from "./components/forms/AgencyCredentialsProcess";
 import CustomerPackageDetails from "./pages/user-page/CustomerPackageDetails";
 import CustomerBookPage from "./pages/user-page/CustomerBookPage";
-import { AboutHikeko } from "./components/layout/index/AboutHikeko";
 import AboutPage from "./pages/AboutPage";
 import { baseUrl } from "./Url";
 import Dashboard_StaffPage from "./pages/staff-page/Dashboard_StaffPage";
-import AdminDashboard from "./pages/admin-page/AdminDashboard";
 import ProfilePage from "./pages/user-page/ProfilePage";
+import AdminTransactionList from "./pages/admin-page/AdminTransactionList";
 
 // Set default axios settings
 axios.defaults.baseURL = `${baseUrl}`;
@@ -93,6 +92,22 @@ function App() {
               element={
                 <ProtectRoute>
                   <AdminBookingList />
+                </ProtectRoute>
+              }
+            />
+            <Route
+              path="/admin/transactions"
+              element={
+                <ProtectRoute>
+                  <AdminTransactionList />
+                </ProtectRoute>
+              }
+            />
+            <Route
+              path="/admin/transactions/:referenceCode"
+              element={
+                <ProtectRoute>
+                  <AdminTransactionList />
                 </ProtectRoute>
               }
             />
