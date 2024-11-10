@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React,{ useEffect, useState } from "react";
 import axios from "axios";
 import EditEvent from "../../components/admin-components/EditEvent";
 import { MultiLevelSidebar } from "@/components/admin-components/AdminSidebar";
@@ -74,46 +74,12 @@ export default function AdminBookingList() {
         });
     };
 
-    const handleSaveEdit = (e) => {
-        e.preventDefault();
-        axios.put(`${baseUrl}/booking-list/${selectedBookingId}`, updatedData, { withCredentials: true })
-            .then((response) => {
-                console.log("Booking updated:", response.data);
-                setEditMode(false);
-                setBookings(bookings.map(b => 
-                    b._id === selectedBookingId ? response.data : b
-                ));
-            })
-            .catch((error) => {
-                console.error("Error updating booking:", error);
-            });
-    };
-
-    const handleDelete = (id) => {
-        axios.delete(`${baseUrl}/booking-list/${id}`, { withCredentials: true })
-            .then((response) => {
-                console.log("Booking deleted:", response.data);
-                setBookings(bookings.filter(b => b._id !== id));
-            })
-            .catch((error) => {
-                console.error("Error deleting booking:", error);
-            });
-    };
 
     return (
         <div className="flex h-screen">
             <MultiLevelSidebar />
             <div className="flex-1 p-8">
                 <div>
-                    {editMode ? (
-                        <form onSubmit={handleSaveEdit} className="mb-6">
-                            <EditEvent 
-                                updatedData={updatedData} 
-                                setUpdatedData={setUpdatedData} 
-                                setEditMode={setEditMode} 
-                                bookingId={selectedBookingId} />
-                        </form>
-                    ) : (
                         <div>
                             <div className="overflow-x-auto border bg-white shadow-lg rounded-xl p-6">  
                                 <h2 className="text-xl mb-4">Joiner List</h2>  
@@ -128,75 +94,72 @@ export default function AdminBookingList() {
                                             </tr>
                                         </thead>
                                         <tbody className="bg-white divide-y divide-gray-200">
-                                        {bookings.map((booking) => (
-                                            <>
-                                                {/* Parent Row with Conditional Gray Background */}
-                                                <tr 
-                                                key={booking._id} 
-                                                className={expandedRow === booking._id ? "bg-gray-200" : "bg-white"} // Graying out the parent row when expanded
-                                                >
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{booking.joinerName}</td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{booking.email}</td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{booking.contactNumber}</td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                                    <button 
-                                                    className="flex items-center space-x-1 bg-transparent text-blue-600 hover:text-blue-900 md:font-semibold"
-                                                    onClick={() => toggleExpandedRow(booking._id)}
-                                                    >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                                    </svg>
-                                                    <span>{expandedRow === booking._id ? "Less" : "More"}</span>
-                                                    </button>
-                                                </td>
-                                                </tr>
-
-                                                {/* Expanded Row with Transaction History and Grayed Background */}
-                                                {expandedRow === booking._id && (
-                                                <>
-                                                    {/* Expanded Row for Booking Details */}
-                                                    <tr className="bg-gray-100"> {/* Grayed out expanded row */}
-                                                    <td colSpan="4" className="px-6 py-4">
-                                                        <div className="grid grid-cols-1 gap-1 text-sm text-gray-600">
-                                                        <p><strong>Age:</strong> {booking.age}</p>
-                                                        <p><strong>Sex:</strong> {booking.sex}</p>
-                                                        <p><strong>Home Address:</strong> {booking.homeAddress}</p>
-                                                        <p><strong>Emergency Contact:</strong> {booking.emergencyContactPerson} ({booking.emergencyContactNumber})</p>
-                                                        <p className="flex items-center space-x-1">
-                                                            <strong>Medical Condition:</strong> {booking.medicalCondition ? "Yes" : "No"}
-                                                            {booking.medicalCondition && <MedicalCondiToolTip conditionDetails={booking.conditionDetails} />}
-                                                        </p>
-                                                        </div>
-                                                    </td>
+                                            {bookings.map((booking) => (
+                                                <React.Fragment key={booking._id}>
+                                                    {/* Parent Row with Conditional Gray Background */}
+                                                    <tr key={booking._id} className={expandedRow === booking._id ? "bg-gray-200" : "bg-white"}>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{booking.joinerName}</td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{booking.email}</td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{booking.contactNumber}</td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                                            <button
+                                                                className="flex items-center space-x-1 bg-transparent text-blue-600 hover:text-blue-900 md:font-semibold"
+                                                                onClick={() => toggleExpandedRow(booking._id)}
+                                                            >
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                                                </svg>
+                                                                <span>{expandedRow === booking._id ? "Less" : "More"}</span>
+                                                            </button>
+                                                        </td>
                                                     </tr>
 
-                                                    {/* Expanded Row for Transaction History */}
-                                                    <tr className="bg-gray-100"> {/* Grayed out expanded row */}
-                                                    <td colSpan="4" className="px-6 py-4">
-                                                        <p className="mb-2"><strong>TRANSACTION HISTORY</strong></p>
-                                                        <div className="grid grid-cols-6 gap-1 text-sm text-gray-600">
-                                                        <p
-                                                            key={booking.referenceCode}
-                                                            className="cursor-pointer hover:underline"
-                                                            onClick={() => handleReferenceCodeClick(booking.referenceCode)} // Handle click
-                                                        >
-                                                            {booking.referenceCode}
-                                                        </p>
-                                                        </div>
-                                                    </td>
-                                                    </tr>
-                                                </>
-                                                )}
-                                            </>
-                                        ))}
+                                                    {/* Expanded Row with Transaction History and Grayed Background */}
+                                                    {expandedRow === booking._id && (
+                                                        <>
+                                                            {/* Expanded Row for Booking Details */}
+                                                            <tr className="bg-gray-100">
+                                                                <td colSpan="4" className="px-6 py-4">
+                                                                    <div className="grid grid-cols-1 gap-1 text-sm text-gray-600">
+                                                                        <span><strong>Age:</strong> {booking.age}</span>
+                                                                        <span><strong>Sex:</strong> {booking.sex}</span>
+                                                                        <span><strong>Home Address:</strong> {booking.homeAddress}</span>
+                                                                        <span><strong>Emergency Contact:</strong> {booking.emergencyContactPerson} ({booking.emergencyContactNumber})</span>
+                                                                        <span className="flex items-center space-x-1">
+                                                                            <strong>Medical Condition:</strong> {booking.medicalCondition ? "Yes" : "No"}
+                                                                            {booking.medicalCondition && <MedicalCondiToolTip conditionDetails={booking.conditionDetails} />}
+                                                                        </span>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+
+                                                            {/* Expanded Row for Transaction History */}
+                                                            <tr className="bg-gray-100">
+                                                                <td colSpan="4" className="px-6 py-4">
+                                                                    <span className="mb-2"><strong>TRANSACTION HISTORY</strong></span>
+                                                                    <div className="grid grid-cols-6 gap-1 text-sm text-gray-600">
+                                                                        <span
+                                                                            key={booking.referenceCode}
+                                                                            className="cursor-pointer hover:underline hover:text-blue-600"
+                                                                            onClick={() => handleReferenceCodeClick(booking.referenceCode)} // Handle click
+                                                                        >
+                                                                            {booking.referenceCode}
+                                                                        </span>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </>
+                                                    )}
+                                                </React.Fragment>
+                                            ))}
                                         </tbody>
+
                                     </table>
                                 ) : (
                                     <div>No bookings available</div>
                                 )}
                             </div>
                         </div>
-                    )}
                 </div>
             </div>
         </div>

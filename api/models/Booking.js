@@ -18,6 +18,7 @@ const BookingSchema = new mongoose.Schema({
     paymentType: {type: String, required: true},
     termsAccepted: {type: Boolean, required: true},
     referenceCode: { type: String, unique: true },
+    travelAgency: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     packageId: { type: mongoose.Schema.Types.ObjectId, ref: 'Package', required: true }, // Link to Package model
     status: { 
       type: String, 

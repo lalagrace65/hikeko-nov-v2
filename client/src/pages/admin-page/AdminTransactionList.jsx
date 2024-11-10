@@ -9,9 +9,10 @@ export default function AdminTransactionList() {
     const [bookings, setBookings] = useState([]);
     const [expandedRow, setExpandedRow] = useState(null);
 
-    // Get the highlighted booking reference from the URL
+    // Get the highlighted booking reference from the URL initially
     const queryParams = new URLSearchParams(location.search);
-    const highlightedReference = queryParams.get("highlighted");
+    const initialHighlight = queryParams.get("highlighted");
+    const [highlightedReference, setHighlightedReference] = useState(initialHighlight);
 
     useEffect(() => {
         const fetchBookings = async () => {
@@ -27,6 +28,8 @@ export default function AdminTransactionList() {
     }, []);
 
     const toggleExpandedRow = (bookingId) => {
+        // Clear the highlighted reference when a row is clicked
+        setHighlightedReference(null);
         setExpandedRow(expandedRow === bookingId ? null : bookingId);
     };
 
@@ -51,16 +54,18 @@ export default function AdminTransactionList() {
                                         <tr
                                             className={
                                                 booking.referenceCode === highlightedReference
-                                                    ? "bg-yellow-100" // Apply highlight style
+                                                    ? "bg-yellow-100"
+                                                    : expandedRow === booking._id
+                                                    ? "bg-gray-200"
                                                     : "bg-white"
                                             }
+                                            onClick={() => toggleExpandedRow(booking._id)}
                                         >
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{booking.referenceCode}</td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{booking.packageId}</td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                                                 <button
                                                     className="flex items-center space-x-1 bg-transparent text-blue-600 hover:text-blue-900 md:font-semibold"
-                                                    onClick={() => toggleExpandedRow(booking._id)}
                                                 >
                                                     <span>{expandedRow === booking._id ? "Less" : "More"}</span>
                                                 </button>

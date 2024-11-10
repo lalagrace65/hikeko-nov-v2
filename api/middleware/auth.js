@@ -1,8 +1,6 @@
 // middleware/auth.js
 const jwt = require('jsonwebtoken');
-
-const jwtSecret = 'wsdfghjkqisoaklfksld'; // Replace with your actual secret
-const bcryptSalt = 10;
+const jwtSecret = 'wsdfghjkqisoaklfksld';
 
 function requireRole(roles) {
     return (req, res, next) => {
@@ -22,9 +20,11 @@ function requireRole(roles) {
                 return res.status(403).json({ message: 'Access denied. Insufficient permissions.' });
             }
 
+            // Attach user data to request
+            req.userData = userData;
             next();
         });
     };
 }
 
-module.exports = { requireRole, jwtSecret, bcryptSalt };
+module.exports = { requireRole, jwtSecret };
