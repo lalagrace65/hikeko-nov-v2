@@ -29,15 +29,14 @@ export function UserContextProvider({ children }) {
                 }
             } catch (err) {
                 if (err.response && err.response.status === 401) {
-                    // Handle Unauthorized error gracefully
                     console.error("User is not authorized. Please log in.");
                     setError("Unauthorized: Please log in.");
-                    setUser(null); // Ensure user is set to null
-                    localStorage.removeItem('user'); // Remove any saved user data
+                    setUser(null); 
+                    localStorage.removeItem('user'); 
                 } else {
                     console.error("Error fetching user profile:", err);
                     setError("Failed to fetch user profile. Please log in.");
-                    setUser(null); // Ensure user is set to null
+                    setUser(null); 
                     localStorage.removeItem('user');
                 }
             } finally {
