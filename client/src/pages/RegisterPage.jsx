@@ -65,7 +65,7 @@ export default function RegisterPage() {
                 <div>
                     <Typography variant="h6" className="text-2xl text-center">Register</Typography>
                     <hr className="w-full border-t-1 border-gray-300 mx-auto mt-4 mb-4" />
-                    <form className="max-w-md mx-auto">
+                    <form className="max-w-md mx-auto" onSubmit={registerUser}>
                     <div className="grid gap-1 sm:grid-cols-2">
                         <input 
                             type="text" 
@@ -140,7 +140,7 @@ export default function RegisterPage() {
                         </div>
                 </CardBody>
                 <CardFooter className="pt-0">
-                    <Button className="primary" type="submit" onClick={registerUser}>Register</Button>
+                    <Button className="primary" type="submit">Register</Button>
                     <div className="text-center py-2 text-gray-500 mt-2">
                         <Typography variant="small" className="font-normal"> 
                             Already a member?

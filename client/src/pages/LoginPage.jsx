@@ -10,10 +10,9 @@ export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [redirect, setRedirect] = useState(false);
-    const [redirectPath, setRedirectPath] = useState('/'); // Default redirect path
+    const [redirectPath, setRedirectPath] = useState('/');
     const { setUser } = useContext(UserContext);
-    
-    // Check if the user is already logged in when the component mounts
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         const storedUser = localStorage.getItem('user');
@@ -22,8 +21,6 @@ export default function LoginPage() {
             setUser(JSON.parse(storedUser));
             setRedirect(true);
             const parsedUser = JSON.parse(storedUser);
-
-            // Set the redirect path based on user role
             if (parsedUser.role === 'admin') {
                 setRedirectPath('/admin');
             } else if (parsedUser.role === 'staff') {
@@ -37,19 +34,13 @@ export default function LoginPage() {
     }, [setUser]);
 
     async function handleLoginSubmit(ev) {
-        ev.preventDefault(); // Prevent form default submission behavior
+        ev.preventDefault();
         try {
             const { data } = await axios.post(`${baseUrl}/login`, { email, password }, { withCredentials: true });
-            
-            setUser(data);  // This should include name, email, id, and role
-            
-              // Store token and user info in localStorage
-              localStorage.setItem('token', data.token);
-              localStorage.setItem('user', JSON.stringify(data));
-
+            setUser(data);
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('user', JSON.stringify(data));
             toast.success('Login successful');
-
-            // Set redirect path based on user role
             if (data.role === 'admin') {
                 setRedirectPath('/admin');
             } else if (data.role === 'staff') {
@@ -59,7 +50,6 @@ export default function LoginPage() {
             } else {
                 setRedirectPath('/');
             }
-
             setRedirect(true);
         } catch (e) {
             if (e.response && e.response.status === 403) {
@@ -74,19 +64,18 @@ export default function LoginPage() {
         }
     }
 
-    // Redirect based on the user's role
     if (redirect) {
-        return <Navigate to={redirectPath} />
+        return <Navigate to={redirectPath} />;
     }
 
     return (
         <div className="mt-4 grow flex items-center justify-around">
             <Card className="mx-auto w-full max-w-[24rem]">
-                <CardBody className="flex flex-col gap-2"> 
+                <CardBody className="flex flex-col gap-2">
                     <div>
-                    <Typography variant="h6" className="text-2xl text-center">Login</Typography>
-                    <hr className="w-full border-t-1 border-gray-300 mx-auto mt-4 mb-4" />
-                        <form className="max-w-md mx-auto" >
+                        <Typography variant="h6" className="text-2xl text-center">Login</Typography>
+                        <hr className="w-full border-t-1 border-gray-300 mx-auto mt-4 mb-4" />
+                        <form className="max-w-md mx-auto" onSubmit={handleLoginSubmit}>
                             <input 
                                 type="email"
                                 placeholder="your@email.com"
@@ -101,12 +90,12 @@ export default function LoginPage() {
                                 onChange={ev => setPassword(ev.target.value)}
                                 required
                             />
+                            <Button className="primary" type="submit">Login</Button>
                         </form>
                     </div>
                 </CardBody>
                 <CardFooter className="pt-0">
                     <div className="text-center py-2 text-gray-500 mt-2">
-                    <Button className="primary" type="submit" onClick={handleLoginSubmit}>Login</Button>
                         <Typography variant="small" className="font-normal mt-4">
                             Don't have an account? 
                             <Link className="text-black font-semibold" to={'/register'}> Register now</Link>
