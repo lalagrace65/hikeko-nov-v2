@@ -436,7 +436,6 @@ export default function PackageForm() {
                                 value={paymentOptions}
                                 onChange={ev => setPaymentOptions(ev.target.value)}
                                 className="w-full border mt-2 p-2 rounded"
-                                rows={9}
                             />
                             {errors.paymentOptions && <p className="text-red-500 text-sm">{errors.paymentOptions}</p>}
                         </div>

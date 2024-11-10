@@ -39,10 +39,6 @@ export default function Packages({ selected, onChange }) {
                 <span>Bag tag</span>
             </label>
             <label className="flex border rounded-2xl p-4 items-center gap-2 cursor-pointer">
-                <input type="checkbox" name="entranceFee" checked={selected.includes('entranceFee')} onChange={handleCbClick} />
-                <span>Entrance fee</span>
-            </label>
-            <label className="flex border rounded-2xl p-4 items-center gap-2 cursor-pointer">
                 <input type="checkbox" name="driverFee" checked={selected.includes('driverFee')} onChange={handleCbClick} />
                 <span>Driver's fee</span>
             </label>
