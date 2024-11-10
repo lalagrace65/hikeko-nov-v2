@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const TravelAgencySignUp = require('../../models/TravelAgencySignUp');
+const User = require('../../models/User');
 
 
 const router = express.Router();
@@ -63,5 +64,4 @@ router.post('/signup', async (req,res) => {
     return res.status(500).json({ error: error.message || 'Failed to create signup' });
   }
 });
-
 module.exports = router;

@@ -320,6 +320,15 @@ function JoinerDetailsForm({packageId}) {
                 
             </ReactSortable>
 
+            {/*Voucher*/}
+            <div className="relative w-full">
+                <InputField
+                    type="text"
+                    label="Voucher"
+                    name="voucher"
+             />
+            </div>
+
             {/* Checkbox */}
                 <Checkbox
                 label={

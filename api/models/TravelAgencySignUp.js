@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const uniqid = require('uniqid');
+const bcrypt = require('bcryptjs');
 
 const TravelAgencySignUpSchema = new mongoose.Schema({
   ownerFirstName: { type: String, required: true },
@@ -23,9 +25,22 @@ const TravelAgencySignUpSchema = new mongoose.Schema({
   },
   emailVerified: { type: Boolean, default: false },
   verificationToken: { type: String },
-  
+  temporaryPassword: { type: String, unique: true  }, 
+  temporaryPasswordExpiry: { type: Date }, // Expiry date for temp password
+  password: { type: String }, // Permanent password after they change it
+  role: { type: String, enum: ['admin', 'staff'], default: 'admin' },
 }, { timestamps: true });
 
+// Pre-save hook to generate unique reference code
+TravelAgencySignUpSchema.pre('save', async function (next) {
+  if (!this.temporaryPassword) {
+    const tempPassword = uniqid();
+    this.plainTempPassword = tempPassword; // Save plain text password
+    this.temporaryPassword = await bcrypt.hash(tempPassword, 10); 
+    this.temporaryPasswordExpiry = Date.now() + 24 * 60 * 60 * 1000; // 24 hours from now
+  }
+  next();
+});
 
 const TravelAgencySignUpModel = mongoose.model('TravelAgencySignUp', TravelAgencySignUpSchema);
 

@@ -7,9 +7,10 @@ import {
    
   export function AboutHikeko() {
     return (
-    <div className="flex justify-center items-center mt-20 gap-5 bg-about p-20">
+      // About Hikeko
+    <div className="flex justify-center items-center mt-20 bg-about" style={{paddingLeft: "165px", paddingRight: "155px", paddingTop: "40px", paddingBottom: "40px"  }}>
         <CardHeader shadow={false}  floated={false}
-          className="ml-30 mr-30 shrink-0 rounded-r-none w-80"
+          className=" w-2/5 shrink-0 rounded-r-none" 
         >
           <img
             src="praisedTA_1.jpg"
@@ -18,7 +19,7 @@ import {
           />
         </CardHeader>
         <CardBody>
-          <Typography color="white" className="mb-8 font-extralight text-2xl">
+          <Typography color="white" className="mb-8 font-extralight text-lg">
             At HikeKo, we are passionate about connecting hikers with the beauty of nature. 
             Our mission is to provide an enriching and safe hiking experience for everyone. 
             We believe that every step in nature is a step towards a healthier and happier life.

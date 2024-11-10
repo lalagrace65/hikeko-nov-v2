@@ -46,6 +46,10 @@ export default function Packages({ selected, onChange }) {
                 <input type="checkbox" name="driverFee" checked={selected.includes('driverFee')} onChange={handleCbClick} />
                 <span>Driver's fee</span>
             </label>
+            <label className="flex border rounded-2xl p-4 items-center gap-2 cursor-pointer">
+                <input type="checkbox" name="droneService" checked={selected.includes('droneService')} onChange={handleCbClick} />
+                <span>Drone Shot Service</span>
+            </label>
         </div>
     );
 }

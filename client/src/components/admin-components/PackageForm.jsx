@@ -7,6 +7,10 @@ import Packages from "../admin-components/Packages";
 import { MultiLevelSidebar } from "../admin-components/AdminSidebar";
 import toast from "react-hot-toast";
 import { baseUrl } from "@/Url";
+import { Typography, Spinner } from "@material-tailwind/react";
+import { FiUpload } from "react-icons/fi";
+import { ReactSortable } from 'react-sortablejs';
+
 
 export default function PackageForm() {
     const [trails, setTrails] = useState([]);
@@ -24,6 +28,68 @@ export default function PackageForm() {
     const [maxGuests, setMaxGuests] = useState('');
     const [dpPolicy, setDpPolicy] = useState('');
     const [selectedDate, setSelectedDate] = useState(null); 
+
+    const [packageImages, setPackageImages] = useState([]);
+    const [isUploading, setIsUploading] = useState(false);
+
+    // Error states
+    const [errors, setErrors] = useState({
+        selectedTrail: "",
+        price: "",
+        dpPolicy: "",
+        pickupLocation: "",
+        coordinatorName: "",
+        checkIn: "",
+        checkOut: "",
+        maxGuests: "",
+    });
+
+    // Validate fields function
+    const validate = () => {
+        const newErrors = {};
+        if (!selectedTrail) newErrors.selectedTrail = "Trail is required";
+        if (!price || isNaN(parseFloat(price.replace(/[₱,]/g, "")))) newErrors.price = "Valid price is required";
+        if (!dpPolicy || isNaN(parseFloat(dpPolicy.replace(/[₱,]/g, "")))) newErrors.dpPolicy = "Valid downpayment policy is required";
+        if (!exclusions) newErrors.exclusions = "Package exclusions is required";
+        if (!extraInfo) newErrors.extraInfo = "Extra info is required";
+        if (!paymentOptions) newErrors.paymentOptions = "Payment details is required";
+        if (!pickupLocation) newErrors.pickupLocation = "Pickup location is required";
+        if (!coordinatorName) newErrors.coordinatorName = "Coordinator name is required";
+        if (!checkIn) newErrors.checkIn = "Check-in time is required";
+        if (!checkOut) newErrors.checkOut = "Check-out time is required";
+        if (!maxGuests || isNaN(maxGuests)) newErrors.maxGuests = "Valid max guests number is required";
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    function formatToPHP(value) {
+        const num = parseFloat(value);
+        return isNaN(num) ? '' : new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(num);
+    }
+
+    // Format price to always show the PHP currency symbol
+    function formatPrice(value) {
+        const rawValue = value.replace(/[^0-9.]/g, ''); // Remove any non-numeric characters
+        return formatToPHP(rawValue); // Convert the cleaned value to PHP format
+    }
+    function handlePriceChange(ev) {
+        const inputValue = ev.target.value.replace(/[^0-9.]/g, ''); 
+        setPrice(inputValue); 
+    }
+    
+    function handleDpPolicyChange(ev) {
+        const input = ev.target.value.replace(/[^0-9.]/g, '');
+        setDpPolicy(input);
+    }
+    
+    function handleBlurPrice() {
+        setPrice(formatToPHP(price));
+    }
+    
+    function handleBlurDpPolicy() {
+        setDpPolicy(formatToPHP(dpPolicy));
+    }
 
     function inputHeader(text) {
         return (
@@ -74,23 +140,45 @@ export default function PackageForm() {
 
     async function addNewPackage(ev) {
         ev.preventDefault();
+        if (!validate()) {
+            toast.error("Please fix the errors");
+            return;
+        }
+
         try {
+            // Sanitize the price input to remove currency symbol and commas
+            const sanitizedPrice = parseFloat(price.replace(/[₱,]/g, ''));
+            const parsedDpPolicy = parseFloat(dpPolicy.replace(/[₱,]/g, ''));
+
+            if (isNaN(sanitizedPrice)) {
+                toast.error('Please enter a valid price.');
+                console.log("Error: Price is not a valid number:", price);
+                return;
+            }
+
+            if (isNaN(parsedDpPolicy)) {
+                toast.error('Please enter a valid downpayment policy.');
+                console.log("Error: Downpayment policy is not a valid number:", dpPolicy);
+                return;
+            }
+
             const checkInTime = timeStringToObject(checkIn);
             const checkOutTime = timeStringToObject(checkOut);
 
             if (!selectedDate) {
-                toast.error('Select event date!');
+                toast.error('Select event date.');
                 return;
             }
 
             const formattedDate = dayjs(selectedDate).format('YYYY-MM-DD');
             const dateCreated = new Date();
 
-            await axios.post(`${baseUrl}/packages`, {
+            console.log("Submitting package data..."); 
+            const response = await axios.post(`${baseUrl}/packages`, {
                 trailId: selectedTrail,
                 packages,
                 additionalPackages,
-                price,
+                price: sanitizedPrice,
                 paymentOptions,
                 exclusions,
                 pickupLocation,
@@ -99,11 +187,13 @@ export default function PackageForm() {
                 checkIn: checkInTime,
                 checkOut: checkOutTime,
                 maxGuests,
-                dpPolicy,
+                dpPolicy: parsedDpPolicy,
                 date: formattedDate,
-                dateCreated: dateCreated
+                dateCreated: dateCreated,
+                packageImages: packageImages,
             }, { withCredentials: true });
 
+            console.log("Package creation response:", response);
             toast.success('New package posted successfully!');   
 
             // Clear form fields
@@ -121,6 +211,7 @@ export default function PackageForm() {
             setDpPolicy('');
             setSelectedDate(null);
             setSelectedTrail(''); 
+            setPackageImages([]);
         } catch (err) {
             toast.error('Failed to post package.');
             console.error('Error posting package:', err);     
@@ -140,6 +231,35 @@ export default function PackageForm() {
         fetchTrails();
     }, []);
 
+    //Sortable image upload
+    async function uploadPackageImages(ev){
+        const files = ev.target?.files;
+        if(files?.length > 0){
+            console.log("Files selected for upload:", files);
+            setIsUploading(true);
+            const data = new FormData();
+            for (const file of files){
+                data.append('file', file);
+            }
+            try {
+                console.log("Sending files to the server...");
+                const res = await axios.post('/api/upload', data);
+                console.log("Upload response:", res);
+                setPackageImages(oldImages => {
+                    return [...oldImages, ...res.data.links];
+                });
+            } catch (error) {
+                toast.error("Failed to upload image.");
+
+            } finally {
+                setIsUploading(false);
+            }
+        }
+    }
+    function updatePackageImagesOrder(packageImages) {
+        setPackageImages(packageImages);
+    }
+
     return (
         <div className="flex">
             <MultiLevelSidebar />
@@ -158,10 +278,13 @@ export default function PackageForm() {
                                     <option key={trail._id} value={trail._id}>{trail.title}</option>
                                 ))}
                             </select>
-
+                            {errors.selectedTrail && <p className="text-red-500 text-sm">{errors.selectedTrail}</p>}
+                            
+                            {/* Package Inclusions */}
                             {preInput('Packages Inclusions', 'Select all packages available')}
                             <div className="mt-2">
                                 <Packages selected={packages} onChange={setPackages} />
+                                {errors.packages && <p className="text-red-500 text-sm">{errors.packages}</p>}
                             </div>
 
                             {preInput('', 'Additional packages (Optional)')}
@@ -172,6 +295,7 @@ export default function PackageForm() {
                                 placeholder="Travel Agency may add additional packages here that are not listed above."
                                 rows={5}
                             />
+                            {errors.additionalPackages && <p className="text-red-500 text-sm">{errors.additionalPackages}</p>}
 
                             {preInput('Package Exclusions', 'Enter the package exclusions')}
                             <textarea
@@ -179,14 +303,18 @@ export default function PackageForm() {
                                 onChange={ev => setExclusions(ev.target.value)}
                                 className="w-full border mt-2 p-2 rounded"
                             />
+                            {errors.exclusions && <p className="text-red-500 text-sm">{errors.exclusions}</p>}
 
-                            {preInput('Downpayment Policy')}
-                            <textarea
+                            {preInput('Downpayment Policy Price')}
+                            <input
+                                type="text"
                                 value={dpPolicy}
-                                onChange={ev => setDpPolicy(ev.target.value)}
+                                onChange={handleDpPolicyChange}
+                                onBlur={handleBlurDpPolicy}
                                 className="w-full border mt-2 p-2 rounded"
-                                rows={5}
+                                
                             />
+                            {errors.dpPolicy && <p className="text-red-500 text-sm">{errors.dpPolicy}</p>}
 
                             {preInput('Extra Info', 'Add here hiking rules & regulations, reminders, iterinary, etc. (Optional)')}
                             <textarea
@@ -195,6 +323,42 @@ export default function PackageForm() {
                                 className="w-full border mt-2 p-2 rounded"
                                 rows={5}
                             />
+                            {errors.extraInfo && <p className="text-red-500 text-sm">{errors.extraInfo}</p>}
+
+                            {/* Upload Photo */}
+                            <div>
+                                <Typography variant="h4" className="my-2">
+                                    Upload Photo
+                                </Typography>
+                                <Typography variant="h6" className="my-2 font-normal text-gray-500">
+                                    * Will be display on the package
+                                </Typography>
+                                <input
+                                    type="file" 
+                                    onChange={uploadPackageImages}
+                                    accept="image/*"  
+                                    id="file-upload"
+                                    className="hidden " // Hide the actual file input
+                                />
+                                <label htmlFor="file-upload" className="flex items-center w-1/2 px-4 py-2 border border-gray-300 text-black rounded-2xl cursor-pointer">
+                                    <FiUpload className='w-5 h-5 mr-4' />
+                                    <span>{isUploading ? <Spinner size="sm" /> : "Upload Package Images"}</span>
+                                </label>
+
+                                <ReactSortable
+                                    list={packageImages}
+                                    className="flex flex-relative w-full"
+                                    setList={updatePackageImagesOrder}>
+                                    {!!packageImages?.length && packageImages.map(link => {
+                                        return(
+                                            <div key={link} className=" w-36 h-36 mr-2 mt-2">
+                                                <img src ={link} alt="" className="w-full h-full object-cover rounded-lg"/>
+                                            </div>
+                                        );
+                                    })}
+                                </ReactSortable>
+                            </div>
+
                             <button className="primary my-4 w-full p-2 bg-blue-500 text-white rounded">Save</button>
                         </form>
                     </div>
@@ -235,7 +399,9 @@ export default function PackageForm() {
                                 onChange={ev => setMaxGuests(ev.target.value)}
                                 className="w-full border p-2 rounded"
                             />
+                            {errors.maxGuests && <p className="text-red-500 text-sm">{errors.maxGuests}</p>}
                         </div> 
+                        
                         <div>
                             {preInput('Pickup Location', 'Enter the pickup location address')}
                             <input type="text"
@@ -243,6 +409,7 @@ export default function PackageForm() {
                                 onChange={ev => setPickupLocation(ev.target.value)}
                                 className="w-full border mt-2 p-2 rounded"
                             />
+                            {errors.pickupLocation && <p className="text-red-500 text-sm">{errors.pickupLocation}</p>}
                         </div>
                         <div>
                             {preInput('Coordinator Name')}
@@ -251,24 +418,30 @@ export default function PackageForm() {
                                 onChange={ev => setCoordinatorName(ev.target.value)}
                                 className="w-full border p-2 rounded"
                             />
+                            {errors.coordinatorName && <p className="text-red-500 text-sm">{errors.coordinatorName}</p>}
                         </div>
                         <div>
                             {preInput('Price', 'Enter tour price')}
                             <input type="text"
                                 value={price}
-                                onChange={ev => setPrice(ev.target.value)}
+                                onChange={handlePriceChange} // Use the handlePriceChange function for onChange
+                                onBlur={handleBlurPrice} 
                                 className="w-full border p-2 rounded"
                             />
+                            {errors.price && <p className="text-red-500 text-sm">{errors.price}</p>}
                         </div>
                         <div>
-                            {preInput('Payment Method', 'Input payment method and details')}
+                            {preInput('Payment Details', 'Input available payment methods and details')}
                             <textarea
                                 value={paymentOptions}
                                 onChange={ev => setPaymentOptions(ev.target.value)}
                                 className="w-full border mt-2 p-2 rounded"
+                                rows={9}
                             />
+                            {errors.paymentOptions && <p className="text-red-500 text-sm">{errors.paymentOptions}</p>}
                         </div>
                     </div>
+                    
                 </div>
             </div>
         </div>

@@ -12,7 +12,7 @@ export default function LoginPage() {
     const [redirect, setRedirect] = useState(false);
     const [redirectPath, setRedirectPath] = useState('/'); // Default redirect path
     const { setUser } = useContext(UserContext);
-
+    
     // Check if the user is already logged in when the component mounts
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -43,9 +43,9 @@ export default function LoginPage() {
             
             setUser(data);  // This should include name, email, id, and role
             
-            // Store token and user info in localStorage
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('user', JSON.stringify(data));
+              // Store token and user info in localStorage
+              localStorage.setItem('token', data.token);
+              localStorage.setItem('user', JSON.stringify(data));
 
             toast.success('Login successful');
 

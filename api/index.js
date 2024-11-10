@@ -21,7 +21,8 @@ const uploadRoute = require('./routes/uploadRoute');
 const customerPackagesRoute = require('./routes/Customer/packages');
 const bookingRoute = require('./routes/Customer/joinerDetails'); //public view
 const joinerBookingsRoute = require('./routes/Customer/userBookings');
-
+const travelAgencyLoginRoute = require('./routes/TravelAgency/travelAgencyLoginRoute');
+const travelAgencySettingsRoute = require('./routes/TravelAgency/settings');
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -72,6 +73,8 @@ app.use(uploadRoute);
 app.use('/api', customerPackagesRoute);
 app.use('/api', bookingRoute);
 app.use('/api', joinerBookingsRoute);
+app.use(travelAgencyLoginRoute);
+app.use(travelAgencySettingsRoute);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

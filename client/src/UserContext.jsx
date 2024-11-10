@@ -43,8 +43,8 @@ export function UserContextProvider({ children }) {
                 setReady(true);
             }
         };
-    
-        // Try to load user from localStorage first
+
+        // Check local storage for user data on initial load
         const storedUser = localStorage.getItem('user');
         console.log("Stored user from localStorage:", storedUser);
         
@@ -54,8 +54,8 @@ export function UserContextProvider({ children }) {
         } else {
             fetchUserProfile();  // Call the fetchUserProfile function if no user in localStorage
         }
-    }, []);  // Empty dependency array, so it runs once when the component mounts
-    
+    }, []);  // Run this only once on component mount    
+
     return (
         <UserContext.Provider value={{ user, setUser, ready, error }}>
             {children}

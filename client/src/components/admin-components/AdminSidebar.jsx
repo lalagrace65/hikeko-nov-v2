@@ -31,7 +31,7 @@ export function MultiLevelSidebar() {
       setUser(null);
       navigate('/'); // Redirect to the index after logout
     } catch (error) {
-      console.error("Logout failed:", error);
+      console.error('Error logging out:', error);
     }
   };
 
@@ -64,6 +64,10 @@ export function MultiLevelSidebar() {
 
   const handleAddStaff = () => {
     navigate('/admin/add-staff'); 
+  };
+
+  const handleSettings = () => {
+    navigate('/admin/settings'); 
   };
 
   return (
@@ -245,17 +249,17 @@ export function MultiLevelSidebar() {
           <ListItemPrefix>
             <InboxIcon className="h-5 w-5 mr-2" />
           </ListItemPrefix>
-          Inbox
+            Inbox
           <ListItemSuffix>
             <Chip value="14" size="sm" variant="ghost" color="blue-gray" className="rounded-full" />
           </ListItemSuffix>
         </ListItem>
 
-        <ListItem>
+        <ListItem onClick={handleSettings}>
           <ListItemPrefix>
             <Cog6ToothIcon className="h-5 w-5 mr-2" />
           </ListItemPrefix>
-          Settings
+            Settings
         </ListItem>
         
         <ListItem onClick={handleLogout}>

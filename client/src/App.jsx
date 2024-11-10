@@ -29,8 +29,10 @@ import CustomerPackageDetails from "./pages/user-page/CustomerPackageDetails";
 import CustomerBookPage from "./pages/user-page/CustomerBookPage";
 import AboutPage from "./pages/AboutPage";
 import { baseUrl } from "./Url";
+import SettingsPage from "./pages/admin-page/SettingsPage";
 import Dashboard_StaffPage from "./pages/staff-page/Dashboard_StaffPage";
 import ProfilePage from "./pages/user-page/ProfilePage";
+import TravelAgencyLoginPage from "./pages/admin-page/TravelAgencyLoginPage";
 import AdminTransactionList from "./pages/admin-page/AdminTransactionList";
 
 // Set default axios settings
@@ -59,9 +61,11 @@ function App() {
             <Route path="/book" element={<CustomerBookPage />}/>
             <Route path="/about" element={<AboutPage />}/>
             <Route path="/profile" element={<ProfilePage />}/>
-
+    
             <Route path="/staff-db" element={<Dashboard_StaffPage />} />
-
+            <Route path="/travelAgencyLogin" element={<TravelAgencyLoginPage/>} />
+            
+            
             {/* Protect Admin Routes */}
             <Route
               path="/admin"
@@ -135,7 +139,16 @@ function App() {
                 </ProtectRoute>
               }
             />
-            </Route>
+            <Route
+              path="/admin/settings"
+              element={
+                <ProtectRoute requirePasswordChange={true}>
+                  <SettingsPage />
+                </ProtectRoute>
+              }
+            />
+          </Route>
+          
         </Routes>
       </UserLocationProvider>
     </UserContextProvider>

@@ -15,7 +15,7 @@ import {
         {/*featured card 1*/}
         <Card
           shadow={false}
-          className="relative grid h-[20rem] w-full max-w-[20rem] overflow-hidden text-center "
+          className="relative grid h-[20rem] w-full max-w-[275px] overflow-hidden text-center "
         >
           <CardHeader
             floated={false}
@@ -45,7 +45,7 @@ import {
         {/*featured card 2*/}
         <Card
           shadow={false}
-          className="relative grid h-[20rem] w-full max-w-[20rem] overflow-hidden text-center "
+          className="relative grid h-[20rem] w-full max-w-[275px] overflow-hidden text-center "
         >
           <CardHeader
             floated={false}
@@ -75,7 +75,7 @@ import {
         {/*featured card 3*/}
         <Card
           shadow={false}
-          className="relative grid h-[20rem] w-full max-w-[20rem] overflow-hidden text-center "
+          className="relative grid h-[20rem] w-full max-w-[275px] overflow-hidden text-center "
         >
           <CardHeader
             floated={false}
@@ -105,7 +105,7 @@ import {
         {/*featured card 4*/}
         <Card
           shadow={false}
-          className="relative grid h-[20rem] w-full max-w-[20rem] overflow-hidden text-center "
+          className="relative grid h-[20rem] w-full max-w-[275px] overflow-hidden text-center "
         >
           <CardHeader
             floated={false}

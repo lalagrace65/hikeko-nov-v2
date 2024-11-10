@@ -10,10 +10,10 @@ export default function IndexPage() {
         window.scrollTo(0, 0);
       }, []);
     return (
-        <div>
+        <div className="mx-auto">
             <Banner />
             <h1 className="flex mt-10 text-4xl font-bold justify-center">Find Your Perfect Hike</h1>
-            <h3 className="flex mt-6 text-lg justify-center">
+            <h3 className="flex mt-6 text-md justify-center">
                 Set out on a journey suitable to your preferences. 
                 Whether you seek breathtaking landscapes or challenging terrains, HikeKo offers hikes for every adventurer.</h3>
             <FeaturedPackage />

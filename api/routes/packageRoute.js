@@ -27,7 +27,9 @@ router.post('/packages', requireRole(['admin', 'staff']), (req, res) => {
         checkOut, 
         maxGuests, 
         date, 
-        dateCreated } = req.body;
+        dateCreated,
+        packageImages
+    } = req.body;
 
     // Check for required fields
     if (!date || !dateCreated) {
@@ -66,7 +68,8 @@ router.post('/packages', requireRole(['admin', 'staff']), (req, res) => {
                 maxGuests,
                 dpPolicy,
                 date: new Date(date), 
-                dateCreated: new Date(dateCreated) // Save the timestamp
+                dateCreated: new Date(dateCreated), // Save the timestamp
+                packageImages
             });
 
             res.status(201).json(packageDoc);
