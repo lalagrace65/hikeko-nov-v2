@@ -33,26 +33,35 @@ export default function TravelAgencyLoginPage() {
             console.log('Attempting to login with', { email, password }); // Log input values
             const { data } = await axios.post(`${baseUrl}/travelAgencyLogin`, { email, password }, { withCredentials: true });
     
-            console.log('Response from server:', data); // Log the response data from the server
-            
-            if (data.requiresPasswordChange) {
-                toast.success('Login successful. Please change your password.');
-                setRedirectPath('/admin/settings'); // Redirect to password update page
-                setRedirect(true);  // Set redirect to true to trigger redirection
-                console.log('Password change required. Redirecting to settings.');
-            } else {
-                setUser(data);
+            console.log('Response from server:', data); // Log the entire response data from the server
+    
+            // Check if token exists in the response data
+            if (data.token) {
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user', JSON.stringify(data));
+                setUser(data);
+                
+                if (data.requiresPasswordChange) {
+                    toast.success('Login successful. Please change your password.');
+                    setRedirectPath('/admin/settings');
+                } else {
+                    setRedirectPath(data.role === 'admin' ? '/admin' : '/');
+                }
     
-                setRedirectPath(data.role === 'admin' ? '/admin' : '/');
                 setRedirect(true);
-                console.log('Login successful. Redirecting to:', data.role === 'admin' ? '/admin' : '/');}
+                console.log('Login successful. Redirecting to:', redirectPath);
+            } else {
+                console.error('No token found in response data');
+                toast.error('Login failed: token not provided by server');
+            }
+    
         } catch (e) {
             console.error('Login error:', e); // Log the error details
             toast.error(e.response?.data || 'Login failed');
         }
     }
+    
+    
     
     // Conditional redirect based on the state
     if (redirect) {

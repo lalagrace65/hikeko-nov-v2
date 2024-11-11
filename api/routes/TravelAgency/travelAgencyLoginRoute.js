@@ -11,36 +11,32 @@ router.post('/travelAgencyLogin', async (req, res) => {
 
     const userDoc = await TravelAgencySignUp.findOne({ businessEmail: email });
     if (!userDoc) {
-        console.log('User not found'); // Log when user is not found
+        console.log('User not found');
         return res.status(404).json('User not found');
     }
 
     if (userDoc.status !== 'Approved') {
-        console.log('Account not approved'); // Log when account is not approved
+        console.log('Account not approved');
         return res.status(403).json('Account not approved');
     }
+
     const now = new Date();
     let passOk = false;
 
-    // Check temporary password if not expired, else check permanent password
+    // Check if the temporary password is valid and not expired
     if (userDoc.temporaryPassword && userDoc.temporaryPasswordExpiry > now) {
-        console.log('Checking temporary password'); 
+        console.log('Checking temporary password');
         passOk = await bcrypt.compare(password, userDoc.temporaryPassword);
-        if (passOk) {
-            console.log('Temporary password valid');
-            return res.json({ 
-                message: 'Login successful. Please change your password.', 
-                requiresPasswordChange: true 
-            });
-        }
     } else {
-        console.log('Checking permanent password'); // Log checking of permanent password
-        passOk = await bcrypt.compare(password, userDoc.password);    
-    }   
+        console.log('Checking permanent password');
+        passOk = await bcrypt.compare(password, userDoc.password);
+    }
+
     if (!passOk) {
-        console.log('Invalid password'); // Log if password is invalid
+        console.log('Invalid password');
         return res.status(422).json('Invalid email or password');
     }
+
     // Generate JWT if password is valid
     jwt.sign(
         {
@@ -52,13 +48,24 @@ router.post('/travelAgencyLogin', async (req, res) => {
         {},
         (err, token) => {
             if (err) throw err;
-            res.cookie('token', token).json({
+
+            const response = {
                 email: userDoc.businessEmail,
                 id: userDoc._id,
                 role: userDoc.role,
-                token,
-                requiresPasswordChange: false // already has permanent password
-            });
+                token
+            };
+
+            if (userDoc.temporaryPassword && userDoc.temporaryPasswordExpiry > now) {
+                // Set requiresPasswordChange if logging in with a temporary password
+                response.requiresPasswordChange = true;
+                console.log('Temporary password valid. Requires password change.');
+            } else {
+                response.requiresPasswordChange = false;
+                console.log('Login successful with permanent password.');
+            }
+
+            res.cookie('token', token).json(response);
         }
     );
 });
