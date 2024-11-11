@@ -16,6 +16,7 @@ export default {
                 profileContainer: '#efe7da',
                 cardPrice: '#faf9f5',
                 primary: '#C7622B',
+                aboutColor: '#1d402f',
 			}
         }
     },

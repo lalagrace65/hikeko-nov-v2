@@ -1,7 +1,9 @@
-import { AboutHikeko } from "@/components/layout/about/AboutHikeko";
+
+import { Advertisement } from "@/components/layout/index/Advertisement";
 import Banner from "@/components/layout/index/Banner";
 import { FeaturedPackage } from "@/components/layout/index/FeaturedPackage";
 import HikingFAQs from "@/components/layout/index/HikingFAQs";
+import { MoreAbout } from "@/components/layout/index/MoreAbout";
 import { useEffect } from "react";
 
 export default function IndexPage() {
@@ -12,13 +14,15 @@ export default function IndexPage() {
     return (
         <div className="mx-auto">
             <Banner />
-            <h1 className="flex mt-10 text-4xl font-bold justify-center">Find Your Perfect Hike</h1>
-            <h3 className="flex mt-6 text-md justify-center">
+            <h1 className="flex mt-10 text-4xl font-bold justify-center text-primary">Find Your Perfect Hike</h1>
+            <h3 className="flex mt-6 text-lg justify-center">
                 Set out on a journey suitable to your preferences. 
                 Whether you seek breathtaking landscapes or challenging terrains, HikeKo offers hikes for every adventurer.</h3>
-            <FeaturedPackage />
+            {/*<FeaturedPackage />*/}
+            <FeaturedPackage /> 
             <div className="ml-60 mr-60">
-                <AboutHikeko/>
+                <Advertisement />
+                <MoreAbout />
                 <HikingFAQs />
             </div>
         </div>

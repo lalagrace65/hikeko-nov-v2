@@ -27,7 +27,8 @@ export function FooterWithSocialLinks() {
 
   return (
     <footer className="relative w-full mt-40">
-      <div className="mx-auto w-full max-w-[screen-xl] px-8">
+      <hr className="mb-10"/>
+      <div className="mx-auto w-full max-w-[screen-xl]">
         <div className="flex justify-between items-start text-right">
           <Typography className="mb-6 ml-60 text-primary flex items-center text-6xl font-semibold">
           <img src="HIKEKO-LOGO-BIG.png" alt="HikeKo Logo" className="w-30 h-40"/>

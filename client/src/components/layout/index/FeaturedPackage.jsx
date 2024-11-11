@@ -1,137 +1,160 @@
 import {
-    Card,
     CardHeader,
     CardBody,
     Typography,
-    Button,
   } from "@material-tailwind/react";
-  import { useNavigate } from "react-router-dom";
-
+   
   export function FeaturedPackage() {
-    const navigate = useNavigate();
-
     return (
-      <div className="flex justify-center items-center mt-10 gap-5">
-        {/*featured card 1*/}
-        <Card
-          shadow={false}
-          className="relative grid h-[20rem] w-full max-w-[275px] overflow-hidden text-center "
-        >
-          <CardHeader
-            floated={false}
-            shadow={false}
-            color="transparent"
-            className="absolute inset-0 m-0 h-full w-full rounded-none bg-cover bg-center"
-            style={{ backgroundImage: "url('/palemlem.jpg')" }}
-          >
-            <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-t from-black/70 via-black/40" />
-          </CardHeader>
-  
-          <CardBody className="relative p-4">
-            <div className="absolute top-3 left-3 text-left">
-              <Typography color="white">
-                <span className="text-xl font-bold">MT. Palemlem</span>
-                <span className="text-sm font-bold">Day hike</span>
-              </Typography>
+    <div className="flex justify-center items-center mt-10">
+        <div className="h-[20rem] w-full max-w-[365px] mb-10">
+            <CardHeader floated={false} color="blue-gray" className="cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105">
+                <img
+                    src="mt.batulao.jpg"
+                    alt="ui/ux review check"
+                />
+            <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/60 " />
+            </CardHeader>
+            <CardBody>
+            <div className="flex items-center justify-between">
+                <Typography variant="h5" color="blue-gray" className="font-medium">
+                Mt. Batulao
+                </Typography>
             </div>
-            <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2">
-                <a href="http://localhost:5173/trails/670ea39b353edd402dd25e0a">
-                <Button className="bg-transparent border-2"> Book Now</Button>
-                </a>
+            <Typography color="gray">
+                Alfonso cavite, Philippines
+            </Typography>
+                <Typography
+                    className="flex items-center gap-1.5 font-normal text-gray-600"
+                    >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="-mt-0.5 h-4 w-4 text-gray-600"
+                    >
+                        <path
+                        fillRule="evenodd"
+                        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
+                        clipRule="evenodd"
+                        />
+                    </svg>
+                    4.7 . class 2 . Trail Difficulty: 3
+                </Typography>
+            </CardBody>
+        </div>
+        {/*feature 2*/}
+        <div className="h-[20rem] w-full max-w-[365px] mb-10 ">
+            <CardHeader floated={false} color="blue-gray" className="cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105">
+                <img
+                    src="gulugud-baboy.jpg"
+                    alt="ui/ux review check"
+                />
+            <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/60 " />
+            </CardHeader>
+            <CardBody>
+            <div className="flex items-center justify-between">
+                <Typography variant="h5" color="blue-gray" className="font-medium">
+                Gulugud-baboy
+                </Typography>
             </div>
-          </CardBody>
-        </Card>
-  
-        {/*featured card 2*/}
-        <Card
-          shadow={false}
-          className="relative grid h-[20rem] w-full max-w-[275px] overflow-hidden text-center "
-        >
-          <CardHeader
-            floated={false}
-            shadow={false}
-            color="transparent"
-            className="absolute inset-0 m-0 h-full w-full rounded-none bg-cover bg-center"
-            style={{ backgroundImage: "url('/sicapoo.jpg')" }}
-          >
-            <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-t from-black/70 via-black/40" />
-          </CardHeader>
-  
-          <CardBody className="relative p-4">
-            <div className="absolute top-3 left-3 text-left">
-              <Typography color="white">
-                <span className="text-xl font-bold">MT. Sicapoo</span>
-                <span className="text-sm font-bold">Day hike</span>
-              </Typography>
+            <Typography color="gray">
+                Alfonso cavite, Philippines
+            </Typography>
+                <Typography
+                    className="flex items-center gap-1.5 font-normal text-gray-600"
+                    >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="-mt-0.5 h-4 w-4 text-gray-600"
+                    >
+                        <path
+                        fillRule="evenodd"
+                        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
+                        clipRule="evenodd"
+                        />
+                    </svg>
+                    4.7 . class 2 . Trail Difficulty: 3
+                </Typography>
+            </CardBody>
+        </div>
+        {/*feature 3*/}
+        <div className="h-[20rem] w-full max-w-[365px] mb-10 ">
+            <CardHeader floated={false} color="blue-gray" className="cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105">
+                <img
+                    src="scenery1.png"
+                    alt="ui/ux review check"
+                />
+            <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/60 " />
+            </CardHeader>
+            <CardBody>
+            <div className="flex items-center justify-between">
+                <Typography variant="h5" color="blue-gray" className="font-medium">
+                Tirad-pass
+                </Typography>
             </div>
-            <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2">
-                <a href="http://localhost:5173/trails/670eae174b9780da917fe6ca">
-                <Button className="bg-transparent border-2"> Book Now</Button>
-                </a>
+            <Typography color="gray">
+                Alfonso cavite, Philippines
+            </Typography>
+                <Typography
+                    className="flex items-center gap-1.5 font-normal text-gray-600"
+                    >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="-mt-0.5 h-4 w-4 text-gray-600"
+                    >
+                        <path
+                        fillRule="evenodd"
+                        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
+                        clipRule="evenodd"
+                        />
+                    </svg>
+                    4.7 . class 2 . Trail Difficulty: 3
+                </Typography>
+            </CardBody>
+        </div>
+        {/*feature 4*/}
+        <div className="h-[20rem] w-full max-w-[365px] mb-10 ">
+            <CardHeader floated={false} color="blue-gray" className="cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105">
+                <img
+                    src="scenery2.png"
+                    alt="ui/ux review check"
+                />
+            <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/60 " />
+            </CardHeader>
+            <CardBody>
+            <div className="flex items-center justify-between">
+                <Typography variant="h5" color="blue-gray" className="font-medium">
+                Mt. Palemlem
+                </Typography>
             </div>
-          </CardBody>
-        </Card>
-
-        {/*featured card 3*/}
-        <Card
-          shadow={false}
-          className="relative grid h-[20rem] w-full max-w-[275px] overflow-hidden text-center "
-        >
-          <CardHeader
-            floated={false}
-            shadow={false}
-            color="transparent"
-            className="absolute inset-0 m-0 h-full w-full rounded-none bg-cover bg-center"
-            style={{ backgroundImage: "url('/timarid.jpg')" }}
-          >
-            <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-t from-black/70 via-black/40" />
-          </CardHeader>
-  
-          <CardBody className="relative p-4">
-            <div className="absolute top-3 left-3 text-left">
-              <Typography color="white">
-                <span className="text-xl font-bold">MT. Timarid</span>
-                <span className="text-sm font-bold">Day hike</span>
-              </Typography>
-            </div>
-            <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2">
-                <a href="http://localhost:5173/trails/670eb2bc4b9780da917fe711">
-                <Button className="bg-transparent border-2"> Book Now</Button>
-                </a>
-            </div>
-          </CardBody>
-        </Card>
-
-        {/*featured card 4*/}
-        <Card
-          shadow={false}
-          className="relative grid h-[20rem] w-full max-w-[275px] overflow-hidden text-center "
-        >
-          <CardHeader
-            floated={false}
-            shadow={false}
-            color="transparent"
-            className="absolute inset-0 m-0 h-full w-full rounded-none bg-cover bg-center"
-            style={{ backgroundImage: "url('/scenery2.png')" }}
-          >
-            <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-t from-black/70 via-black/40" />
-          </CardHeader>
-  
-          <CardBody className="relative p-4">
-            <div className="absolute top-3 left-3 text-left">
-              <Typography color="white">
-                <span className="text-xl font-bold">MT. Simagaysay</span>
-                <span className="text-sm font-bold">Day hike</span>
-              </Typography>
-            </div>
-            <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2">
-                <a href="http://localhost:5173/trails/670f417129cedf3c278584b9">
-                <Button className="bg-transparent border-2"> Book Now</Button>
-                </a>
-            </div>
-          </CardBody>
-        </Card>
-      </div>
+            <Typography color="gray">
+                Alfonso cavite, Philippines
+            </Typography>
+                <Typography
+                    className="flex items-center gap-1.5 font-normal text-gray-600"
+                    >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="-mt-0.5 h-4 w-4 text-gray-600"
+                    >
+                        <path
+                        fillRule="evenodd"
+                        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
+                        clipRule="evenodd"
+                        />
+                    </svg>
+                    4.7 . class 2 . Trail Difficulty: 3
+                </Typography>
+            </CardBody>
+        </div>
+    </div>
+      
     );
   }
-  

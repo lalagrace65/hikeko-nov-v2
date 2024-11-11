@@ -14,34 +14,30 @@ const Banner = () => {
             <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-30"></div>
             
             {/* Main Content */}
-            <div className="absolute inset-0 flex flex-col justify-center text-white"
-                style={{
-                    padding: '20px',         
-                    marginLeft: '160px',      
+            <div className="absolute inset-0 flex flex-col justify-center ml-60 text-white"
+                style={{           
                     borderRadius: '8px',
-                    maxWidth: '600px',      
+                    maxWidth: '700px',      
                 }}>
 
-                <h1 className="text-3xl font-bold">Discover your next hiking adventure,</h1>
-                <h1 className="text-3xl font-bold">your journey starts here</h1>
+                <h1 className="text-4xl font-bold">Discover your next hiking adventure,</h1>
+                <h1 className="text-4xl font-bold">your journey starts here</h1>
                 
                 {/* Search bar */}
                 <div className='mt-4 items-center shadow-2xl'>    
                     <div className="flex gap-3 mt-4 p-3 text-gray-600 bg-white" 
                          style={{
                             borderRadius: '16px',
-                            width: '600px',
+                            width: '700px',
                             }}>
                         <MdLocationSearching className='w-12 h-16 ml-1 text-primary' />
-                        <input type="text" placeholder="Seach for places..." />
+                        <input type="text" placeholder="Seach for mountains..." />
                     </div>
                 </div>
             </div>
 
             {/* Image Slider */}
-            <div className="relative inset-0 transform"
-                style={{ marginLeft: '940px', marginTop: '35px' }}
-            >
+            <div className="absolute right-0 top-0 bottom-0 flex items-center mr-60">
                 <CarouselDefault className="rounded-xl w-full "/>
             </div>
         </div>

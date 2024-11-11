@@ -15,10 +15,6 @@ button {
   @apply bg-gray-300;
 }
 
-.bg-about {
-  background-color: #1d402f;
-}
-
 .profile-container {
   margin-top: 50px; /* Adds space from the top */
   margin-left: auto;

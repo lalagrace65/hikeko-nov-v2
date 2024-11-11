@@ -29,7 +29,7 @@ export function GeneralQuestion() {
     <div className="">
       <Accordion open={open === 1} icon={<Icon id={1} open={open} />}>
         <AccordionHeader onClick={() => handleOpen(1)} className="bg-transparent ">What is Hiking?</AccordionHeader>
-        <AccordionBody>
+        <AccordionBody className="text-lg">
             Hiking is a form of walking, usually on trails, often in natural areas. 
             It's a popular outdoor activity that offers many benefits for physical and mental health.
         </AccordionBody>
@@ -38,7 +38,7 @@ export function GeneralQuestion() {
         <AccordionHeader onClick={() => handleOpen(2)} className="bg-transparent ">
             What equipment do I need for hiking? 
         </AccordionHeader>
-        <AccordionBody>
+        <AccordionBody className="text-lg">
             Basic hiking essentials include comfortable hiking boots, appropriate clothing, a backpack, water, snacks, a map, and a compass. 
             Depending on the hike, you may also need additional items like trekking poles, a first-aid kit, and rain gear.
         </AccordionBody>
@@ -47,7 +47,7 @@ export function GeneralQuestion() {
         <AccordionHeader onClick={() => handleOpen(3)} className="bg-transparent">
             How do I choose a hiking trail? 
         </AccordionHeader>
-        <AccordionBody>
+        <AccordionBody className="text-lg">
             Consider your fitness level, experience, and the amount of time you have available. 
             Research different trails to find one that matches your interests and abilities. Look for information on trail length, elevation gain, difficulty level, and scenic features.
         </AccordionBody>
