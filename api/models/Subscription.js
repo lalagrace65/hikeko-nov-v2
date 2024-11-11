@@ -6,7 +6,7 @@ const SubscriptionSchema = new mongoose.Schema({
     subscriptionPlan: {
         type: String,
         enum: ['Basic', 'Premium'],
-        required: true, // This will define whether the subscription is monthly or yearly
+        required: true,
       },
       subscriptionStartDate: {
         type: Date,
@@ -34,6 +34,10 @@ const SubscriptionSchema = new mongoose.Schema({
         amountPaid: { type: Number },
         paymentStatus: { type: String, enum: ['Success', 'Failed'], required: true },
       }],
+      termsAccepted: {
+        type: Boolean,
+        required: true,
+      }
   }, { timestamps: true });
   
   // Pre-save hook to generate unique reference code for the booking

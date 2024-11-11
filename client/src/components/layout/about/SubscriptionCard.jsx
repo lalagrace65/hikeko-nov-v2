@@ -32,7 +32,7 @@ export function PricingCard() {
 const navigate = useNavigate();
 
 const basicPlanSubscription = () => {
-    navigate('/travelAgencySignUp'); 
+    navigate('/basicPlanSubscription'); 
 };
 
 const premiumPlanSubscription = () => {

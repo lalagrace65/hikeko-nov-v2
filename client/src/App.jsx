@@ -35,6 +35,7 @@ import ProfilePage from "./pages/user-page/ProfilePage";
 import TravelAgencyLoginPage from "./pages/admin-page/TravelAgencyLoginPage";
 import AdminTransactionList from "./pages/admin-page/AdminTransactionList";
 import UploadProofSubscription from "./components/layout/about/UploadProofSubscription";
+import CheckBasicPlan from "./components/layout/about/CheckBasicPlan";
 
 // Set default axios settings
 axios.defaults.baseURL = `${baseUrl}`;
@@ -63,6 +64,7 @@ function App() {
             <Route path="/about" element={<AboutPage />}/>
             <Route path="/profile" element={<ProfilePage />}/>
             <Route path="/uploadProofSubscription" element={<UploadProofSubscription />} />
+            <Route path="/basicPlanSubscription" element={<CheckBasicPlan />} />
     
             <Route path="/staff-db" element={<Dashboard_StaffPage />} />
             <Route path="/travelAgencyLogin" element={<TravelAgencyLoginPage/>} />

@@ -5,24 +5,24 @@ const Subscription = require('../../models/Subscription');
 
 const router = express.Router();
 
-router.post('/premiumSubscription', async (req, res) => {
+router.post('/basicSubscription', async (req, res) => {
   try {
     const { 
-      subscriptionPlan, 
-      subscriptionStartDate, 
-      subscriptionEndDate,
-       proof, 
-       renewalStatus } = req.body;
+        subscriptionPlan, 
+        subscriptionStartDate, 
+        subscriptionEndDate,
+        renewalStatus,
+        termsAccepted,
+    } = req.body;
     
     // Create a new subscription object
     const newSubscription = new Subscription({
       subscriptionPlan,
       subscriptionStartDate,
       subscriptionEndDate,
-      subscriptionStatus: 'Active', // Initially set to Active
+      subscriptionStatus: 'Active', 
       renewalStatus,
-      proof, 
-      paymentHistory: [], // Can be updated later with payment history details
+      termsAccepted,
     });
 
     // Save the subscription to the database
