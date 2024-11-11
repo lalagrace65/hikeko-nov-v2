@@ -14,7 +14,7 @@ const travel_agencyRoute = require('./routes/travel_agencyRoute');
 const user_dashboardRoute = require('./routes/user_dashboardRoute');
 const packageRoute = require('./routes/packageRoute');
 const featuresRoute = require('./routes/featureRoute');
-const  signUpRoute = require('./routes/TravelAgency/signUp');
+const signUpRoute = require('./routes/TravelAgency/signUp');
 const trailsRoute = require('./routes/trailsRoute');
 const bookingListRoute = require('./routes/bookingListRoute');
 const uploadRoute = require('./routes/uploadRoute');
@@ -22,7 +22,7 @@ const customerPackagesRoute = require('./routes/Customer/packages');
 const bookingRoute = require('./routes/Customer/joinerDetails'); //public view
 const joinerBookingsRoute = require('./routes/Customer/userBookings');
 const travelAgencyLoginRoute = require('./routes/TravelAgency/travelAgencyLoginRoute');
-const travelAgencySettingsRoute = require('./routes/TravelAgency/settings');
+const travelAgencySettingsRoute = require('./routes/TravelAgency/adminDetailsRoute');
 const premiumPlanRoute = require('./routes/Subscription/PremiumPlan');
 const basicPlanRoute = require('./routes/Subscription/BasicPlan');
 
@@ -76,7 +76,7 @@ app.use('/api', customerPackagesRoute);
 app.use('/api', bookingRoute);
 app.use('/api', joinerBookingsRoute);
 app.use(travelAgencyLoginRoute);
-app.use(travelAgencySettingsRoute);
+app.use(travelAgencySettingsRoute); //for travel agency details
 app.use(premiumPlanRoute);
 app.use(basicPlanRoute);
 
