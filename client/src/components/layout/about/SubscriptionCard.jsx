@@ -1,3 +1,4 @@
+import { baseUrl } from "@/Url";
 import {
     Card,
     CardHeader,
@@ -30,9 +31,13 @@ return (
 export function PricingCard() {
 const navigate = useNavigate();
 
-const handleCardButton = () => {
+const basicPlanSubscription = () => {
     navigate('/travelAgencySignUp'); 
-    };
+};
+
+const premiumPlanSubscription = () => {
+    navigate('/uploadProofSubscription'); 
+};
 return (
     <div className="flex justify-center items-center mt-20 gap-10">
     {/*basic plan subscription*/}
@@ -86,7 +91,7 @@ return (
                     className="hover:scale-[1.02] focus:scale-[1.02] active:scale-100 bg-primary "
                     ripple={false}
                     fullWidth={true}
-                    onClick={handleCardButton}
+                    onClick={basicPlanSubscription}
                 >
                     Get Started
                 </Button>
@@ -143,7 +148,7 @@ return (
                     className="hover:scale-[1.02] focus:scale-[1.02] active:scale-100 bg-primary "
                     ripple={false}
                     fullWidth={true}
-                    onClick={handleCardButton}
+                    onClick={premiumPlanSubscription}
                 >
                     Get Started
                 </Button>

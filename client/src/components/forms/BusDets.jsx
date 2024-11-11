@@ -32,6 +32,7 @@ export default function BusDets() {
     const [businessContactNo, setBusinessContactNo] = useState("");
 
 
+
     const [errors, setErrors] = useState({
         businessName: '',
         businessEmail: '',
@@ -50,7 +51,6 @@ export default function BusDets() {
             }));
         }
     }, []);
-   
     const handleChange = (e) => {
         const { name, value } = e.target;
         // Check if e.target exists (regular input)
@@ -100,6 +100,13 @@ export default function BusDets() {
         event.preventDefault();
         let validationErrors = {};
 
+        // Retrieve subscriptionId from localStorage
+        const subscriptionId = localStorage.getItem('subscriptionId');
+        if (!subscriptionId) {
+            toast.error('Subscription ID is missing!');
+            return;
+        }
+
         // Validate form fields
         const requiredFields = [
             'businessName',
@@ -118,6 +125,7 @@ export default function BusDets() {
         setErrors(validationErrors);
         setIsSubmitting(true);
 
+        
         // Validate business contact number
         if (!businessContactNo.trim()) {
             validationErrors.businessContactNo = "Business contact number is required.";
@@ -162,9 +170,15 @@ export default function BusDets() {
             await emailjs.send('service_qjiocya', 'template_ge9ir44', emailData, 'jooaQAKBdAerURta8');
 
              // Here, you can also send submissionData to your server if needed
-            const signupResult = await axios.post(`${baseUrl}/api/signup`, submissionData);
+            const signupResult = await axios.post(`${baseUrl}/api/signup`, {
+                ...submissionData,
+                subscriptionId
+            });
             console.log("Signup successful:", signupResult.data);
             toast.success("Signup Credentials submitted successfully.");
+
+            // Clear the form data from localStorage after successful submission
+            localStorage.removeItem("formData");
 
             // Clear the form data
             setFormData({

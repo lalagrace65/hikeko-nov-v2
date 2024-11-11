@@ -9,7 +9,7 @@ export default function TravelAgencyLoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [redirect, setRedirect] = useState(false);
-    const [redirectPath, setRedirectPath] = useState('null'); // Default redirect path
+    const [redirectPath, setRedirectPath] = useState('/'); // Default redirect path
     const { setUser } = useContext(UserContext);
     
     // Check if the user is already logged in when the component mounts
@@ -18,19 +18,14 @@ export default function TravelAgencyLoginPage() {
         const storedUser = localStorage.getItem('user');
     
         if (token && storedUser) {
-            setUser(JSON.parse(storedUser));
-            setRedirect(true); // Automatically redirect if already logged in
             const parsedUser = JSON.parse(storedUser);
-
-            // Set the redirect path based on user role
-            if (parsedUser.role === 'admin') {
-                setRedirectPath('/admin');
-            } else {
-                setRedirectPath('/');
-            }
-            console.log('User is already logged in. Redirecting to:', redirectPath);
+            setUser(parsedUser);
+            setRedirectPath(parsedUser.role === 'admin' ? '/admin' : '/');
+            setRedirect(true);
+            console.log('User is already logged in. Redirecting to:', parsedUser.role === 'admin' ? '/admin' : '/');
         }
     }, [setUser]);
+
 
     async function handleLoginSubmit(ev) {
         ev.preventDefault();
@@ -50,15 +45,9 @@ export default function TravelAgencyLoginPage() {
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user', JSON.stringify(data));
     
-                // Redirect based on role
-                if (data.role === 'admin') {
-                    setRedirectPath('/admin');
-                } else {
-                    setRedirectPath('/');
-                }
-                setRedirect(true); // Trigger the redirect
-                console.log('Login successful. Redirecting to:', redirectPath);
-            }
+                setRedirectPath(data.role === 'admin' ? '/admin' : '/');
+                setRedirect(true);
+                console.log('Login successful. Redirecting to:', data.role === 'admin' ? '/admin' : '/');}
         } catch (e) {
             console.error('Login error:', e); // Log the error details
             toast.error(e.response?.data || 'Login failed');

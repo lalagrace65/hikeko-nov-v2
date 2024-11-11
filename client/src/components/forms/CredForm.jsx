@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function CredForm() {
   const navigate = useNavigate();
+  
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [ownerMobileNum, setOwnerMobileNum] = useState("");
   const { register, handleSubmit, setValue, formState: { errors } } = useForm({
@@ -21,6 +22,8 @@ export default function CredForm() {
     },
   });
 
+  // Retrieve subscriptionId from localStorage
+  const subscriptionId = localStorage.getItem('subscriptionId');
   
   const onSubmit = async (data, ev) => {
     ev.preventDefault();
@@ -32,7 +35,7 @@ export default function CredForm() {
 
     localStorage.setItem("formData", JSON.stringify(data));
     // Navigate to the next page
-    navigate("/travelAgencySignUp/businessDetails");
+    navigate("/travelAgencySignUp/businessDetails", { state: { subscriptionId, formData: data } });
   };
 
   const preventLeadingWhitespace = (value) => {

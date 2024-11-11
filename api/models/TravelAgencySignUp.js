@@ -3,6 +3,7 @@ const uniqid = require('uniqid');
 const bcrypt = require('bcryptjs');
 
 const TravelAgencySignUpSchema = new mongoose.Schema({
+  subscriptionId: {type: mongoose.Schema.Types.ObjectId, ref:'Subscription'},
   ownerFirstName: { type: String, required: true },
   ownerLastName: { type: String, required: true },
   ownerMobileNum: { type: String, required: true },
