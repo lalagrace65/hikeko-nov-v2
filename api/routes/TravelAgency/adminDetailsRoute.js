@@ -13,7 +13,7 @@ router.get('/admin-details', requireRole(['admin']), async (req, res) => {
 
         // Fetch the required details from the TravelAgencySignUp model
         const adminDetails = await TravelAgencySignUp.findById(adminId).select(
-            'businessName businessEmail businessAddress businessType businessContactNo'
+            'ownerFirstName ownerLastName businessEmail ownerMobileNum businessName businessAddress businessType businessBranch businessContactNo birCertificateDocu dtiPermitDocu businessPermitDocu mayorsPermitDocu subscriptionId'
         );
 
         if (!adminDetails) {
