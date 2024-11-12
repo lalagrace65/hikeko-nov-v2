@@ -11,8 +11,10 @@ router.post('/premiumSubscription', async (req, res) => {
       subscriptionPlan, 
       subscriptionStartDate, 
       subscriptionEndDate,
-       proof, 
-       renewalStatus } = req.body;
+      proof, 
+      renewalStatus,
+      termsAccepted
+    } = req.body;
     
     // Create a new subscription object
     const newSubscription = new Subscription({
@@ -22,7 +24,8 @@ router.post('/premiumSubscription', async (req, res) => {
       subscriptionStatus: 'Active', // Initially set to Active
       renewalStatus,
       proof, 
-      paymentHistory: [], // Can be updated later with payment history details
+      paymentHistory: [],
+      termsAccepted, 
     });
 
     // Save the subscription to the database
