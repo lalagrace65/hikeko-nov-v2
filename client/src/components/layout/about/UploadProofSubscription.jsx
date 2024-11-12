@@ -79,6 +79,7 @@ export default function UploadProofSubscription() {
                 subscriptionStartDate: new Date(),
                 subscriptionEndDate: new Date(new Date().setMonth(new Date().getMonth() + 6)), // 6 months from now
                 proof: formData.proof.link, // The proof link after the upload
+                termsAccepted:isTermsChecked,
                 renewalStatus: true,
             };
     
