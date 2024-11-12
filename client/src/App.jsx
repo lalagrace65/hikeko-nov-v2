@@ -146,7 +146,7 @@ function App() {
             <Route
               path="/admin/settings"
               element={
-                <ProtectRoute requirePasswordChange={true}>
+                <ProtectRoute>
                   <SettingsPage />
                 </ProtectRoute>
               }

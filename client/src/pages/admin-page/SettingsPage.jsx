@@ -9,8 +9,15 @@ import 'react-phone-number-input/style.css';
 export default function AdminDetails() {
   const [adminDetails, setAdminDetails] = useState(null);
   const [businessContactNo, setBusinessContactNo] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [updateMessage, setUpdateMessage] = useState('');
   const [error, setError] = useState(''); // Define error state here
-  const { user } = useContext(UserContext);
+  const { updateUserRequiresPasswordChange } = useContext(UserContext);
+  const { user, ready  } = useContext(UserContext);
+
+  if (!ready) return <p>Loading...</p>;
+  if (!user) return <p>You must be logged in to access this page.</p>;
 
   useEffect(() => {
     const fetchAdminDetails = async () => {
@@ -56,6 +63,30 @@ export default function AdminDetails() {
         setError("Invalid phone number format for the selected country.");
     } else {
         setError('');
+    }
+  };
+
+   // Function to update the password
+   const handleUpdatePassword = async () => {
+    if (newPassword.length < 8) {
+      setPasswordError('Password must be at least 8 characters long.');
+      return;
+    }
+    try {
+      const response = await axios.put(
+        `${baseUrl}/admin-details/set-password`,
+        { newPassword },
+        { withCredentials: true }
+      );
+      console.log('Password updated successfully:', response.data);
+      setUpdateMessage(response.data.message);
+      setPasswordError('');
+
+      // Update UserContext to reflect password change requirement
+      updateUserRequiresPasswordChange(false);
+    } catch (error) {
+      console.error('Error updating password:', error);
+      setPasswordError('Failed to update password.');
     }
   };
 
@@ -111,7 +142,28 @@ export default function AdminDetails() {
               placeholder="Enter phone number"
               value={adminDetails.businessContactNo}
               onChange={handlePhoneNumberChange}
-          />{error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+              disabled
+          />
+        {preInput('Set new password')}
+        <input
+          type="password"
+          className="w-full p-2 border border-gray-300 rounded mt-2"
+          placeholder="Enter new password"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+        />
+        {passwordError && <p className="text-red-500 text-sm">{passwordError}</p>}
+
+        {/* Button to update password */}
+        <button
+          onClick={handleUpdatePassword}
+          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+        >
+          Update Password
+        </button>
+
+        {/* Success or error message */}
+        {updateMessage && <p className="text-green-500 mt-2">{updateMessage}</p>} 
       </div>
     </div>
   );

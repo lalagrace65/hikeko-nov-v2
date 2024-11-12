@@ -10,6 +10,14 @@ export function UserContextProvider({ children }) {
     const [ready, setReady] = useState(false); // Track if data is fetched
     const [error, setError] = useState(null);   // Track any errors
 
+    // Inside UserContextProvider
+    const updateUserRequiresPasswordChange = (requiresPasswordChange) => {
+        setUser((prevUser) => ({
+            ...prevUser,
+            requiresPasswordChange,
+        }));
+    };
+
     // This is where we call the fetchUserProfile function
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -57,7 +65,7 @@ export function UserContextProvider({ children }) {
     }, []);  // Run this only once on component mount    
 
     return (
-        <UserContext.Provider value={{ user, setUser, ready, error }}>
+        <UserContext.Provider value={{ user, setUser, ready, error, updateUserRequiresPasswordChange }}>
             {children}
         </UserContext.Provider>
     );

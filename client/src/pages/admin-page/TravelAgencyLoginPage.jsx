@@ -61,14 +61,11 @@ export default function TravelAgencyLoginPage() {
         }
     }
     
-    
-    
     // Conditional redirect based on the state
     if (redirect) {
         console.log('Redirecting to:', redirectPath);
         return <Navigate to={redirectPath} />;
     }
-
 
     return (
         <div className="mt-4 grow flex items-center justify-around">
