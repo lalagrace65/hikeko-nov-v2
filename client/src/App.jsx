@@ -1,7 +1,7 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContextProvider, UserContext } from "./UserContext";
-import ProtectRoute from "./ProtectedRoutes"; // Import the ProtectRoute component
+import ProtectRoute from "./ProtectedRoutes";
 import axios from "axios";
 
 import IndexPage from "./pages/IndexPage";
@@ -32,6 +32,15 @@ import AboutPage from "./pages/AboutPage";
 import { baseUrl } from "./Url";
 import Dashboard_StaffPage from "./pages/staff-page/Dashboard_StaffPage";
 import AdminDashboard from "./pages/admin-page/AdminDashboard";
+import BlogPage from "./pages/blog.page"; //*
+import UserAuthForm from "./pages/userAuthForm.page"; //*
+import Editor from "./pages/editor.pages"; //*
+import HomePage from "./pages/home.page"; //*
+import SearchPage from "./pages/search.page"; //*
+import PageNotFound from "./pages/404.page"; //*
+import ProfilePage from "./pages/profile.page"; //*
+
+
 
 // Set default axios settings
 axios.defaults.baseURL = `${baseUrl}`;
@@ -58,6 +67,12 @@ function App() {
             <Route path="/account/events/adminTrails" element={<AddPackageTrails />} />
             <Route path="/book" element={<CustomerBookPage />}/>
             <Route path="/about" element={<AboutPage />}/>
+            <Route path="blog/:blog_id" element={<BlogPage />} /> //*
+            <Route path="search/:query" element={<SearchPage />} /> //*
+            <Route path="/editor" element={<Editor />} /> //*
+            <Route path="*" element={<PageNotFound />} /> //*
+
+
 
             <Route path="/staff-db" element={<Dashboard_StaffPage />} />
 

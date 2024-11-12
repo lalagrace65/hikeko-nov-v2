@@ -71,7 +71,7 @@ export default function BusDets() {
 
           setIsUploading(true);
           try {
-              const response = await axios.post(`${baseUrl}/api/upload`, data, {
+              const response = await axios.post('/api/upload', data, {
                   headers: {
                       'Content-Type': 'multipart/form-data',
                   },
@@ -117,10 +117,27 @@ export default function BusDets() {
 
         setErrors(validationErrors);
         setIsSubmitting(true);
+
         // Validate business contact number
         if (!businessContactNo.trim()) {
             validationErrors.businessContactNo = "Business contact number is required.";
         }
+
+        // Validate required document uploads
+        if (!formData.birCertificateDocu.link) {
+            validationErrors.birCertificateDocu = "BIR Certificate is required.";
+        }
+        if (!formData.dtiPermitDocu.link) {
+            validationErrors.dtiPermitDocu = "DTI Permit is required.";
+        }
+        if (!formData.businessPermitDocu.link) {
+            validationErrors.businessPermitDocu = "Business Permit is required.";
+        }
+        if (!formData.mayorsPermitDocu.link) {
+            validationErrors.mayorsPermitDocu = "Mayor's Permit is required.";
+        }
+
+    setErrors(validationErrors);
 
         if (Object.keys(validationErrors).length > 0) {
             setIsSubmitting(false);
@@ -339,10 +356,14 @@ export default function BusDets() {
                             <input type="file" accept=".pdf,.doc,.docx,.txt " 
                                     onChange={(e) => handleFileChange(e, 'birCertificateDocu')} 
                             />
-                             {formData.birCertificateDocu.name && 
-                            <Typography className="text-green-500 text-sm">
-                                Uploaded: {formData.birCertificateDocu.name}
-                            </Typography>}
+                             {formData.birCertificateDocu.name && (
+                                <Typography className="text-green-500 text-sm">
+                                    Uploaded: {formData.birCertificateDocu.name}
+                                </Typography>
+                            )}
+                            {errors.birCertificateDocu && (
+                                <Typography className="text-red-500 text-sm">{errors.birCertificateDocu}</Typography>
+                            )}
                         </div>
 
                         {/* DTI Permit */}
@@ -351,10 +372,14 @@ export default function BusDets() {
                             <input type="file" accept=".pdf,.doc,.docx,.txt" 
                                     onChange={(e) => handleFileChange(e, 'dtiPermitDocu')} 
                             />
-                            {formData.dtiPermitDocu.name && 
-                            <Typography className="text-green-500 text-sm">
-                                Uploaded: {formData.dtiPermitDocu.name}
-                            </Typography>}
+                            {formData.dtiPermitDocu.name && (
+                                <Typography className="text-green-500 text-sm">
+                                    Uploaded: {formData.dtiPermitDocu.name}
+                                </Typography>
+                            )}
+                            {errors.dtiPermitDocu && (
+                                <Typography className="text-red-500 text-sm">{errors.dtiPermitDocu}</Typography>
+                            )}
                         </div>
 
                         {/* Business Permit */}
@@ -363,10 +388,14 @@ export default function BusDets() {
                             <input type="file" accept=".pdf,.doc,.docx,.txt" 
                                     onChange={(e) => handleFileChange(e, 'businessPermitDocu')} 
                             />
-                            {formData.businessPermitDocu.name && 
+                            {formData.businessPermitDocu.name && (
                              <Typography className="text-green-500 text-sm">
                                 Uploaded: {formData.businessPermitDocu.name}
-                            </Typography>}
+                            </Typography>
+                            )}
+                            {errors.businessPermitDocu && (
+                                <Typography className="text-red-500 text-sm">{errors.businessPermitDocu}</Typography>
+                            )}
                         </div>
 
                         {/* Mayor's Permit */}
@@ -375,10 +404,14 @@ export default function BusDets() {
                             <input type="file" accept=".pdf,.doc,.docx,.txt" 
                                     onChange={(e) => handleFileChange(e, 'mayorsPermitDocu')}  
                             />
-                            {formData.mayorsPermitDocu.name && 
+                            {formData.mayorsPermitDocu.name && (
                             <Typography className="text-green-500 text-sm">
                                  Uploaded: {formData.mayorsPermitDocu.name}
-                            </Typography>}
+                            </Typography>
+                            )}
+                            {errors.mayorsPermitDocu && (
+                                <Typography className="text-red-500 text-sm">{errors.mayorsPermitDocu}</Typography>
+                            )}
                         </div>
                     </div>
                     {isUploading && <p>Uploading...</p>}

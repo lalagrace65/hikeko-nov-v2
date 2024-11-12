@@ -135,7 +135,7 @@ function JoinerDetailsForm({packageId}) {
                 data.append('file', file);
             }
             try {
-                const res = await axios.post(`${baseUrl}/api/upload`, data);
+                const res = await axios.post('/api/upload', data);
                 setProofPaymentImages(oldImages => {
                     return [...oldImages, ...res.data.links];
                 });

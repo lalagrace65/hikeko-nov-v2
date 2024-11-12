@@ -94,7 +94,7 @@ export default function Header() {
                             {exploreDropdownOpen && (
                                 <div className="absolute mt-2 w-48 bg-white rounded-md shadow-lg py-2 border">
                                     <Link to="/trails" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Tour & Packages</Link>
-                                    <Link to="/forum" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Community</Link>
+                                    <Link to="/blog" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Community</Link>
                                 </div>
                             )}
                         </div>
