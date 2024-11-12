@@ -3,12 +3,28 @@ import {
     CardBody,
     Typography,
   } from "@material-tailwind/react";
+import { useNavigate } from "react-router-dom";
    
   export function FeaturedPackage() {
+    const navigate = useNavigate();
+
+    const handleSimagaysay = () => {
+        navigate('/trails/670f417129cedf3c278584b9');
+    }
+    const handleTimarid = () => {
+        navigate('/trails/670eb2bc4b9780da917fe711');
+    }
+    const handleTiradpass = () => {
+        navigate('/trails/670f46b529cedf3c278584d6');
+    }
+    const handlPalemlem = () => {
+        navigate('/trails/670ea39b353edd402dd25e0a');
+    }
+
     return (
     <div className="flex justify-center items-center mt-10">
         <div className="h-[20rem] w-full max-w-[365px] mb-10">
-            <CardHeader floated={false} color="blue-gray" className="cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105">
+            <CardHeader onClick={handleSimagaysay} floated={false} color="blue-gray" className="cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 ">
                 <img
                     src="mt.batulao.jpg"
                     alt="ui/ux review check"
@@ -18,7 +34,7 @@ import {
             <CardBody>
             <div className="flex items-center justify-between">
                 <Typography variant="h5" color="blue-gray" className="font-medium">
-                Mt. Batulao
+                Mt. Simagaysay
                 </Typography>
             </div>
             <Typography color="gray">
@@ -45,7 +61,7 @@ import {
         </div>
         {/*feature 2*/}
         <div className="h-[20rem] w-full max-w-[365px] mb-10 ">
-            <CardHeader floated={false} color="blue-gray" className="cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105">
+            <CardHeader onClick={handleTimarid} floated={false} color="blue-gray" className="cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105">
                 <img
                     src="gulugud-baboy.jpg"
                     alt="ui/ux review check"
@@ -55,7 +71,7 @@ import {
             <CardBody>
             <div className="flex items-center justify-between">
                 <Typography variant="h5" color="blue-gray" className="font-medium">
-                Gulugud-baboy
+                Mt. Timarid
                 </Typography>
             </div>
             <Typography color="gray">
@@ -82,7 +98,7 @@ import {
         </div>
         {/*feature 3*/}
         <div className="h-[20rem] w-full max-w-[365px] mb-10 ">
-            <CardHeader floated={false} color="blue-gray" className="cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105">
+            <CardHeader onClick={handleTiradpass} floated={false} color="blue-gray" className="cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105">
                 <img
                     src="scenery1.png"
                     alt="ui/ux review check"
@@ -119,7 +135,7 @@ import {
         </div>
         {/*feature 4*/}
         <div className="h-[20rem] w-full max-w-[365px] mb-10 ">
-            <CardHeader floated={false} color="blue-gray" className="cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105">
+            <CardHeader onClick={handlPalemlem} floated={false} color="blue-gray" className="cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105">
                 <img
                     src="scenery2.png"
                     alt="ui/ux review check"
