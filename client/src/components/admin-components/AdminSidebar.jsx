@@ -6,7 +6,7 @@ import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { MdTour } from "react-icons/md";
 import { RiBookletFill } from "react-icons/ri";
 import { FaUserGroup } from "react-icons/fa6";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from 'axios';
 
 import { useNavigate } from "react-router-dom";
@@ -15,12 +15,48 @@ import { baseUrl } from "@/Url";
 
 export function MultiLevelSidebar() {
   const [open, setOpen] = React.useState(0);
+  const [logo, setLogo] = useState(null);
   const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleOpen = (value) => {
     setOpen(open === value ? value : value);
   };
+
+  useEffect(() => {
+    const fetchBusinessName = async () => {
+      try {
+        const response = await axios.get(`${baseUrl}/admin-details`, {
+          headers: { Authorization: `Bearer ${user.token}` }, // or use cookies/session
+        });
+        setUser((prevUser) => ({
+          ...prevUser,
+          businessName: response.data.businessName, // Assuming the API response has the businessName
+        }));
+      } catch (error) {
+        console.error("Error fetching business name:", error);
+      }
+    };
+  
+    if (user) {
+      fetchBusinessName();
+    }
+  }, [user]);
+  
+
+  useEffect(() => {
+    const fetchLogo = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/api/settings/getSystemLogo`);
+            const systemLogo = response.data.avatar; 
+            setLogo(systemLogo); 
+        } catch (error) {
+            console.error("Error fetching logo:", error);
+        }
+    };
+
+    fetchLogo();
+}, []);
 
   // Function to handle logout
   const handleLogout = async () => {
@@ -74,9 +110,11 @@ export function MultiLevelSidebar() {
     <Card className=".h-screen w-80 p-4 shadow-xl shadow-blue-gray-900/5">
       <div className="mb-2 p-4 ">
         <Typography className="flex items-center gap-2" variant="h5" color="blue-gray">
-            <Avatar className="rounded-lg h-10 w-10"
-              src="https://docs.material-tailwind.com/img/face-2.jpg" alt="avatar" />
-            {!!user && (<div>{user.name}</div>)}
+          <Avatar 
+              src={logo || "/default-logo.jpg"}  // Fallback to a default logo if the fetched logo is null
+              alt="Logo"
+          />
+          {!!user && (<div>{user.businessName}</div>)}
         </Typography>
       </div>
       <List>

@@ -25,6 +25,7 @@ const travelAgencyLoginRoute = require('./routes/TravelAgency/travelAgencyLoginR
 const travelAgencySettingsRoute = require('./routes/TravelAgency/adminDetailsRoute');
 const premiumPlanRoute = require('./routes/Subscription/PremiumPlan');
 const basicPlanRoute = require('./routes/Subscription/BasicPlan');
+const avatarRoute = require('./routes/TravelAgency/avatarRoute');
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -79,6 +80,7 @@ app.use(travelAgencyLoginRoute);
 app.use(travelAgencySettingsRoute); //for travel agency details
 app.use(premiumPlanRoute);
 app.use(basicPlanRoute);
+app.use('/api',avatarRoute);
 
 
 // Error handling middleware

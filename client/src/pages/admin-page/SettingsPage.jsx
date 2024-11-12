@@ -5,6 +5,8 @@ import { MultiLevelSidebar } from '@/components/admin-components/AdminSidebar';
 import { baseUrl } from '@/Url';
 import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
+import {Button} from "@material-tailwind/react";
+import toast from 'react-hot-toast';
 
 export default function AdminDetails() {
   const [adminDetails, setAdminDetails] = useState(null);
@@ -16,8 +18,74 @@ export default function AdminDetails() {
   const { updateUserRequiresPasswordChange } = useContext(UserContext);
   const { user, ready  } = useContext(UserContext);
 
+  const [isUploading, setIsUploading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [logo, setLogo] = useState({ link: '' });
+
   if (!ready) return <p>Loading...</p>;
   if (!user) return <p>You must be logged in to access this page.</p>;
+
+  // Load existing logo from MongoDB when component mounts
+  useEffect(() => {
+    const fetchLogo = async () => {
+      try {
+        const response = await axios.get('/api/settings/getSystemLogo'); // Endpoint to get saved logo
+        if (response.data.avatar) {
+          setLogo({ link: response.data.avatar });
+        }
+      } catch (error) {
+        console.error('Failed to load logo:', error);
+      }
+    };
+    fetchLogo();
+  }, []);
+
+  // Handle file selection and upload to AWS
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const data = new FormData();
+      data.append('file', file);
+  
+      setIsUploading(true);
+      try {
+        const response = await axios.post('/api/upload', data, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+  
+        console.log('Upload response:', response.data);  // Log response data
+        const link = response.data.links ? response.data.links[0] : ''; // Access the link inside the links array
+        setLogo({ link });
+        toast.success('Upload complete');
+      } catch (error) {
+        console.error('Upload failed:', error);
+        toast.error('Upload failed');
+      } finally {
+        setIsUploading(false);
+      }
+    }
+  };
+  // Save the logo data to MongoDB
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      await axios.post(`/api/settings/addSystemLogo`, { 
+        avatar: logo.link,
+      });
+
+      toast.success('Settings saved successfully');
+    } catch (error) {
+      console.error('Save failed:', error);
+      toast.error('Failed to save settings');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  // Handle clicking the "Edit" span to open the file input
+  const handleEditClick = () => {
+    document.getElementById('avatar').click();
+  };
 
   useEffect(() => {
     const fetchAdminDetails = async () => {
@@ -96,11 +164,11 @@ export default function AdminDetails() {
     <div className="flex min-h-screen">
       <MultiLevelSidebar className="min-h-screen" />
       <div className="flex-1 p-10">
-        <h1>Admin Details</h1>
-        <div className="grid grid-cols-2 gap-6"> {/* Create a 2-column grid */}
+        <h1>Travel Agency Details</h1>
+        <div className="grid grid-cols-2 gap-6"> 
           {/* Left Column */}
           <div>
-          <div className="grid grid-cols-2 gap-4"> {/* Nested grid for first and last name */}
+          <div className="grid grid-cols-2 gap-4"> 
             <div>
               {preInput('Owner First Name')}
               <input
@@ -150,64 +218,7 @@ export default function AdminDetails() {
                 />
               </div>
             </div>
-            {preInput('BIR Certificate')}
-            <input
-              type="text"
-              className="w-full p-2 border border-gray-300 rounded"
-              value={adminDetails.birCertificateDocu}
-              disabled
-            />
-            
-            {preInput('DTI Permit')}
-            <input
-              type="text"
-              className="w-full p-2 border border-gray-300 rounded"
-              placeholder="Business Type"
-              value={adminDetails.dtiPermitDocu}
-              disabled
-            />
-            {preInput('Mayors Permit')}
-            <input
-              type="text"
-              className="w-full p-2 border border-gray-300 rounded"
-              placeholder="Business Type"
-              value={adminDetails.mayorsPermitDocu}
-              disabled
-            />
-            {preInput('Business Permit')}
-            <input
-              type="text"
-              className="w-full p-2 border border-gray-300 rounded"
-              placeholder="Business Type"
-              value={adminDetails.businessPermitDocu}
-              disabled
-            />
-  
-            {preInput('Set new password')}
-            <input
-              type="password"
-              className="w-full p-2 border border-gray-300 rounded mt-2"
-              placeholder="Enter new password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-            {passwordError && <p className="text-red-500 text-sm">{passwordError}</p>}
-            {/* Button to update password */}
-            <button
-              onClick={handleUpdatePassword}
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-            >
-              Update Password
-            </button>
-      
-            {/* Success or error message */}
-            {updateMessage && <p className="text-green-500 mt-2">{updateMessage}</p>}
-          </div>
-  
-          {/* Right Column */}
-          <div>
-          
-            {preInput('Business Name')}
+              {preInput('Business Name')}
               <input
                 type="text"
                 className="w-full p-2 border border-gray-300 rounded"
@@ -215,7 +226,6 @@ export default function AdminDetails() {
                 value={adminDetails.businessName}
                 disabled
               />
-    
               {preInput('Business Email')}
               <input
                 type="text"
@@ -224,7 +234,6 @@ export default function AdminDetails() {
                 value={adminDetails.businessEmail}
                 disabled
               />
-    
               {preInput('Business Address')}
               <input
                 type="text"
@@ -255,10 +264,139 @@ export default function AdminDetails() {
                   />
               </div>
             </div>
+            {preInput('Set new password')}
+            <input
+              type="password"
+              className="w-full p-2 border border-gray-300 rounded mt-2"
+              placeholder="Enter new password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+            {passwordError && <p className="text-red-500 text-sm">{passwordError}</p>}
+            {/* Button to update password */}
+            <button
+              onClick={handleUpdatePassword}
+              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+            >
+              Update Password
+            </button>
+      
+            {/* Success or error message */}
+            {updateMessage && <p className="text-green-500 mt-2">{updateMessage}</p>}
+          </div>
+  
+          {/* Right Column */}
+          <div>
+            {preInput('BIR Certificate')}
+            <input
+              type="text"
+              className="w-full p-2 border border-gray-300 rounded"
+              value={adminDetails.birCertificateDocu}
+              disabled
+            />
+            {adminDetails.birCertificateDocu && (
+              <a
+                href={adminDetails.birCertificateDocu}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ml-2 text-blue-500"
+              >
+                View BIR Certificate
+              </a>
+            )}
+
+            {preInput('DTI Permit')}
+            <input
+              type="text"
+              className="w-full p-2 border border-gray-300 rounded"
+              placeholder="Business Type"
+              value={adminDetails.dtiPermitDocu}
+              disabled
+            />
+            {adminDetails.dtiPermitDocu && (
+              <a
+                href={adminDetails.dtiPermitDocu}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ml-2 text-blue-500"
+              >
+                View DTI Permit
+              </a>
+            )}
+
+            {preInput('Mayors Permit')}
+            <input
+              type="text"
+              className="w-full p-2 border border-gray-300 rounded"
+              placeholder="Business Type"
+              value={adminDetails.mayorsPermitDocu}
+              disabled
+            />
+            {adminDetails.mayorsPermitDocu && (
+              <a
+                href={adminDetails.mayorsPermitDocu}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ml-2 text-blue-500"
+              >
+                View Mayors Permit
+              </a>
+            )}
+
+            {preInput('Business Permit')}
+            <input
+              type="text"
+              className="w-full p-2 border border-gray-300 rounded"
+              placeholder="Business Type"
+              value={adminDetails.businessPermitDocu}
+              disabled
+            />
+            {adminDetails.businessPermitDocu && (
+              <a
+                href={adminDetails.businessPermitDocu}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ml-2 text-blue-500"
+              >
+                View Business Permit
+              </a>
+            )}
+            <div>
+            <span>Travel Agency Logo</span>
+              <div className="flex flex-col items-center justify-center">
+                {logo.link ? (
+                  <img
+                    src={logo.link}
+                    key={logo.link}
+                    className="w-40 h-40 rounded-full object-cover"
+                    alt="Travel Agency Logo"
+                  />
+                ) : (
+                  <div className="w-40 h-40 rounded-full bg-gray-200 flex items-center justify-center">
+                    No Image
+                  </div>
+                )}
+              </div>
+              <input
+                id="avatar"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleFileChange}
+              />
+              <span
+                onClick={handleEditClick}
+                className="block border rounded-lg p-2 text-center cursor-pointer mt-2"
+              >
+                {isUploading ? 'Uploading...' : 'Edit'}
+              </span>
+              <Button onClick={handleSave} disabled={isSaving || isUploading}>
+                {isSaving ? 'Saving...' : 'Save'}
+              </Button>
+            </div>         
           </div>
         </div>        
       </div>
     </div>
-  );
-    
+  ); 
 };
