@@ -2,7 +2,6 @@
 import { Advertisement } from "@/components/layout/index/Advertisement";
 import Banner from "@/components/layout/index/Banner";
 import { FeaturedPackage } from "@/components/layout/index/FeaturedPackage";
-import HikingFAQs from "@/components/layout/index/HikingFAQs";
 import { MoreAbout } from "@/components/layout/index/MoreAbout";
 import { useEffect } from "react";
 
@@ -23,7 +22,6 @@ export default function IndexPage() {
             <div className="ml-60 mr-60">
                 <Advertisement />
                 <MoreAbout />
-                <HikingFAQs />
             </div>
         </div>
     );

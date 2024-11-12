@@ -4,6 +4,14 @@ import { Link, Navigate } from "react-router-dom";
 import { UserContext } from "@/UserContext";
 import { baseUrl } from "@/Url.jsx";
 import toast from "react-hot-toast";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Typography,
+  Input,
+  Button,
+} from "@material-tailwind/react";
 
 export default function TravelAgencyLoginPage() {
     const [email, setEmail] = useState('');
@@ -61,7 +69,6 @@ export default function TravelAgencyLoginPage() {
         }
     }
     
-    // Conditional redirect based on the state
     if (redirect) {
         console.log('Redirecting to:', redirectPath);
         return <Navigate to={redirectPath} />;
@@ -69,25 +76,35 @@ export default function TravelAgencyLoginPage() {
 
     return (
         <div className="mt-4 grow flex items-center justify-around">
-            <div className="mb-64">
-                <h1 className="text-4xl text-center mb-4">Login</h1>
-                <form className="max-w-md mx-auto" onSubmit={handleLoginSubmit}>
-                    <input type="email"
-                        placeholder="your@email.com"
-                        value={email}
-                        onChange={ev => setEmail(ev.target.value)}
+            <Card className="w-full max-w-[60rem] h-[20rem] flex-row shadow-xl border">
+                <CardHeader
+                    shadow={false}
+                    floated={false}
+                    className="m-0 w-2/2 shrink-0 rounded-r-none"
+                >
+                    <img
+                    src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80"
+                    alt="card-image"
+                    className="h-full w-full object-cover"
                     />
-                    <input type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={ev => setPassword(ev.target.value)}
-                    />
-                    <button className="primary">Login</button>
-                    <div className="text-center py-2 text-gray-500">
-                        Don't have an account? <Link className="underline text-black" to={'/register'}>Register now</Link>
-                    </div>
-                </form>
-            </div>
+                </CardHeader>
+                <CardBody className="flex flex-col gap-4">
+                    <Typography variant="h3" color="blue-gray">Travel Agency Login</Typography>
+                    <form className="w-full" onSubmit={handleLoginSubmit}>
+                        <input type="email"
+                            placeholder="your@email.com"
+                            value={email}
+                            onChange={ev => setEmail(ev.target.value)}
+                        />
+                        <input type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={ev => setPassword(ev.target.value)}
+                        />
+                        <button className="primary mt-4">Login</button>
+                    </form>
+                </CardBody>
+            </Card>
         </div>
     );
 }

@@ -3,7 +3,6 @@ const express = require('express');
 const TravelAgencySignUp = require('../../models/TravelAgencySignUp');
 const Subscription = require('../../models/Subscription');
 
-
 const router = express.Router();
 
 // POST request for signup

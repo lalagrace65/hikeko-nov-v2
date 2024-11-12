@@ -1,37 +1,54 @@
 import { Typography } from "@material-tailwind/react";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { UserContext } from "./UserContext";
 
 const LINKS = [
   {
     title: "Company",
-    items: ["Hiking FAQs", "About us", "News", "Press" ],
+    items: [
+      { label: "Travel Agency Login", link: "/travelAgencyLogin" },
+      { label: "Hiking FAQs", link: "/hikingFAQs" },
+      { label: "About us" },
+      { label: "News" },
+    ],
   },
   {
     title: "Resource",
-    items: ["Help center",  "Newsletter",  "Events", "Blog", ],
+    items: [
+      { label: "Help center" },
+      { label: "Newsletter" },
+      { label: "Events" },
+      { label: "Blog" },
+    ],
   },
 ];
- 
+
 const currentYear = new Date().getFullYear();
- 
+
 export function FooterWithSocialLinks() {
   const location = useLocation(); 
-  const { user } = useContext(UserContext); // Access user data from context
+  const { user } = useContext(UserContext);
+  const navigate = useNavigate();
 
   // Hide footer for admin or staff roles or if on the profile page
   if (location.pathname === '/profile' || user?.role === 'admin' || user?.role === 'staff') {
     return null;
   }
 
+  const handleHome = () => {
+    navigate('/'); 
+  };
+
   return (
     <footer className="relative w-full mt-40">
       <hr className="mb-10"/>
       <div className="mx-auto w-full max-w-[screen-xl]">
         <div className="flex justify-between items-start text-right">
-          <Typography className="mb-6 ml-60 text-primary flex items-center text-6xl font-semibold">
-          <img src="HIKEKO-LOGO-BIG.png" alt="HikeKo Logo" className="w-30 h-40"/>
+          <Typography className="cursor-pointer mb-6 ml-60 text-primary flex items-center text-6xl font-semibold"
+            onClick={handleHome}
+          >
+            <img src="HIKEKO-LOGO-BIG.png" alt="HikeKo Logo" className="w-30 h-40"/>
             HIKEKO
           </Typography>
           <div className="flex gap-20 mr-60">
@@ -44,15 +61,16 @@ export function FooterWithSocialLinks() {
                 >
                   {title}
                 </Typography>
-                {items.map((link) => (
-                  <li key={link}>
+                {items.map((item) => (
+                  <li key={item.label}>
                     <Typography
                       as="a"
                       href="#"
                       color="gray"
                       className="py-1.5 font-normal text-primary hover:text-hoverColor"
+                      onClick={() => item.link && navigate(item.link)}
                     >
-                      {link}
+                      {item.label}
                     </Typography>
                   </li>
                 ))}
@@ -60,17 +78,16 @@ export function FooterWithSocialLinks() {
             ))}
           </div>
         </div>
-        
+
         <div className="mt-12 flex w-full flex-col items-center justify-center border-t border-blue-gray-50 py-4 md:flex-row md:justify-between">
-        <Typography
+          <Typography
             variant="small"
             className="mb-4 text-center font-normal text-primary md:mb-0 ml-60"
           >
-            &copy; {currentYear} HikeKo. All
-            Rights Reserved.
+            &copy; {currentYear} HikeKo. All Rights Reserved.
           </Typography>
           <div className="flex gap-4 text-primary sm:justify-center mr-60">
-            <Typography as="a" href="#" className="opacity-80 transition-opacity hover:opacity-100">
+          <Typography as="a" href="#" className="opacity-80 transition-opacity hover:opacity-100">
               <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path
                   fillRule="evenodd"

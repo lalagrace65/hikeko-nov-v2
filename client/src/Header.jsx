@@ -14,6 +14,10 @@ export default function Header() {
     if (isAdminOrStaff) {
         return null; // Do not render the Header
     }
+    
+    if (location.pathname === '/travelAgencyLogin' ) {
+        return null;
+    }
 
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [exploreDropdownOpen, setExploreDropdownOpen] = useState(false);
