@@ -9,7 +9,7 @@ const LINKS = [
     items: [
       { label: "Travel Agency Login", link: "/travelAgencyLogin" },
       { label: "Hiking FAQs", link: "/hikingFAQs" },
-      { label: "About us" },
+      { label: "About us", link: "/about" },
       { label: "News" },
     ],
   },
