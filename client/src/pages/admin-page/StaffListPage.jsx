@@ -120,7 +120,6 @@ export default function StaffPage() {
                                         <thead className="bg-gray-100">
                                             <tr>
                                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
                                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact No.</th>
                                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
@@ -130,7 +129,6 @@ export default function StaffPage() {
                                             {staff.map((staffMember) => (
                                                 <tr key={staffMember._id}>
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{staffMember._id}</td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{staffMember.name}</td>
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{staffMember.email}</td>
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{staffMember.contactNo}</td>
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">

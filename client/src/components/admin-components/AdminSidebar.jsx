@@ -72,7 +72,13 @@ export function MultiLevelSidebar() {
   };
 
   const handleAnalytics = () => {
-    navigate('/admin/dashboard'); 
+    navigate('/admin/dashboard/analytics'); 
+  };
+  const handleReports= () => {
+    navigate('/admin/dashboard/reports'); 
+  };
+  const handleProjects= () => {
+    navigate('/admin/dashboard/projects'); 
   };
   const handleEvent = () => {
     navigate('/admin/events'); 
@@ -102,6 +108,9 @@ export function MultiLevelSidebar() {
     navigate('/admin/add-staff'); 
   };
 
+  const handleInbox = () => {
+    navigate('/admin/inbox'); 
+  };
   const handleSettings = () => {
     navigate('/admin/settings'); 
   };
@@ -146,13 +155,13 @@ export function MultiLevelSidebar() {
                 </ListItemPrefix>
                 Analytics
               </ListItem>
-              <ListItem>
+              <ListItem onClick={handleReports}>
                 <ListItemPrefix>
                   <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                 </ListItemPrefix>
-                Reporting
+                Reports
               </ListItem>
-              <ListItem>
+              <ListItem onClick={handleProjects}>
                 <ListItemPrefix>
                   <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                 </ListItemPrefix>
@@ -283,7 +292,7 @@ export function MultiLevelSidebar() {
           </AccordionBody>
         </Accordion>)}
         
-        <ListItem>
+        <ListItem onClick={handleInbox}>
           <ListItemPrefix>
             <InboxIcon className="h-5 w-5 mr-2" />
           </ListItemPrefix>

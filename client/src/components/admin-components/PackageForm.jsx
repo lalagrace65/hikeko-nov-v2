@@ -51,7 +51,6 @@ export default function PackageForm() {
         if (!price || isNaN(parseFloat(price.replace(/[₱,]/g, "")))) newErrors.price = "Valid price is required";
         if (!dpPolicy || isNaN(parseFloat(dpPolicy.replace(/[₱,]/g, "")))) newErrors.dpPolicy = "Valid downpayment policy is required";
         if (!exclusions) newErrors.exclusions = "Package exclusions is required";
-        if (!extraInfo) newErrors.extraInfo = "Extra info is required";
         if (!paymentOptions) newErrors.paymentOptions = "Payment details is required";
         if (!pickupLocation) newErrors.pickupLocation = "Pickup location is required";
         if (!coordinatorName) newErrors.coordinatorName = "Coordinator name is required";
@@ -295,7 +294,6 @@ export default function PackageForm() {
                                 placeholder="Travel Agency may add additional packages here that are not listed above."
                                 rows={5}
                             />
-                            {errors.additionalPackages && <p className="text-red-500 text-sm">{errors.additionalPackages}</p>}
 
                             {preInput('Package Exclusions', 'Enter the package exclusions')}
                             <textarea
@@ -323,7 +321,6 @@ export default function PackageForm() {
                                 className="w-full border mt-2 p-2 rounded"
                                 rows={5}
                             />
-                            {errors.extraInfo && <p className="text-red-500 text-sm">{errors.extraInfo}</p>}
 
                             {/* Upload Photo */}
                             <div>
@@ -359,7 +356,7 @@ export default function PackageForm() {
                                 </ReactSortable>
                             </div>
 
-                            <button className="primary my-4 w-full p-2 bg-blue-500 text-white rounded">Save</button>
+                            <button className="primary mt-4 w-full text-white rounded hover:shadow-xl transition-all duration-300 ease-in-out">Save</button>
                         </form>
                     </div>
 

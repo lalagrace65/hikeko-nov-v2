@@ -12,6 +12,7 @@ import {
   Input,
   Button,
 } from "@material-tailwind/react";
+import AgencyHeader from "@/components/admin-components/TA_LoginHeader";
 
 export default function TravelAgencyLoginPage() {
     const [email, setEmail] = useState('');
@@ -75,7 +76,9 @@ export default function TravelAgencyLoginPage() {
     }
 
     return (
-        <div className="mt-4 grow flex items-center justify-around">
+        <div className="grow">
+        <AgencyHeader />
+        <div className="mt-20 grow flex items-center justify-around">
             <Card className="w-full max-w-[60rem] h-[20rem] flex-row shadow-xl border">
                 <CardHeader
                     shadow={false}
@@ -83,7 +86,7 @@ export default function TravelAgencyLoginPage() {
                     className="m-0 w-2/2 shrink-0 rounded-r-none"
                 >
                     <img
-                    src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80"
+                    src="sicapoo.jpg"
                     alt="card-image"
                     className="h-full w-full object-cover"
                     />
@@ -106,5 +109,6 @@ export default function TravelAgencyLoginPage() {
                 </CardBody>
             </Card>
         </div>
+        </div>  
     );
 }

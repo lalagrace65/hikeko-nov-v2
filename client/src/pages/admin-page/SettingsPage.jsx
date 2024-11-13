@@ -164,125 +164,115 @@ export default function AdminDetails() {
     <div className="flex min-h-screen">
       <MultiLevelSidebar className="min-h-screen" />
       <div className="flex-1 p-10">
-        <h1>Travel Agency Details</h1>
         <div className="grid grid-cols-2 gap-6"> 
-          {/* Left Column */}
-          <div>
-          <div className="grid grid-cols-2 gap-4"> 
-            <div>
-              {preInput('Owner First Name')}
-              <input
-                type="text"
-                className="w-full p-2 border border-gray-300 rounded"
-                placeholder="Owner First Name"
-                value={adminDetails.ownerFirstName}
-                disabled
-              />
-            </div>
-            <div>
-              {preInput('Owner Last Name')}
-              <input
-                type="text"
-                className="w-full p-2 border border-gray-300 rounded"
-                placeholder="Owner Last Name"
-                value={adminDetails.ownerLastName}
-                disabled
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div>{/* Left Column */}
+              <div> {/* Image div */}
+                <span>Travel Agency Logo</span>
+                  <div className="flex flex-col items-center justify-center">
+                    {logo.link ? (
+                      <img
+                        src={logo.link}
+                        key={logo.link}
+                        className="w-40 h-40 rounded-full object-cover"
+                        alt="Travel Agency Logo"
+                      />
+                    ) : (
+                      <div className="w-40 h-40 rounded-full bg-gray-200 flex items-center justify-center">
+                        No Image
+                      </div>
+                    )}
+                  </div>
+                  <input
+                    id="avatar"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
+                  <span
+                    onClick={handleEditClick}
+                    className="block border rounded-lg p-2 text-center cursor-pointer mt-2 hover:bg-slate-200 ease-in-out duration-300"
+                  >
+                    {isUploading ? 'Uploading...' : 'Edit'}
+                  </span>
+                  <Button className="mt-2 primary" onClick={handleSave} disabled={isSaving || isUploading}>
+                    {isSaving ? 'Saving...' : 'Save'}
+                  </Button>
+              </div> 
+            <div className="grid grid-cols-2 gap-4"> 
               <div>
-                {preInput('Owner Mobile No.')}
-                <PhoneInput
-                  className=" mt-2 mb-2 w-full px-3 py-2 border border-gray-300 rounded-2xl"
-                  international
-                  countryCallingCodeEditable={false}
-                  defaultCountry="PH"
-                  placeholder="Enter phone number"
-                  value={adminDetails.ownerMobileNum}
-                  onChange={handlePhoneNumberChange}
+                {preInput('Owner First Name')}
+                <input
+                  type="text"
+                  className="w-full p-2 border border-gray-300 rounded"
+                  placeholder="Owner First Name"
+                  value={adminDetails.ownerFirstName}
                   disabled
                 />
               </div>
               <div>
-                {preInput('Business Mobile No.')}
-                <PhoneInput
-                  className=" mt-2 mb-2 w-full px-3 py-2 border border-gray-300 rounded-2xl"
-                  international
-                  countryCallingCodeEditable={false}
-                  defaultCountry="PH"
-                  placeholder="Enter phone number"
-                  value={adminDetails.businessContactNo}
-                  onChange={handlePhoneNumberChange}
+                {preInput('Owner Last Name')}
+                <input
+                  type="text"
+                  className="w-full p-2 border border-gray-300 rounded"
+                  placeholder="Owner Last Name"
+                  value={adminDetails.ownerLastName}
                   disabled
                 />
               </div>
             </div>
-              {preInput('Business Name')}
-              <input
-                type="text"
-                className="w-full p-2 border border-gray-300 rounded"
-                placeholder="Business Name"
-                value={adminDetails.businessName}
-                disabled
-              />
-              {preInput('Business Email')}
-              <input
-                type="text"
-                className="w-full p-2 border border-gray-300 rounded"
-                placeholder="Business Email"
-                value={adminDetails.businessEmail}
-                disabled
-              />
-              {preInput('Business Address')}
-              <input
-                type="text"
-                className="w-full p-2 border border-gray-300 rounded"
-                placeholder="Business Address"
-                value={adminDetails.businessAddress}
-                disabled
-              />
             <div className="grid grid-cols-2 gap-4">
-              <div>
-                {preInput('Business Branch')}
-                  <input
-                    type="text"
-                    className="w-full p-2 border border-gray-300 rounded"
-                    placeholder="Business Type"
-                    value={adminDetails.businessBranch}
+                <div>
+                  {preInput('Owner Mobile No.')}
+                  <PhoneInput
+                    className=" mt-2 mb-2 w-full px-3 py-2 border border-gray-300 rounded-2xl"
+                    international
+                    countryCallingCodeEditable={false}
+                    defaultCountry="PH"
+                    placeholder="Enter phone number"
+                    value={adminDetails.ownerMobileNum}
+                    onChange={handlePhoneNumberChange}
                     disabled
                   />
-              </div>
-              <div>
-                {preInput('Business Type')}
-                  <input
-                    type="text"
-                    className="w-full p-2 border border-gray-300 rounded"
-                    placeholder="Business Type"
-                    value={adminDetails.businessType}
+                </div>
+                <div>
+                  {preInput('Business Mobile No.')}
+                  <PhoneInput
+                    className=" mt-2 mb-2 w-full px-3 py-2 border border-gray-300 rounded-2xl"
+                    international
+                    countryCallingCodeEditable={false}
+                    defaultCountry="PH"
+                    placeholder="Enter phone number"
+                    value={adminDetails.businessContactNo}
+                    onChange={handlePhoneNumberChange}
                     disabled
                   />
+                </div>
               </div>
-            </div>
-            {preInput('Set new password')}
-            <input
-              type="password"
-              className="w-full p-2 border border-gray-300 rounded mt-2"
-              placeholder="Enter new password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-            {passwordError && <p className="text-red-500 text-sm">{passwordError}</p>}
-            {/* Button to update password */}
-            <button
-              onClick={handleUpdatePassword}
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-            >
-              Update Password
-            </button>
-      
-            {/* Success or error message */}
-            {updateMessage && <p className="text-green-500 mt-2">{updateMessage}</p>}
+                {preInput('Business Name')}
+                <input
+                  type="text"
+                  className="w-full p-2 border border-gray-300 rounded"
+                  placeholder="Business Name"
+                  value={adminDetails.businessName}
+                  disabled
+                />
+                {preInput('Business Email')}
+                <input
+                  type="text"
+                  className="w-full p-2 border border-gray-300 rounded"
+                  placeholder="Business Email"
+                  value={adminDetails.businessEmail}
+                  disabled
+                />
+                {preInput('Business Address')}
+                <input
+                  type="text"
+                  className="w-full p-2 border border-gray-300 rounded"
+                  placeholder="Business Address"
+                  value={adminDetails.businessAddress}
+                  disabled
+                />
           </div>
   
           {/* Right Column */}
@@ -360,40 +350,48 @@ export default function AdminDetails() {
               >
                 View Business Permit
               </a>
-            )}
-            <div>
-            <span>Travel Agency Logo</span>
-              <div className="flex flex-col items-center justify-center">
-                {logo.link ? (
-                  <img
-                    src={logo.link}
-                    key={logo.link}
-                    className="w-40 h-40 rounded-full object-cover"
-                    alt="Travel Agency Logo"
+            )}    
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                {preInput('Business Branch')}
+                  <input
+                    type="text"
+                    className="w-full p-2 border border-gray-300 rounded"
+                    placeholder="Business Type"
+                    value={adminDetails.businessBranch}
+                    disabled
                   />
-                ) : (
-                  <div className="w-40 h-40 rounded-full bg-gray-200 flex items-center justify-center">
-                    No Image
-                  </div>
-                )}
               </div>
-              <input
-                id="avatar"
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleFileChange}
-              />
-              <span
-                onClick={handleEditClick}
-                className="block border rounded-lg p-2 text-center cursor-pointer mt-2"
-              >
-                {isUploading ? 'Uploading...' : 'Edit'}
-              </span>
-              <Button onClick={handleSave} disabled={isSaving || isUploading}>
-                {isSaving ? 'Saving...' : 'Save'}
-              </Button>
-            </div>         
+              <div>
+                {preInput('Business Type')}
+                  <input
+                    type="text"
+                    className="w-full p-2 border border-gray-300 rounded"
+                    placeholder="Business Type"
+                    value={adminDetails.businessType}
+                    disabled
+                  />
+              </div>
+            </div>
+            {preInput('Set new password')}
+            <input
+              type="password"
+              className="w-full p-2 border border-gray-300 rounded mt-2"
+              placeholder="Enter new password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+            {passwordError && <p className="text-red-500 text-sm">{passwordError}</p>}
+            {/* Button to update password */}
+            <Button
+              onClick={handleUpdatePassword}
+              className="mt-2 primary"
+            >
+              Update Password
+            </Button>
+      
+            {/* Success or error message */}
+            {updateMessage && <p className="text-green-500 mt-2">{updateMessage}</p>}    
           </div>
         </div>        
       </div>

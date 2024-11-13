@@ -24,7 +24,6 @@ button {
 }
 
 button.primary {
-  background-color: #f59b42;
   @apply bg-orange-300 p-2 w-full text-white rounded-2xl;
 }
 

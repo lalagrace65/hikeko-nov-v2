@@ -21,7 +21,7 @@ import AddPackageTrails from "./pages/admin-page/AddPackageTrails";
 import AdminTrailDetails from "./components/trails/AdminTrailDetails";
 import AdminPage from "./pages/admin-page/AdminPage";
 import EventsPage from "./pages/admin-page/EventsPage";
-import StaffPage from "./pages/staff-page/StaffPage";
+import StaffPage from "./pages/admin-page/StaffListPage";
 import AdminBookingList from "./pages/admin-page/AdminBookingList";
 import EventArchivesPage from "./pages/admin-page/EventArchivesPage";
 import AgencyCredentialsProcess from "./components/forms/AgencyCredentialsProcess";
@@ -32,11 +32,15 @@ import { baseUrl } from "./Url";
 import SettingsPage from "./pages/admin-page/SettingsPage";
 import Dashboard_StaffPage from "./pages/staff-page/Dashboard_StaffPage";
 import ProfilePage from "./pages/user-page/ProfilePage";
-import TravelAgencyLoginPage from "./pages/admin-page/TravelAgencyLoginPage";
+import TravelAgencyLoginPage from "./pages/TravelAgencyLoginPage";
 import AdminTransactionList from "./pages/admin-page/AdminTransactionList";
 import UploadProofSubscription from "./components/layout/about/UploadProofSubscription";
 import CheckBasicPlan from "./components/layout/about/CheckBasicPlan";
 import HikingFAQs from "./components/layout/index/HikingFAQs";
+import Dashboard_AnalyticsPage from "./pages/admin-page/Dashboard_AnalyticsPage";
+import Dashboard_Reports from "./pages/admin-page/Dashboard_Reports";
+import Dashboard_Projects from "./pages/admin-page/Dashboard_Projects";
+import InboxPage from "./pages/admin-page/InboxPage";
 
 // Set default axios settings
 axios.defaults.baseURL = `${baseUrl}`;
@@ -77,6 +81,30 @@ function App() {
               element={
                 <ProtectRoute>
                   <AdminPage />
+                </ProtectRoute>
+              }
+            />
+            <Route
+              path="/admin/dashboard/analytics"
+              element={
+                <ProtectRoute>
+                  <Dashboard_AnalyticsPage />
+                </ProtectRoute>
+              }
+            />
+            <Route
+              path="/admin/dashboard/reports"
+              element={
+                <ProtectRoute>
+                  <Dashboard_Reports />
+                </ProtectRoute>
+              }
+            />
+            <Route
+              path="/admin/dashboard/projects"
+              element={
+                <ProtectRoute>
+                  <Dashboard_Projects />
                 </ProtectRoute>
               }
             />
@@ -141,6 +169,14 @@ function App() {
               element={
                 <ProtectRoute>
                   <CreateStaffAccount />
+                </ProtectRoute>
+              }
+            />
+            <Route
+              path="/admin/inbox"
+              element={
+                <ProtectRoute>
+                  <InboxPage />
                 </ProtectRoute>
               }
             />
