@@ -27,6 +27,10 @@ button.primary {
   @apply bg-orange-300 p-2 w-full text-white rounded-2xl;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 .phone-input-container input:focus {
   outline: none;
   border: none;
