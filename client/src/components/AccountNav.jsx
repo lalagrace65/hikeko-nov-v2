@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { UserContext } from "../UserContext";
 import { Link, Navigate, useParams } from "react-router-dom";
 import EventsPage from "../pages/admin-page/EventsPage.jsx";
-import StaffPage from "../pages/admin-page/StaffListPage.jsx";
+import StaffPage from "../pages/admin-page/StaffPage.jsx";
 
 export default function AccountNav() {
     const { ready, user } = useContext(UserContext);

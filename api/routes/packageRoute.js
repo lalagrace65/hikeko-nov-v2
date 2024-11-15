@@ -40,21 +40,27 @@ router.post('/packages', requireRole(['admin', 'staff']), (req, res) => {
         if (err) return res.status(403).json({ message: 'Unauthorized' });
 
         try {
-            let travelAgencyId;
+            let adminId;
 
             // If user is staff, retrieve the admin ID from the staff document
             if (userData.role === 'staff') {
                 const staffUser = await User.findById(userData.id);
                 if (!staffUser) return res.status(404).json({ message: 'Staff user not found' });
-                travelAgencyId = staffUser.adminId; // Assuming the staff document has an adminId field
+                adminId = staffUser.adminId; // Assuming the staff document has an adminId field
             } else {
-                travelAgencyId = userData.id; // Admin creating the package
+                adminId = userData.id; // Admin creating the package
+            }
+
+            // Fetch the business name from the User model to ensure admin exists
+            const travelAgency = await User.findById(adminId).select('businessName');
+            if (!travelAgency || !travelAgency.businessName) {
+                return res.status(404).json({ message: 'Travel agency not found' });
             }
 
             // Create a new package document in the database
             const packageDoc = await Package.create({
                 trailId,
-                travelAgency: travelAgencyId,  // Associate package with the correct admin
+                travelAgency: adminId,  // Associate package with the correct admin ID
                 packages,
                 additionalPackages,
                 price,
@@ -62,11 +68,11 @@ router.post('/packages', requireRole(['admin', 'staff']), (req, res) => {
                 exclusions, 
                 pickupLocation,
                 extraInfo,
+                dpPolicy,
                 coordinatorName,
                 checkIn,
                 checkOut,
                 maxGuests,
-                dpPolicy,
                 date: new Date(date), 
                 dateCreated: new Date(dateCreated), // Save the timestamp
                 packageImages
@@ -79,6 +85,7 @@ router.post('/packages', requireRole(['admin', 'staff']), (req, res) => {
         }
     });
 });
+
 
 // GET route to retrieve packages, optionally including archived ones
 router.get('/packages', async (req, res) => {

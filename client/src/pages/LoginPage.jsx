@@ -62,7 +62,7 @@ export default function LoginPage() {
                 toast.error('Login failed');
             }
         }
-    }
+    }    
 
     if (redirect) {
         return <Navigate to={redirectPath} />;
@@ -90,7 +90,7 @@ export default function LoginPage() {
                                 onChange={ev => setPassword(ev.target.value)}
                                 required
                             />
-                            <Button className="primary" type="submit">Login</Button>
+                            <Button className="primary mt-4" type="submit">Login</Button>
                         </form>
                     </div>
                 </CardBody>

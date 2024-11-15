@@ -6,24 +6,14 @@ import { baseUrl } from "./Url.jsx";
 
 export default function Header() {
     const { user, setUser, ready } = useContext(UserContext);
-
-    // Check if the user is an admin or staff
-    const isAdminOrStaff = user && (user.role === 'admin' || user.role === 'staff');
-
-    // If the user is an admin or staff, return null to hide the header
-    if (isAdminOrStaff) {
-        return null; // Do not render the Header
-    }
-    
-    if (location.pathname === '/travelAgencyLogin' ) {
-        return null;
-    }
-
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [exploreDropdownOpen, setExploreDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
     const exploreDropdownRef = useRef(null);
     const navigate = useNavigate();
+
+    // Check if the user is an admin or staff
+    const isAdminOrStaff = user && (user.role === 'admin' || user.role === 'staff');
 
     // Function to handle logout
     async function handleLogout() {
@@ -72,9 +62,14 @@ export default function Header() {
         };
     }, [exploreDropdownOpen]);
 
+    // Conditionally render header based on user's role
+    if (isAdminOrStaff) {
+        return null; // Hide Header if the user is admin or staff
+    }
+
     return (
         <div className="sticky top-0 z-50">
-            <header  className="py-6 px-60 flex justify-between bg-white shadow-lg text-primary">
+            <header className="py-6 px-60 flex justify-between bg-white shadow-lg text-primary">
                 <Link to={'/'} className="flex items-center gap-1 hover:scale-[1.03]">
                     <img src="HIKEKO-LOGO-BIG.png" alt="Logo" className="w-8 h-10" />
                     <span className=" text-xl">HIKEKO</span>
@@ -83,7 +78,7 @@ export default function Header() {
                 {/* Navigation and User menu */}
                 <div className="flex items-center gap-6">
                     <nav className="flex gap-6">
-                        <Link to="/" className=" hover:text-hoverColor">Home</Link>
+                        <Link to="/" className="hover:text-hoverColor">Home</Link>
                         
                         {/* Explore dropdown */}
                         <div ref={exploreDropdownRef} className="relative">
@@ -100,13 +95,13 @@ export default function Header() {
                             )}
                         </div>
 
-                        <Link to="/book" className=" hover:text-hoverColor">Book</Link>
-                        <Link to="/about" className=" hover:text-hoverColor">About</Link>
+                        <Link to="/book" className="hover:text-hoverColor">Book</Link>
+                        <Link to="/about" className="hover:text-hoverColor">About</Link>
                     </nav>
 
                     {/* User icon and dropdown */}
                     <div onClick={() => setDropdownOpen(!dropdownOpen)} className="relative" ref={dropdownRef}>
-                        <div className="flex gap-2 border border-gray-300 rounded-full py-2 px-4 cursor-pointer shadow-none hover:shadow-md hover:shadow-gray-300 transition-shadow ">
+                        <div className="flex gap-2 border border-gray-300 rounded-full py-2 px-4 cursor-pointer shadow-none hover:shadow-md hover:shadow-gray-300 transition-shadow">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                             </svg>

@@ -14,18 +14,18 @@ const travel_agencyRoute = require('./routes/travel_agencyRoute');
 const user_dashboardRoute = require('./routes/user_dashboardRoute');
 const packageRoute = require('./routes/packageRoute');
 const featuresRoute = require('./routes/featureRoute');
-const signUpRoute = require('./routes/TravelAgency/signUp');
 const trailsRoute = require('./routes/trailsRoute');
 const bookingListRoute = require('./routes/bookingListRoute');
 const uploadRoute = require('./routes/uploadRoute');
 const customerPackagesRoute = require('./routes/Customer/packages');
 const bookingRoute = require('./routes/Customer/joinerDetails'); //public view
 const joinerBookingsRoute = require('./routes/Customer/userBookings');
-const travelAgencyLoginRoute = require('./routes/TravelAgency/travelAgencyLoginRoute');
-const travelAgencySettingsRoute = require('./routes/TravelAgency/adminDetailsRoute');
+
+const travelAgencySettingsRoute = require('./routes/TravelAgency/adminDetailsRoute.js');
 const premiumPlanRoute = require('./routes/Subscription/PremiumPlan');
 const basicPlanRoute = require('./routes/Subscription/BasicPlan');
-const avatarRoute = require('./routes/TravelAgency/avatarRoute');
+
+const adminRegisterRoute = require('./routes/adminRegisterRoute.js');
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -69,18 +69,19 @@ app.use('/api/admin', travel_agencyRoute);
 app.use(user_dashboardRoute); // For user account
 app.use(packageRoute); // For package routing
 app.use('/api', featuresRoute); // Prefix with '/api'
-app.use('/api',signUpRoute);
+
 app.use('/api', trailsRoute);
 app.use( bookingListRoute );
 app.use(uploadRoute);
 app.use('/api', customerPackagesRoute);
 app.use('/api', bookingRoute);
 app.use('/api', joinerBookingsRoute);
-app.use(travelAgencyLoginRoute);
-app.use(travelAgencySettingsRoute); //for travel agency details
+
+app.use('/api',adminRegisterRoute);
+
+app.use(travelAgencySettingsRoute);
 app.use(premiumPlanRoute);
 app.use(basicPlanRoute);
-app.use('/api',avatarRoute);
 
 
 // Error handling middleware

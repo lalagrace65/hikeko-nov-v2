@@ -21,7 +21,7 @@ import AddPackageTrails from "./pages/admin-page/AddPackageTrails";
 import AdminTrailDetails from "./components/trails/AdminTrailDetails";
 import AdminPage from "./pages/admin-page/AdminPage";
 import EventsPage from "./pages/admin-page/EventsPage";
-import StaffPage from "./pages/admin-page/StaffListPage";
+import StaffPage from "./pages/admin-page/StaffPage";
 import AdminBookingList from "./pages/admin-page/AdminBookingList";
 import EventArchivesPage from "./pages/admin-page/EventArchivesPage";
 import AgencyCredentialsProcess from "./components/forms/AgencyCredentialsProcess";
@@ -29,18 +29,17 @@ import CustomerPackageDetails from "./pages/user-page/CustomerPackageDetails";
 import CustomerBookPage from "./pages/user-page/CustomerBookPage";
 import AboutPage from "./pages/AboutPage";
 import { baseUrl } from "./Url";
-import SettingsPage from "./pages/admin-page/SettingsPage";
 import Dashboard_StaffPage from "./pages/staff-page/Dashboard_StaffPage";
 import ProfilePage from "./pages/user-page/ProfilePage";
-import TravelAgencyLoginPage from "./pages/TravelAgencyLoginPage";
 import AdminTransactionList from "./pages/admin-page/AdminTransactionList";
 import UploadProofSubscription from "./components/layout/about/UploadProofSubscription";
 import CheckBasicPlan from "./components/layout/about/CheckBasicPlan";
-import HikingFAQs from "./components/layout/index/HikingFAQs";
-import Dashboard_AnalyticsPage from "./pages/admin-page/Dashboard_AnalyticsPage";
-import Dashboard_Reports from "./pages/admin-page/Dashboard_Reports";
-import Dashboard_Projects from "./pages/admin-page/Dashboard_Projects";
+import AdminDetails from "./pages/admin-page/SettingsPage";
 import InboxPage from "./pages/admin-page/InboxPage";
+import Dashboard_Projects from "./pages/admin-page/Dashboard_Projects";
+import Dashboard_Reports from "./pages/admin-page/Dashboard_Reports";
+import Dashboard_AnalyticsPage from "./pages/admin-page/Dashboard_AnalyticsPage";
+import HikingFAQs from "./components/layout/index/HikingFAQs";
 
 // Set default axios settings
 axios.defaults.baseURL = `${baseUrl}`;
@@ -72,7 +71,7 @@ function App() {
             <Route path="/uploadProofSubscription" element={<UploadProofSubscription />} />
             <Route path="/basicPlanSubscription" element={<CheckBasicPlan />} />
             <Route path="/staff-db" element={<Dashboard_StaffPage />} />
-            <Route path="/travelAgencyLogin" element={<TravelAgencyLoginPage/>} />
+
             
             
             {/* Protect Admin Routes */}
@@ -81,6 +80,30 @@ function App() {
               element={
                 <ProtectRoute>
                   <AdminPage />
+                </ProtectRoute>
+              }
+            />
+            <Route
+              path="/admin/dashboard/analytics"
+              element={
+                <ProtectRoute>
+                  <Dashboard_AnalyticsPage />
+                </ProtectRoute>
+              }
+            />
+            <Route
+              path="/admin/dashboard/reports"
+              element={
+                <ProtectRoute>
+                  <Dashboard_Reports />
+                </ProtectRoute>
+              }
+            />
+            <Route
+              path="/admin/dashboard/projects"
+              element={
+                <ProtectRoute>
+                  <Dashboard_Projects />
                 </ProtectRoute>
               }
             />
@@ -184,7 +207,7 @@ function App() {
               path="/admin/settings"
               element={
                 <ProtectRoute>
-                  <SettingsPage />
+                  <AdminDetails />
                 </ProtectRoute>
               }
             />

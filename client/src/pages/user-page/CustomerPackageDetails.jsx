@@ -28,7 +28,7 @@ function CustomerPackageDetails() {
         <div className="p-4">
             <h1 className="text-3xl font-bold"></h1>
             <Typography variant="h1">
-                You are Booking to: {packageDetail.travelAgency.name}
+                
             </Typography>
             <p>Price: {packageDetail.price}</p>
             <p>Payment Options: {packageDetail.paymentOptions}</p>

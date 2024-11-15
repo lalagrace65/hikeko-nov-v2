@@ -66,44 +66,44 @@ export default function RegisterPage() {
                     <Typography variant="h6" className="text-2xl text-center">Register</Typography>
                     <hr className="w-full border-t-1 border-gray-300 mx-auto mt-4 mb-4" />
                     <form className="max-w-md mx-auto" onSubmit={registerUser}>
-                    <div className="grid gap-1 sm:grid-cols-2">
-                        <input 
-                            type="text" 
-                            placeholder="first name" 
-                            value={firstName} 
-                            onChange={ev => setFirstName(ev.target.value)} 
-                        />
-                        <input 
-                            type="text" 
-                            placeholder="last name" 
-                            value={lastName} 
-                            onChange={ev => setLastName(ev.target.value)} 
-                        />
-                        <div>
-                            <h6 className="ml-2 text-gray-600 text-sm">Contact Number</h6>
-                            <PhoneInput
-                                className="phone-input-container mt-2 mb-2 w-full px-3 py-2 border border-gray-300 rounded-2xl"
-                                international
-                                countryCallingCodeEditable={false}
-                                defaultCountry="PH"
-                                placeholder="Enter phone number"
-                                value={contactNo}
-                                onChange={setContactNo}
+                        <div className="grid gap-1 sm:grid-cols-2">
+                            <input 
+                                type="text" 
+                                placeholder="first name" 
+                                value={firstName} 
+                                onChange={ev => setFirstName(ev.target.value)} 
                             />
-                        </div>
-                        <div>
-                            <h6 className="ml-2 text-gray-600 text-sm">Emergency Contact Number</h6>
-                            <PhoneInput
-                                className="phone-input-container mt-2 mb-2 w-full px-3 py-2 border border-gray-300 rounded-2xl"
-                                international
-                                countryCallingCodeEditable={false}
-                                defaultCountry="PH"
-                                placeholder="Enter phone number"
-                                value={emergencyContactNo}
-                                onChange={setEmergencyContactNo}    
+                            <input 
+                                type="text" 
+                                placeholder="last name" 
+                                value={lastName} 
+                                onChange={ev => setLastName(ev.target.value)} 
                             />
+                            <div>
+                                <h6 className="ml-2 text-gray-600 text-sm">Contact Number</h6>
+                                <PhoneInput
+                                    className="phone-input-container mt-2 mb-2 w-full px-3 py-2 border border-gray-300 rounded-2xl"
+                                    international
+                                    countryCallingCodeEditable={false}
+                                    defaultCountry="PH"
+                                    placeholder="Enter phone number"
+                                    value={contactNo}
+                                    onChange={setContactNo}
+                                />
+                            </div>
+                            <div>
+                                <h6 className="ml-2 text-gray-600 text-sm">Emergency Contact Number</h6>
+                                <PhoneInput
+                                    className="phone-input-container mt-2 mb-2 w-full px-3 py-2 border border-gray-300 rounded-2xl"
+                                    international
+                                    countryCallingCodeEditable={false}
+                                    defaultCountry="PH"
+                                    placeholder="Enter phone number"
+                                    value={emergencyContactNo}
+                                    onChange={setEmergencyContactNo}    
+                                />
+                            </div>
                         </div>
-                    </div>
                         <input 
                             type="text" 
                             placeholder="address" 
@@ -136,11 +136,11 @@ export default function RegisterPage() {
                             value={confirmPassword} 
                             onChange={ev => setConfirmPassword(ev.target.value)} 
                         />
-                        </form>
-                        </div>
+                        <Button className="primary mt-4" type="submit">Register</Button>
+                    </form>
+                </div>
                 </CardBody>
                 <CardFooter className="pt-0">
-                    <Button className="primary" type="submit">Register</Button>
                     <div className="text-center py-2 text-gray-500 mt-2">
                         <Typography variant="small" className="font-normal"> 
                             Already a member?

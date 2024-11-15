@@ -1,5 +1,6 @@
 // middleware/auth.js
 const jwt = require('jsonwebtoken');
+const bcryptSalt = 10; 
 const jwtSecret = 'wsdfghjkqisoaklfksld';
 
 function requireRole(roles) {
@@ -27,4 +28,4 @@ function requireRole(roles) {
     };
 }
 
-module.exports = { requireRole, jwtSecret };
+module.exports = { requireRole, jwtSecret, bcryptSalt };

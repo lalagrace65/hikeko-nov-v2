@@ -3,7 +3,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const { jwtSecret } = require('../../middleware/auth');
 const Booking = require('../../models/Booking.js');
-const Package = require('../../models/Package'); // Make sure to import the Package model
+const Package = require('../../models/Package');
 const { createBooking } = require('../../controller/bookingController');
 
 // Router for public routes
@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.post('/booking', async (req, res) => {
     console.log('Received booking:', req.body);
-    
+
     const { 
         joinerName,
         email,
@@ -33,29 +33,39 @@ router.post('/booking', async (req, res) => {
     let userData;
 
     // Token authentication
-    const token = req.headers['authorization']; // Get token from headers
-    if (token) {
-        try {
-            userData = await new Promise((resolve, reject) => {
-                jwt.verify(token, jwtSecret, (err, decoded) => {
-                    if (err) {
-                        reject('Unauthorized: Invalid token');
-                    }
-                    resolve(decoded);
-                });
+    const token = req.headers['authorization']?.split(' ')[1]; // Get token after "Bearer "
+
+    if (!token) {
+        return res.status(401).send('Token is required');
+    }
+
+    try {
+        userData = await new Promise((resolve, reject) => {
+            jwt.verify(token, jwtSecret, (err, decoded) => {
+                if (err) {
+                    console.log('Token verification failed:', err);
+                    reject('Unauthorized: Invalid token');
+                }
+                resolve(decoded);
             });
-        } catch (err) {
-            return res.status(401).send(err);
-        }
+        });
+    } catch (err) {
+        console.error('Token verification error:', err);
+        return res.status(401).send('Unauthorized: Invalid token');
     }
 
     if (!packageId) {
         return res.status(400).send('Package ID is required');
     }
 
+    // Check if the packageId is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(packageId)) {
+        return res.status(400).send('Invalid Package ID');
+    }
+
     try {
         // Fetch package and populate the travelAgency reference
-        const packageDoc = await Package.findById(packageId).populate('travelAgency');
+        const packageDoc = await Package.findById(packageId).populate('travelAgency', 'businessName');
 
         if (!packageDoc || !packageDoc.travelAgency) {
             return res.status(404).send('Package not found or travelAgency not associated.');

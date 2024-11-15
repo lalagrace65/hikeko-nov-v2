@@ -14,7 +14,7 @@ export default function BusDets() {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         businessName: "",
-        businessEmail: "",
+        email: "",
         businessBranch: "",
         businessAddress: "",
         businessType: "Select an option",
@@ -35,7 +35,7 @@ export default function BusDets() {
 
     const [errors, setErrors] = useState({
         businessName: '',
-        businessEmail: '',
+        email: '',
         businessContactNo: '',
         businessBranch: '',
         businessAddress: '',
@@ -110,7 +110,7 @@ export default function BusDets() {
         // Validate form fields
         const requiredFields = [
             'businessName',
-            'businessEmail',
+            'email',
             'businessBranch',
             'businessAddress',
             'businessType'
@@ -161,7 +161,7 @@ export default function BusDets() {
         
         const emailData = {
             to_name: formData.businessName, // Name for EmailJS
-            to_email: formData.businessEmail, // Email for EmailJS
+            to_email: formData.email, // Email for EmailJS
             // Add other data you want to send
         };
         try {
@@ -170,7 +170,7 @@ export default function BusDets() {
             await emailjs.send('service_qjiocya', 'template_ge9ir44', emailData, 'jooaQAKBdAerURta8');
 
              // Here, you can also send submissionData to your server if needed
-            const signupResult = await axios.post(`${baseUrl}/api/signup`, {
+            const signupResult = await axios.post(`${baseUrl}/api/admin-register`, {
                 ...submissionData,
                 subscriptionId
             });
@@ -183,7 +183,7 @@ export default function BusDets() {
             // Clear the form data
             setFormData({
                 businessName: "",
-                businessEmail: "",
+                email: "",
                 businessBranch: "",
                 businessAddress: "",
                 businessType: "Select an option",
@@ -242,14 +242,14 @@ export default function BusDets() {
                         <div>
                             <label>Business Email:</label>
                             <input
-                                name='businessEmail'
+                                name='email'
                                 label="Business Email"
                                 type="email"
-                                value={formData.businessEmail}
+                                value={formData.email}
                                 onChange={handleChange}
                                 className="mb-2 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
-                            {errors.businessEmail && <Typography className="text-red-500 text-sm">{errors.businessEmail}</Typography>}
+                            {errors.email && <Typography className="text-red-500 text-sm">{errors.email}</Typography>}
                         </div>
 
                         {/* Business Type and Number of Branches */}

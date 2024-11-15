@@ -1,19 +1,19 @@
 const express = require('express');
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const User = require('../../models/User');
 const { requireRole } = require('../../middleware/auth');
 
 const router = express.Router();
 
-// GET admin details
+// Get admin details
 router.get('/admin-details', requireRole(['admin']), async (req, res) => {
     try {
         const adminId = req.userData.id; // Get admin ID from the verified token
 
-        // Fetch the required details from the TravelAgencySignUp model
+        // Fetch the required details from the TravelAgencySignUpModel
         const adminDetails = await User.findById(adminId).select(
-            'ownerFirstName ownerLastName businessEmail ownerMobileNum businessName businessAddress businessType businessBranch businessContactNo birCertificateDocu dtiPermitDocu businessPermitDocu mayorsPermitDocu subscriptionId'
+            'firstName lastName email contactNo businessName businessAddress businessType businessBranch businessContactNo birCertificateDocu dtiPermitDocu businessPermitDocu mayorsPermitDocu subscriptionId'
         );
 
         if (!adminDetails) {
@@ -51,6 +51,46 @@ router.put('/admin-details/set-password', requireRole(['admin']), async (req, re
     } catch (error) {
         console.error('Error updating password:', error);
         res.status(500).json({ message: 'Server error', error });
+    }
+});
+
+// Add or update system logo (avatar)
+router.post('/admin-details/settings/addSystemLogo', requireRole(['admin']), async (req, res) => {
+    console.log('Received data:', req.body); 
+
+    try {
+        const { avatar } = req.body;
+
+        // Check data format before creating
+        if (!avatar || !avatar.length) {
+            throw new Error('SystemSettingsLogo is missing or empty');
+        }
+
+        // Check if there's an existing avatar and update it, or create a new one
+        let systemDoc = await User.findOne({});
+        if (systemDoc) {
+            systemDoc.avatar = avatar;
+            await systemDoc.save();
+        } else {
+            systemDoc = await User.create({ avatar });
+        }
+
+        console.log('Created or updated system document:', systemDoc);
+        res.json(systemDoc);
+    } catch (error) {
+        console.error('Error in addSystemLogo route:', error.message);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// Get current system logo (avatar)
+router.get('/admin-details/settings/getSystemLogo', requireRole(['admin']), async (req, res) => {
+    try {
+        const systemDoc = await User.findOne({});
+        res.json(systemDoc || { avatar: null });
+    } catch (error) {
+        console.error('Error in getSystemLogo route:', error.message);
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 

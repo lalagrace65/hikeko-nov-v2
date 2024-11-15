@@ -98,7 +98,7 @@ function TrailDetail() {
 
       {/* Right Column: Packages */}
       <div className="w-[900px] flex-shrink-0">
-        <div class name="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold mb-4">Packages</h2>
         {packages.length > 0 ? (
           <div className="grid gap-4">
@@ -106,7 +106,7 @@ function TrailDetail() {
               <div key={pkg._id} className="border rounded p-4 shadow">
                 <div>
                   <h3 className="text-lg font-semibold mb-2">{pkg.name}</h3>
-                  <p>Travel Agency: {pkg.travelAgency.name}</p>
+                  <p>Travel Agency: {pkg.price}</p>
                   <p>Price: {pkg.price}</p>
                   <p>Date: {formatDate(pkg.date)}</p>
                   <p>Payment Options: {pkg.paymentOptions}</p>

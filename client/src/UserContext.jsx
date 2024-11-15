@@ -2,7 +2,6 @@ import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import { baseUrl } from "./Url";
 
-
 export const UserContext = createContext();
 
 export function UserContextProvider({ children }) {
@@ -26,10 +25,11 @@ export function UserContextProvider({ children }) {
                 const { data } = await axios.get(`${baseUrl}/profile`, { 
                     withCredentials: true 
                 });
-                
+
+                // Check if data is available and includes required user fields
                 if (data) {
                     console.log("Fetched user profile:", data);
-                    setUser(data);
+                    setUser(data); // Update the user state with firstName, lastName, email, etc.
                     localStorage.setItem('user', JSON.stringify(data)); // Save in localStorage
                 } else {
                     setUser(null);
@@ -55,9 +55,9 @@ export function UserContextProvider({ children }) {
         // Check local storage for user data on initial load
         const storedUser = localStorage.getItem('user');
         console.log("Stored user from localStorage:", storedUser);
-        
+
         if (storedUser) {
-            setUser(JSON.parse(storedUser));
+            setUser(JSON.parse(storedUser)); // Set user from localStorage if available
             setReady(true);
         } else {
             fetchUserProfile();  // Call the fetchUserProfile function if no user in localStorage

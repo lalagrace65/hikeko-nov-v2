@@ -1,19 +1,19 @@
 import React, { useEffect, useState, useContext } from 'react';
-import axios from 'axios';
 import { UserContext } from '@/UserContext';
 import { MultiLevelSidebar } from '@/components/admin-components/AdminSidebar';
 import { baseUrl } from '@/Url';
 import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
+import axios from 'axios';
 import {Button} from "@material-tailwind/react";
 import toast from 'react-hot-toast';
 
 export default function AdminDetails() {
   const [adminDetails, setAdminDetails] = useState(null);
-  const [businessContactNo, setBusinessContactNo] = useState('');
+  const [businessContactNo, setBusinessContactNo] = useState('')
   const [newPassword, setNewPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  const [updateMessage, setUpdateMessage] = useState('');
+  const [updateMessage, setUpdateMessage] = useState('');;
   const [error, setError] = useState(''); // Define error state here
   const { updateUserRequiresPasswordChange } = useContext(UserContext);
   const { user, ready  } = useContext(UserContext);
@@ -25,11 +25,11 @@ export default function AdminDetails() {
   if (!ready) return <p>Loading...</p>;
   if (!user) return <p>You must be logged in to access this page.</p>;
 
-  // Load existing logo from MongoDB when component mounts
-  useEffect(() => {
+   // Load existing logo from MongoDB when component mounts
+   useEffect(() => {
     const fetchLogo = async () => {
       try {
-        const response = await axios.get('/api/settings/getSystemLogo'); // Endpoint to get saved logo
+        const response = await axios.get('/admin-details/settings/getSystemLogo'); // Endpoint to get saved logo
         if (response.data.avatar) {
           setLogo({ link: response.data.avatar });
         }
@@ -69,7 +69,7 @@ export default function AdminDetails() {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      await axios.post(`/api/settings/addSystemLogo`, { 
+      await axios.post(`/admin-details/settings/addSystemLogo`, { 
         avatar: logo.link,
       });
 
@@ -86,7 +86,7 @@ export default function AdminDetails() {
   const handleEditClick = () => {
     document.getElementById('avatar').click();
   };
-
+  
   useEffect(() => {
     const fetchAdminDetails = async () => {
       try {
@@ -164,41 +164,41 @@ export default function AdminDetails() {
     <div className="flex min-h-screen">
       <MultiLevelSidebar className="min-h-screen" />
       <div className="flex-1 p-10">
+        <h1>Travel Agency Details</h1>
         <div className="grid grid-cols-2 gap-6"> 
-          <div>{/* Left Column */}
-              <div> {/* Image div */}
-                <span>Travel Agency Logo</span>
-                  <div className="flex flex-col items-center justify-center">
-                    {logo.link ? (
-                      <img
-                        src={logo.link}
-                        key={logo.link}
-                        className="w-40 h-40 rounded-full object-cover"
-                        alt="Travel Agency Logo"
-                      />
-                    ) : (
-                      <div className="w-40 h-40 rounded-full bg-gray-200 flex items-center justify-center">
-                        No Image
-                      </div>
-                    )}
-                  </div>
-                  <input
-                    id="avatar"
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleFileChange}
-                  />
-                  <span
-                    onClick={handleEditClick}
-                    className="block border rounded-lg p-2 text-center cursor-pointer mt-2 hover:bg-slate-200 ease-in-out duration-300"
-                  >
-                    {isUploading ? 'Uploading...' : 'Edit'}
-                  </span>
-                  <Button className="mt-2 primary" onClick={handleSave} disabled={isSaving || isUploading}>
-                    {isSaving ? 'Saving...' : 'Save'}
-                  </Button>
-              </div> 
+          {/* Left Column */}
+          <div>
+            <div className="flex flex-col items-center justify-center">
+              {logo.link ? (
+                <img
+                  src={logo.link}
+                  key={logo.link}
+                  className="w-40 h-40 rounded-full object-cover"
+                  alt="Travel Agency Logo"
+                />
+              ) : (
+                <div className="w-40 h-40 rounded-full bg-gray-200 flex items-center justify-center">
+                  No Image
+                </div>
+              )}
+            </div>
+            <input
+              id="avatar"
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleFileChange}
+            />
+            <span
+              onClick={handleEditClick}
+              className="block border rounded-2xl p-2 text-center cursor-pointer mt-2 hover:bg-gray-200 transition duration-300 ease-in-out"
+            >
+              {isUploading ? 'Uploading...' : 'Edit'}
+            </span>
+            <button className='mt-2 w-full primary hover:shadow-lg transition duration-300 ease-in-out' 
+              onClick={handleSave} disabled={isSaving || isUploading}>
+              {isSaving ? 'Saving...' : 'Save'}
+            </button>
             <div className="grid grid-cols-2 gap-4"> 
               <div>
                 {preInput('Owner First Name')}
@@ -206,7 +206,7 @@ export default function AdminDetails() {
                   type="text"
                   className="w-full p-2 border border-gray-300 rounded"
                   placeholder="Owner First Name"
-                  value={adminDetails.ownerFirstName}
+                  value={adminDetails.firstName}
                   disabled
                 />
               </div>
@@ -216,63 +216,60 @@ export default function AdminDetails() {
                   type="text"
                   className="w-full p-2 border border-gray-300 rounded"
                   placeholder="Owner Last Name"
-                  value={adminDetails.ownerLastName}
+                  value={adminDetails.lastName}
                   disabled
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-                <div>
-                  {preInput('Owner Mobile No.')}
-                  <PhoneInput
-                    className=" mt-2 mb-2 w-full px-3 py-2 border border-gray-300 rounded-2xl"
-                    international
-                    countryCallingCodeEditable={false}
-                    defaultCountry="PH"
-                    placeholder="Enter phone number"
-                    value={adminDetails.ownerMobileNum}
-                    onChange={handlePhoneNumberChange}
-                    disabled
-                  />
-                </div>
-                <div>
-                  {preInput('Business Mobile No.')}
-                  <PhoneInput
-                    className=" mt-2 mb-2 w-full px-3 py-2 border border-gray-300 rounded-2xl"
-                    international
-                    countryCallingCodeEditable={false}
-                    defaultCountry="PH"
-                    placeholder="Enter phone number"
-                    value={adminDetails.businessContactNo}
-                    onChange={handlePhoneNumberChange}
-                    disabled
-                  />
-                </div>
+            <div>
+                {preInput('Owner Mobile No.')}
+                <PhoneInput
+                  className=" mt-2 mb-2 w-full px-3 py-2 border border-gray-300 rounded-2xl"
+                  international
+                  countryCallingCodeEditable={false}
+                  defaultCountry="PH"
+                  placeholder="Enter phone number"
+                  value={adminDetails.contactNo}
+                  onChange={handlePhoneNumberChange}
+                  disabled
+                />
               </div>
-                {preInput('Business Name')}
-                <input
-                  type="text"
-                  className="w-full p-2 border border-gray-300 rounded"
-                  placeholder="Business Name"
-                  value={adminDetails.businessName}
-                  disabled
-                />
-                {preInput('Business Email')}
-                <input
-                  type="text"
-                  className="w-full p-2 border border-gray-300 rounded"
-                  placeholder="Business Email"
-                  value={adminDetails.businessEmail}
-                  disabled
-                />
-                {preInput('Business Address')}
-                <input
-                  type="text"
-                  className="w-full p-2 border border-gray-300 rounded"
-                  placeholder="Business Address"
-                  value={adminDetails.businessAddress}
-                  disabled
-                />
+              {preInput('Business Name')}
+              <input
+                type="text"
+                className="w-full p-2 border border-gray-300 rounded"
+                placeholder="Business Name"
+                value={adminDetails.businessName}
+                disabled
+              />
+              {preInput('Business Email')}
+              <input
+                type="text"
+                className="w-full p-2 border border-gray-300 rounded"
+                placeholder="Business Email"
+                value={adminDetails.email}
+                disabled
+              />
+              
+            {preInput('Set new password')}
+            <input
+              type="password"
+              className="w-full p-2 border border-gray-300 rounded mt-2"
+              placeholder="Enter new password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+            {passwordError && <p className="text-red-500 text-sm">{passwordError}</p>}
+            {/* Button to update password */}
+            <button
+              onClick={handleUpdatePassword}
+              className="mt-4 px-4 w-full py-2 primary text-white rounded hover:shadow-lg transition duration-300 ease-in-out"
+            >
+              Update Password
+            </button>
+      
+            {/* Success or error message */}
+            {updateMessage && <p className="text-green-500 mt-2">{updateMessage}</p>}
           </div>
   
           {/* Right Column */}
@@ -350,7 +347,15 @@ export default function AdminDetails() {
               >
                 View Business Permit
               </a>
-            )}    
+            )}
+            {preInput('Business Address')}
+              <input
+                type="text"
+                className="w-full p-2 border border-gray-300 rounded"
+                placeholder="Business Address"
+                value={adminDetails.businessAddress}
+                disabled
+              />
             <div className="grid grid-cols-2 gap-4">
               <div>
                 {preInput('Business Branch')}
@@ -373,25 +378,22 @@ export default function AdminDetails() {
                   />
               </div>
             </div>
-            {preInput('Set new password')}
-            <input
-              type="password"
-              className="w-full p-2 border border-gray-300 rounded mt-2"
-              placeholder="Enter new password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-            {passwordError && <p className="text-red-500 text-sm">{passwordError}</p>}
-            {/* Button to update password */}
-            <Button
-              onClick={handleUpdatePassword}
-              className="mt-2 primary"
-            >
-              Update Password
-            </Button>
-      
-            {/* Success or error message */}
-            {updateMessage && <p className="text-green-500 mt-2">{updateMessage}</p>}    
+            <div>
+                {preInput('Business Mobile No.')}
+                <PhoneInput
+                  className=" mt-2 mb-2 w-full px-3 py-2 border border-gray-300 rounded-2xl"
+                  international
+                  countryCallingCodeEditable={false}
+                  defaultCountry="PH"
+                  placeholder="Enter phone number"
+                  value={adminDetails.businessContactNo}
+                  onChange={handlePhoneNumberChange}
+                  disabled
+                />
+              </div>
+            <div>
+              
+            </div>         
           </div>
         </div>        
       </div>

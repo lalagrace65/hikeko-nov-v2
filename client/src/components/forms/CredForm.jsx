@@ -11,14 +11,14 @@ export default function CredForm() {
   const navigate = useNavigate();
   
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [ownerMobileNum, setOwnerMobileNum] = useState("");
+  const [contactNo, setOwnerMobileNum] = useState("");
   const { register, handleSubmit, setValue, formState: { errors } } = useForm({
     defaultValues: {
-      ownerFirstName: "",
-      ownerLastName: "",
+      firstName: "",
+      lastName: "",
       birCertificate: "",
       termsAccepted: false,
-      ownerMobileNum: "",
+      contactNo: "",
     },
   });
 
@@ -50,16 +50,16 @@ export default function CredForm() {
         {/* Owner First Name */}
         <div>
           <Input 
-            name='ownerFirstName'
+            name='firstName'
             label="Business Owner First Name"
-            {...register("ownerFirstName", {
+            {...register("firstName", {
               required: "Owner First Name is required.",
               validate: preventLeadingWhitespace,
             })}
             
           />
-          {errors.ownerFirstName && (
-            <span className="text-red-500">{errors.ownerFirstName.message}</span>
+          {errors.firstName && (
+            <span className="text-red-500">{errors.firstName.message}</span>
           )}
         </div>
 
@@ -67,14 +67,14 @@ export default function CredForm() {
         <div>
           <Input
             label="Business Owner Last Name"
-            {...register("ownerLastName", {
+            {...register("lastName", {
               required: "Owner Last Name is required.",
               validate: preventLeadingWhitespace,
             })}
            
           />
-          {errors.ownerLastName && (
-            <span className="text-red-500">{errors.ownerLastName.message}</span>
+          {errors.lastName && (
+            <span className="text-red-500">{errors.lastName.message}</span>
           )}
         </div>
 
@@ -86,19 +86,19 @@ export default function CredForm() {
             countryCallingCodeEditable={false}
             defaultCountry="PH"
             placeholder="Enter phone number"
-            value={ownerMobileNum}
+            value={contactNo}
             onChange={(value) => {
               setOwnerMobileNum(value); // Update local state
-              setValue("ownerMobileNum", value); // Update react-hook-form value
+              setValue("contactNo", value); // Update react-hook-form value
             }}
             onBlur={() => {
               // Manually trigger validation on blur
-              setValue("ownerMobileNum", ownerMobileNum, { shouldValidate: true });
+              setValue("contactNo", contactNo, { shouldValidate: true });
             }}
             className="mt-2 mb-2 w-full px-3 py-2 border border-gray-300 rounded-lg"
           />
           {errors.ownerMobileNum && (
-            <span className="text-red-500">{errors.ownerMobileNum.message}</span>
+            <span className="text-red-500">{errors.contactNo.message}</span>
           )}
         </div>
 

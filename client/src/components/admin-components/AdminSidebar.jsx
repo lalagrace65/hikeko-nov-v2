@@ -6,7 +6,7 @@ import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { MdTour } from "react-icons/md";
 import { RiBookletFill } from "react-icons/ri";
 import { FaUserGroup } from "react-icons/fa6";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState,  } from "react";
 import axios from 'axios';
 
 import { useNavigate } from "react-router-dom";
@@ -18,6 +18,40 @@ export function MultiLevelSidebar() {
   const [logo, setLogo] = useState(null);
   const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchBusinessName = async () => {
+      if (user && user.token) {
+        try {
+          const response = await axios.get(`${baseUrl}/admin-details`, {
+            headers: { Authorization: `Bearer ${user.token}` },
+          });
+          setUser((prevUser) => ({
+            ...prevUser,
+            businessName: response.data.businessName,
+          }));
+        } catch (error) {
+          console.error("Error fetching business name:", error);
+        }
+      }
+    };
+  
+    fetchBusinessName();
+  }, []);  // Removed 'user' as dependency to avoid re-triggering the effect  
+
+  useEffect(() => {
+    const fetchLogo = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/admin-details/settings/getSystemLogo`);
+            const systemLogo = response.data.avatar; 
+            setLogo(systemLogo); 
+        } catch (error) {
+            console.error("Error fetching logo:", error);
+        }
+    };
+
+    fetchLogo();
+}, []);
 
   const handleOpen = (value) => {
     setOpen(open === value ? value : value);
@@ -111,6 +145,7 @@ export function MultiLevelSidebar() {
   const handleInbox = () => {
     navigate('/admin/inbox'); 
   };
+
   const handleSettings = () => {
     navigate('/admin/settings'); 
   };

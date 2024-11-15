@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const TravelAgencySignUp = require('../../models/TravelAgencySignUp');
+const User = require('../../models/User');
 const { jwtSecret } = require('../../middleware/auth');
 const router = express.Router();
 
@@ -10,7 +10,7 @@ router.post('/travelAgencyLogin', async (req, res) => {
     console.log('Received login request:', { email });
 
     try {
-        const userDoc = await TravelAgencySignUp.findOne({ businessEmail: email });
+        const userDoc = await User.findOne({ businessEmail: email });
         if (!userDoc) {
             console.log('User not found');
             return res.status(404).json('User not found');
@@ -77,3 +77,4 @@ router.post('/travelAgencyLogin', async (req, res) => {
 });
 
 module.exports = router;
+

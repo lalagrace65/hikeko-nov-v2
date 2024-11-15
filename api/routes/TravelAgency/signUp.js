@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const express = require('express');
-const TravelAgencySignUp = require('../../models/TravelAgencySignUp');
+const User = require('../../models/User');
 const Subscription = require('../../models/Subscription');
 
 const router = express.Router();
@@ -64,7 +64,7 @@ router.post('/signup', async (req,res) => {
       subscriptionId
     };
     // You can choose to exclude sensitive information in the response
-    const signUp = await TravelAgencySignUp.create(signUpData);
+    const signUp = await User.create(signUpData);
 
     // Send a temporary password via email or other method
     console.log('Temporary Password for user:', signUp.plainTempPassword);
@@ -76,3 +76,4 @@ router.post('/signup', async (req,res) => {
   }
 });
 module.exports = router;
+
