@@ -7,6 +7,7 @@ import { baseUrl } from '@/Url';
 import { Carousel } from "@material-tailwind/react";
 import Legend from './Legend';
 import GuidelinesToHiking from './GuidelinesToHiking';
+import { Typography } from "@material-tailwind/react";
 
 function TrailDetail() {
   const { id } = useParams();
@@ -45,6 +46,25 @@ function TrailDetail() {
     const options = { month: 'long', day: 'numeric', year: 'numeric' };
     return date.toLocaleDateString('en-US', options);
   };
+
+    // Helper function to format time (hours and minutes) to 12-hour format
+const formatTime = (hours, minutes) => {
+  if (hours == null || minutes == null) return "N/A";
+  
+  // Convert hours to 12-hour format
+  const period = hours >= 12 ? "PM" : "AM";
+  const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+
+  return `${formattedHours}:${formattedMinutes} ${period}`;
+};
+// Function to format both checkIn and checkOut times
+const formatBookingTime = (checkIn, checkOut) => {
+  const formattedCheckIn = formatTime(checkIn?.hours, checkIn?.minutes);
+  const formattedCheckOut = formatTime(checkOut?.hours, checkOut?.minutes);
+
+  return `${formattedCheckIn} - ${formattedCheckOut}`;
+};
 
   if (!trail) return <p>Loading...</p>;
 
@@ -96,71 +116,102 @@ function TrailDetail() {
         </div>
       </div>
 
-      {/* Right Column: Packages */}
-      <div className="w-[900px] flex-shrink-0">
-        <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold mb-4">Packages</h2>
-        {packages.length > 0 ? (
-          <div className="grid gap-4">
-            {packages.map(pkg => (
-              <div key={pkg._id} className="border rounded p-4 shadow">
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">{pkg.name}</h3>
-                  <p>Travel Agency: {pkg.travelAgency?.businessName}</p>
-                  <p>Price: {pkg.price}</p>
-                  <p>Date: {formatDate(pkg.date)}</p>
-                  <p>Payment Options: {pkg.paymentOptions}</p>
-                  <p>Extra Info: {pkg.extraInfo}</p>
-                  <p>Max Guests: {pkg.maxGuests}</p>
+     {/* Right Column: Packages */}
+<div className="w-[900px] flex-shrink-0">
+  <div className="justify-between items-center mb-4">
+    <h2 className="text-xl font-semibold mb-4">Packages</h2>
+    {packages.length > 0 ? (
+      <div className="grid gap-4">
+        {packages.map(pkg => (
+          <div key={pkg._id} className="border rounded p-4 shadow flex flex-row space-x-4">
+            {/* Left Section: Package Details */}
+            <div className="flex-1">
+              {/* Travel Agency Logo, Name, and Price */}
+              <div className="flex justify-between items-center mb-2">
+                <div className="flex items-center space-x-3">
+                  {pkg.travelAgency && pkg.travelAgency.logo ? (
+                    <img
+                      src={pkg.travelAgency.logo}
+                      alt={`${pkg.travelAgency.name} Logo`}
+                      className="w-12 h-12 object-cover rounded-full"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 bg-gray-200 rounded-full" /> // Placeholder for logo if none exists
+                  )}
+                  <Typography variant="h4" >{pkg.travelAgency?.businessName}</Typography>
                 </div>
-                <div>
-                  {/* Carousel for Package Images */}
-                  {pkg.packageImages && pkg.packageImages.length > 0 ? (
-                    <Carousel
-                      className="rounded-xl mt-4"
-                      navigation={({ setActiveIndex, activeIndex, length }) => (
-                        <div className="absolute bottom-2 left-2/4 z-50 flex -translate-x-2/4 gap-2">
-                          {new Array(length).fill("").map((_, i) => (
-                            <span
-                              key={i}
-                              className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
-                                activeIndex === i ? "w-8 bg-blue-500" : "w-4 bg-blue-200"
-                              }`}
-                              onClick={() => setActiveIndex(i)}
-                            />
-                          ))}
-                        </div>
-                      )}
-                    >
-                      {pkg.packageImages.map((image, idx) => (
-                        <img
-                          key={idx}
-                          src={image}
-                          alt={`Package image ${idx + 1}`}
-                          className="w-full h-64 object-cover rounded"
+                
+                {/* Price */}
+                <Typography variant='h3' className="text-right">
+                  ₱{pkg.price}
+                </Typography>
+              </div>
+
+              <p>Date: {formatDate(pkg.date)}</p>
+              <p>Estimated Time: {formatBookingTime(pkg.checkIn, pkg.checkOut)}</p>
+              <p>Max Joiners: {pkg.maxGuests}</p>
+              <div>
+                <h4 className="text-lg mb-2">Package Inclusions:</h4>
+                <ul className="list-disc pl-5">
+                  {pkg.packages && pkg.packages.length > 0 ? (
+                    pkg.packages.map((inclusion, idx) => (
+                      <li key={idx} className="mb-1">{inclusion}</li>
+                    ))
+                  ) : (
+                    <p>No inclusions available.</p>
+                  )}
+                </ul>
+              </div>
+
+              <Button
+                onClick={() => navigate(`/bookings/packages/${pkg._id}`)}
+                className="mt-4 bg-orange-400 text-white py-2 px-4 rounded hover:bg-amber-500"
+              >
+                Book Now
+              </Button>
+            </div>
+
+            {/* Right Section: Carousel for Package Images */}
+            <div className="w-72 h-auto">
+              {pkg.packageImages && pkg.packageImages.length > 0 ? (
+                <Carousel
+                  className="rounded-xl mt-4"
+                  navigation={({ setActiveIndex, activeIndex, length }) => (
+                    <div className="absolute bottom-2 left-2/4 z-50 flex -translate-x-2/4 gap-2">
+                      {new Array(length).fill("").map((_, i) => (
+                        <span
+                          key={i}
+                          className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
+                            activeIndex === i ? "w-8 bg-blue-500" : "w-4 bg-blue-200"
+                          }`}
+                          onClick={() => setActiveIndex(i)}
                         />
                       ))}
-                    </Carousel>
-                  ) : (
-                    <p className="mt-4 text-gray-500">No images available for this package.</p>
+                    </div>
                   )}
-                </div>
-
-
-                <Button
-                  onClick={() => navigate(`/bookings/packages/${pkg._id}`)}
-                  className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
                 >
-                  Book Now
-                </Button>
-              </div>
-            ))}
+                  {pkg.packageImages.map((image, idx) => (
+                    <img
+                      key={idx}
+                      src={image}
+                      alt={`Package image ${idx + 1}`}
+                      className="w-full h-64 object-cover rounded"
+                    />
+                  ))}
+                </Carousel>
+              ) : (
+                <p className="mt-4 text-gray-500">No images available for this package.</p>
+              )}
+            </div>
           </div>
-        ) : (
-          <p>No packages available for this trail.</p>
-        )}
-        </div>
+        ))}
       </div>
+    ) : (
+      <p>No packages available for this trail.</p>
+    )}
+  </div>
+</div>
+
     </div>
   );
 }

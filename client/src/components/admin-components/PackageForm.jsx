@@ -140,7 +140,7 @@ export default function PackageForm() {
     async function addNewPackage(ev) {
         ev.preventDefault();
         if (!validate()) {
-            toast.error("Please fix the errors");
+            toast.error("Please fix the required fields.");
             return;
         }
 

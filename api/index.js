@@ -24,6 +24,7 @@ const joinerBookingsRoute = require('./routes/Customer/userBookings');
 const travelAgencySettingsRoute = require('./routes/TravelAgency/adminDetailsRoute.js');
 const premiumPlanRoute = require('./routes/Subscription/PremiumPlan');
 const basicPlanRoute = require('./routes/Subscription/BasicPlan');
+const createForumPost = require('./routes/Forum/createPostForum');
 
 const adminRegisterRoute = require('./routes/adminRegisterRoute.js');
 
@@ -78,10 +79,10 @@ app.use('/api', bookingRoute);
 app.use('/api', joinerBookingsRoute);
 
 app.use('/api',adminRegisterRoute);
-
 app.use(travelAgencySettingsRoute);
 app.use(premiumPlanRoute);
 app.use(basicPlanRoute);
+app.use('/api',createForumPost);
 
 
 // Error handling middleware

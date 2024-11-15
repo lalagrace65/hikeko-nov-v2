@@ -15,6 +15,7 @@ const UserSchema = new mongoose.Schema({
   lastName: String,
   email: { type: String, sparse: true },  // Ensure the email is unique and can be null if needed
   password: String,
+  confirmPassword: String,
   address: String,
   contactNo: String,
   emergencyContactNo: String,

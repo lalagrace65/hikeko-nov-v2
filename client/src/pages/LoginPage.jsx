@@ -70,7 +70,7 @@ export default function LoginPage() {
 
     return (
         <div className="mt-4 grow flex items-center justify-around">
-            <Card className="mx-auto w-full max-w-[24rem]">
+            <Card className="mx-auto w-full max-w-[24rem] mt-6">
                 <CardBody className="flex flex-col gap-2">
                     <div>
                         <Typography variant="h6" className="text-2xl text-center">Login</Typography>

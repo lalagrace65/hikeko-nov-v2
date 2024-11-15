@@ -69,7 +69,7 @@ export default function AdminDetails() {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      await axios.post(`/admin-details/settings/addSystemLogo`, { 
+      await axios.post('/admin-details/settings/addSystemLogo', { 
         avatar: logo.link,
       });
 

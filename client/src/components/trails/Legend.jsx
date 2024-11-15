@@ -14,19 +14,21 @@ const difficultyColors = [
 ];
 
 // Color mapping for trail classes
-const trailClassColors = {
-  "Easy": 'bg-green-500',
-  "Moderate": 'bg-yellow-500',
-  "Hard": 'bg-red-500',
-  "Expert": 'bg-purple-500',
-};
+const trailClassColors = [
+  'bg-green-500',   // 1 – Walking (easy stroll)
+  'bg-yellow-500',  // 2 – Hiking along a path/rugged terrain
+  'bg-orange-500',  // 3 – Scrambling (using hands for balance)
+  'bg-blue-500',     // 4 – Climbing easy cliffs but with enough drop off- beginners should be roped.
+  'bg-purple-500',  // 5 – Using free hands as climbing method
+  'bg-red-500',    // 6 – very difficult and need to use artificial method
+];
 
 const Legend = ({ trailClass, difficultyLevel }) => {
   // Ensure difficultyLevel is within 1-9, else fallback to gray
   const difficultyColor = difficultyColors[difficultyLevel - 1] || 'bg-gray-500'; 
 
   // Get the color based on the trail class
-  const trailClassColor = trailClassColors[trailClass] || 'bg-gray-500'; 
+  const trailClassColor = trailClassColors[trailClass - 1] || 'bg-gray-500';
 
   return (
     <div className="flex items-center gap-2 mt-2">

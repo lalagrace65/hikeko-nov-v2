@@ -34,12 +34,13 @@ import ProfilePage from "./pages/user-page/ProfilePage";
 import AdminTransactionList from "./pages/admin-page/AdminTransactionList";
 import UploadProofSubscription from "./components/layout/about/UploadProofSubscription";
 import CheckBasicPlan from "./components/layout/about/CheckBasicPlan";
+import Forum from "./pages/forum-page/forum";
+import HikingFAQs from "./components/layout/index/HikingFAQs";
 import AdminDetails from "./pages/admin-page/SettingsPage";
 import InboxPage from "./pages/admin-page/InboxPage";
 import Dashboard_Projects from "./pages/admin-page/Dashboard_Projects";
 import Dashboard_Reports from "./pages/admin-page/Dashboard_Reports";
 import Dashboard_AnalyticsPage from "./pages/admin-page/Dashboard_AnalyticsPage";
-import HikingFAQs from "./components/layout/index/HikingFAQs";
 
 // Set default axios settings
 axios.defaults.baseURL = `${baseUrl}`;
@@ -73,6 +74,7 @@ function App() {
             <Route path="/staff-db" element={<Dashboard_StaffPage />} />
 
             
+            <Route path="/forum" element={<Forum />} />
             
             {/* Protect Admin Routes */}
             <Route

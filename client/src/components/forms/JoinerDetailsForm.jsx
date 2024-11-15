@@ -20,7 +20,6 @@ import FloatingLabelInput from '../icons/FloatingLabelInput';
 import { baseUrl } from '@/Url';
 
 
-
 function JoinerDetailsForm({packageId}) {
     const [proofPaymentImages, setProofPaymentImages] = useState([]);
     const [joinerContactNo, setJoinerContactNo] = useState("");
@@ -152,7 +151,7 @@ function JoinerDetailsForm({packageId}) {
     }
 
     return (
-        <div className="bg-green-800 p-8 text-white">
+        <div className="bg-cardPrice p-8 text-primary">
             <h2 className="text-2xl font-bold mb-6">JOINER DETAILS:</h2>
             <div className="grid grid-cols-3 gap-6 mb-4 items-center">
                 <div className="relative w-full">
@@ -335,7 +334,7 @@ function JoinerDetailsForm({packageId}) {
                     <Typography
                     variant="small"
                     color="gray"
-                    className="flex items-center font-normal text-white"
+                    className="flex items-center font-normal "
                     >
                     I agree the
                     <a
