@@ -106,7 +106,7 @@ function TrailDetail() {
               <div key={pkg._id} className="border rounded p-4 shadow">
                 <div>
                   <h3 className="text-lg font-semibold mb-2">{pkg.name}</h3>
-                  <p>Travel Agency: {pkg.price}</p>
+                  <p>Travel Agency: {pkg.travelAgency?.businessName}</p>
                   <p>Price: {pkg.price}</p>
                   <p>Date: {formatDate(pkg.date)}</p>
                   <p>Payment Options: {pkg.paymentOptions}</p>

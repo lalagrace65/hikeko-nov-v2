@@ -10,6 +10,7 @@ router.get('/trails/:trailId/packages', async (req, res) => {
     const { trailId } = req.params;
     try {
         const packages = await Package.find({ trailId }).populate('travelAgency', 'businessName'); // populate travel agency if needed
+        console.log(packages);
         res.json(packages);
     } catch (error) {
         console.error('Error fetching packages:', error);
