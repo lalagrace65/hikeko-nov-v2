@@ -1,4 +1,4 @@
-import React , { useState } from 'react';
+import React , { useState, useEffect } from 'react';
 import { 
     Input, 
     Select, 
@@ -27,6 +27,53 @@ function JoinerDetailsForm({packageId}) {
     const [open, setOpen] = React.useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
+
+    const [autofillChecked, setAutofillChecked] = useState(false);
+     // Fetch user profile data if autofill checkbox is checked
+  useEffect(() => {
+    if (autofillChecked) {
+      // Assuming you have a function to fetch user data from the backend
+      axios.get('/profile')
+        .then(response => {
+          const user = response.data;
+          setFormData({
+            joinerName: user.firstName + ' ' + user.lastName,
+            email: user.email,
+            pickupLocation: "",  // You can add defaults if necessary
+            age: "",              // You may have to calculate or leave it blank
+            homeAddress: user.address,
+            emergencyContactPerson: "", // Set defaults if necessary
+            medicalCondition: "No",  // Default to 'No' if no data available
+            conditionDetails: "",
+            paymentType: "Downpayment",
+            termsAccepted: false
+          });
+          setJoinerContactNo(user.contactNo);
+          setEmergencyContactNumber(user.emergencyContactNo);
+        })
+        .catch(error => {
+          console.error("Error fetching user data:", error);
+          toast.error("Failed to load user data.");
+        });
+    } else {
+        // Reset form when checkbox is unchecked
+        setFormData({
+          joinerName: "",
+          email: "",
+          pickupLocation: "",
+          age: "",
+          homeAddress: "",
+          emergencyContactPerson: "",
+          medicalCondition: "",
+          conditionDetails: "",
+          paymentType: "Downpayment",
+          termsAccepted: false,
+        });
+        setJoinerContactNo("");
+        setEmergencyContactNumber("");
+      }
+  }, [autofillChecked]);
+
     const toggleModal = () => {
         setOpenModal(!openModal);
     };
@@ -53,7 +100,6 @@ function JoinerDetailsForm({packageId}) {
             [name]: value.trimStart()
         }));
     };
-
     // Handle the checkbox for terms acceptance
     const handleTermsChange = () => {
         setFormData(prevState => ({
@@ -104,7 +150,18 @@ function JoinerDetailsForm({packageId}) {
                 packageId,
             };
         try {
-            await axios.post(`${baseUrl}/api/booking`, bookingData);
+            // Retrieve the token
+            const token = localStorage.getItem('token'); // or however you store the token
+            if (!token) {
+                toast.error("User is not authenticated.");
+                return;
+            }
+             // Add the Authorization header
+             await axios.post(`${baseUrl}/api/booking`, bookingData, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             toast.success("Booking successfully submitted!");
             // Reset the form data
             setFormData(initialFormData);
@@ -146,6 +203,14 @@ function JoinerDetailsForm({packageId}) {
 
     return (
         <div className="bg-cardPrice p-8 text-primary">
+            <div className="relative w-full">
+            <Checkbox
+                checked={autofillChecked}
+                onChange={() => setAutofillChecked(prev => !prev)}
+                label="Use my profile data"
+            />
+            </div>
+             {/* Form Fields */}
             <h2 className="text-2xl font-bold mb-6">JOINER DETAILS:</h2>
             <div className="grid grid-cols-3 gap-6 mb-4 items-center">
                 <div className="relative w-full">
@@ -231,8 +296,7 @@ function JoinerDetailsForm({packageId}) {
                  {/* Conditionally render the conditionDetails input if medicalCondition is 'Yes' */}
                 {formData.medicalCondition === 'Yes' && (
                     <div className="relative w-full">
-                        <InputField
-                            type="text"
+                        <Input
                             label="If yes, please state..."
                             name="conditionDetails"
                             value={formData.conditionDetails}
