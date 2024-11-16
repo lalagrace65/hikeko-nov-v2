@@ -68,7 +68,7 @@ function CustomerPackageDetails() {
                             ) : (
                                 <div className="w-12 h-12 bg-gray-200 rounded-full" /> // Placeholder for logo if none exists
                             )}
-                            <Typography variant="h4">{packageDetail.travelAgency ? packageDetail.travelAgency.name : 'N/A'}</Typography>
+                            <Typography variant="h4">{packageDetail.travelAgency.businessName}</Typography>
                         </div>
                         <Typography variant="h3" className="text-right ml-14">
                             ₱{packageDetail.price}

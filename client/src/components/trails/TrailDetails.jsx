@@ -159,7 +159,7 @@ const formatBookingTime = (checkIn, checkOut) => {
                   {pkg.travelAgency && pkg.travelAgency.logo ? (
                     <img
                       src={pkg.travelAgency.logo}
-                      alt={`${pkg.travelAgency.name} Logo`}
+                      alt={`${pkg.travelAgency.businessName} Logo`}
                       className="w-12 h-12 object-cover rounded-full"
                     />
                   ) : (
