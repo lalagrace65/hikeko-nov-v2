@@ -32,8 +32,13 @@ const ProfilePage = () => {
                 <h1>User Profile</h1>
                 <div className="profile-details">
                     <p><strong>First Name:</strong> {user.firstName}</p>
+                    <p><strong>Last Name:</strong> {user.lastName}</p>
                     <p><strong>Email:</strong> {user.email}</p>
                     <p><strong>Role:</strong> {user.role}</p>
+                    <p><strong>Address:</strong> {user.address}</p>
+                    <p><strong>Contact Number:</strong> {user.contactNo}</p>
+                    <p><strong>Emergency Contact Number:</strong> {user.emergencyContactNo}</p>
+                    <p><strong>Date of Birth:</strong> {user.dateOfBirth}</p>
                 </div>
             </div>
         </div>
