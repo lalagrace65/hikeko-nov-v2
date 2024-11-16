@@ -31,8 +31,6 @@ export default function BusDets() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [businessContactNo, setBusinessContactNo] = useState("");
 
-
-
     const [errors, setErrors] = useState({
         businessName: '',
         email: '',
@@ -179,6 +177,7 @@ export default function BusDets() {
 
             // Clear the form data from localStorage after successful submission
             localStorage.removeItem("formData");
+            localStorage.removeItem("subscriptionId");
 
             // Clear the form data
             setFormData({
@@ -286,7 +285,6 @@ export default function BusDets() {
                             {/* Number of Branches Input */}
                             <div className="flex flex-col w-1/2 mt-4">
                                 <Input
-                                    type="text"
                                     label='Number of Branches'
                                     name="businessBranch"
                                     id="number_of_branches"
@@ -300,7 +298,6 @@ export default function BusDets() {
                         {/* Business Complete Address */}
                         <div>
                             <Input
-                                type="text"
                                 name="businessAddress"
                                 label='Business Complete Address'
                                 id="business_complete_address"

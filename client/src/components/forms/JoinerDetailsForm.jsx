@@ -95,9 +95,6 @@ function JoinerDetailsForm({packageId}) {
 
     const handleSubmit = async () => {
         if (!validateForm()) return;
-        
-            
-
             // Prepare the booking data
             const bookingData = {
                 ...formData,
@@ -105,10 +102,7 @@ function JoinerDetailsForm({packageId}) {
                 contactNumber: joinerContactNo,
                 emergencyContactNumber: emergencyContactNumber,
                 packageId,
-                
             };
-            
-
         try {
             await axios.post(`${baseUrl}/api/booking`, bookingData);
             toast.success("Booking successfully submitted!");
@@ -155,8 +149,7 @@ function JoinerDetailsForm({packageId}) {
             <h2 className="text-2xl font-bold mb-6">JOINER DETAILS:</h2>
             <div className="grid grid-cols-3 gap-6 mb-4 items-center">
                 <div className="relative w-full">
-                    <InputField
-                        type="text"
+                    <Input
                         label="Joiner Name(s)"
                         name="joinerName"
                         value={formData.joinerName}
@@ -201,8 +194,7 @@ function JoinerDetailsForm({packageId}) {
                     />  
                 </div>
                 <div className="relative w-full">
-                    <InputField
-                        type="text"
+                    <Input
                         label="Pick-up Location"
                         name="pickupLocation"
                         value={formData.pickupLocation}
@@ -211,8 +203,7 @@ function JoinerDetailsForm({packageId}) {
                     />
                 </div>
                 <div className="relative w-full">
-                    <InputField
-                        type="text"
+                    <Input
                         label="Age"
                         name="age"
                         value={formData.age}
@@ -220,8 +211,7 @@ function JoinerDetailsForm({packageId}) {
                     />
                 </div>
                 <div className="relative w-full">
-                    <InputField
-                        type="text"
+                    <Input
                         label="Home Address"
                         name="homeAddress"
                         value={formData.homeAddress}
@@ -251,8 +241,7 @@ function JoinerDetailsForm({packageId}) {
                     </div>
                 )}
                 <div className="relative w-full">
-                    <InputField
-                        type="text"
+                    <Input
                         label="Emergency Contact Person"
                         name="emergencyContactPerson"
                         value={formData.emergencyContactPerson}
@@ -320,13 +309,9 @@ function JoinerDetailsForm({packageId}) {
             </ReactSortable>
 
             {/*Voucher*/}
-            <div className="relative w-full">
-                <InputField
-                    type="text"
-                    label="Voucher"
-                    name="voucher"
-             />
-            </div>
+            <Input
+                label="Voucher (Optional)">
+            </Input>
 
             {/* Checkbox */}
                 <Checkbox
@@ -339,9 +324,9 @@ function JoinerDetailsForm({packageId}) {
                     I agree the
                     <a
                         onClick={toggleModal}
-                        className="font-medium transition-colors hover:text-gray-900"
+                        className="font-medium text-primary transition-colors hover:text-gray-900"
                     >
-                        &nbsp;Terms and Conditions
+                        &nbsp;Terms of Service and Conditions
                     </a>
                     </Typography>
                 }

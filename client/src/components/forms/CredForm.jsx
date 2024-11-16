@@ -5,6 +5,7 @@ import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import TaPrivacyPolicy from "@/context/TaCredPrivacyPolicyTermsCondi";
 
 
 export default function CredForm() {
@@ -41,7 +42,6 @@ export default function CredForm() {
   const preventLeadingWhitespace = (value) => {
     return value.trim().length === value.length || "No leading whitespace allowed.";
   };
-
 
   return (
       <form onSubmit={handleSubmit(onSubmit)} 
@@ -151,33 +151,16 @@ export default function CredForm() {
         </div>
 
         {/* Terms Dialog */}
-        {isDialogOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white rounded-lg p-6 max-w-sm mx-auto shadow-lg">
-              <h2 className="text-xl font-semibold">Terms and Conditions</h2>
-              <p className="mt-4">By accepting, you agree to our terms and conditions.</p>
-              <div className="flex justify-end mt-4">
-                <Button
-                  color="teal"
-                  onClick={() => {
-                    setValue("termsAccepted", true);
-                    setIsDialogOpen(false);
-                  }}
-                >
-                  Accept
-                </Button>
-                <Button color="gray" onClick={() => setIsDialogOpen(false)} className="ml-2">
-                  Cancel
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
+        <TaPrivacyPolicy
+          isOpen={isDialogOpen}
+          onClose={() => setIsDialogOpen(false)} // Close the dialog
+          onAccept={() => setValue("termsAccepted", true)} // Set termsAccepted to true when accepted
+        />
 
         {/* Submit Button */}
         <Button 
             type="submit" 
-            className="w-full mt-4"
+            className="w-full mt-4 bg-primary text-white"
         >
           Get Started
         </Button>

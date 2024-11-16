@@ -78,9 +78,6 @@ export default function TravelAgencyCredentialsHome() {
               night life in Barcelona.
             </Typography>
           </CardBody>
-          <CardFooter className="pt-0">
-            <Button>Read More</Button>
-          </CardFooter>
         </Card>
         {/* Card 2 */}
         <Card className="mt-6 w-96">
@@ -94,9 +91,6 @@ export default function TravelAgencyCredentialsHome() {
               night life in Barcelona.
             </Typography>
           </CardBody>
-          <CardFooter className="pt-0">
-            <Button>Read More</Button>
-          </CardFooter>
         </Card>
         {/* Card 3 */}
         <Card className="mt-6 w-96">
@@ -110,12 +104,7 @@ export default function TravelAgencyCredentialsHome() {
               night life in Barcelona.
             </Typography>
           </CardBody>
-          <CardFooter className="pt-0">
-            <Button>Read More</Button>
-          </CardFooter>
         </Card>
-
-      
       </div>
 
       {/* Image and Text Section */}

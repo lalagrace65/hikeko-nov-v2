@@ -4,12 +4,16 @@ import { useNavigate } from 'react-router-dom';
 
 const AgencyCredentialsProcess = () => {
     const navigate = useNavigate();
+    useEffect(() => {
+        // Scroll to top on component mount
+        window.scrollTo(0, 0);
+      }, []);
 
     useEffect(() => {
         // Set a timeout to redirect to the homepage after 10 seconds (10000 milliseconds)
         const timer = setTimeout(() => {
             navigate('/');
-        }, 10000);
+        }, 8000);
 
         // Cleanup the timer on component unmount
         return () => clearTimeout(timer);
