@@ -14,6 +14,21 @@ function TrailDetail() {
   const navigate = useNavigate();
   const [trail, setTrail] = useState(null);
   const [packages, setPackages] = useState([]);
+  const [user, setUser] = useState(null); // State to store authenticated user information
+
+  useEffect(() => {
+    // Fetch authenticated user info
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(`${baseUrl}/api/book/auth/user`, { withCredentials: true });
+        setUser(response.data);
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     const fetchTrailData = async () => {
@@ -40,6 +55,18 @@ function TrailDetail() {
     };
     fetchPackages();
   }, [trail]);
+
+  const handleBookNow = (packageId) => {
+    if (!user) {
+      navigate('/login'); // Redirect to login if not authenticated
+      return;
+    }
+    if (user.role !== 'user') {
+      alert('Only users with a valid account can book packages.');
+      return;
+    }
+    navigate(`/bookings/packages/${packageId}`); // Navigate to booking page
+  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -162,13 +189,16 @@ const formatBookingTime = (checkIn, checkOut) => {
                   )}
                 </ul>
               </div>
-
               <Button
-                onClick={() => navigate(`/bookings/packages/${pkg._id}`)}
-                className="mt-4 bg-orange-400 text-white py-2 px-4 rounded hover:bg-amber-500"
-              >
-                Book Now
-              </Button>
+                    onClick={() => handleBookNow(pkg._id)}
+                    disabled={!user || user.role !== 'user'} // Disable button if not authorized
+                    className={`mt-4 py-2 px-4 rounded ${
+                      !user || user.role !== 'user' ? 'bg-gray-300 cursor-not-allowed' : 'bg-orange-400 hover:bg-amber-500 text-white'
+                    }`}
+                  >
+                    {user ? 'Book Now' : 'Login to Book'}
+                </Button>
+
             </div>
 
             {/* Right Section: Carousel for Package Images */}

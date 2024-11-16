@@ -69,7 +69,7 @@ router.post('/signup', async (req,res) => {
     // Send a temporary password via email or other method
     console.log('Temporary Password for user:', signUp.plainTempPassword);
     // Return a response to the client
-    return res.json({ message: 'Verification email sent!', signUpId: signUp._id }); // Send only the ID or essential info
+    return res.json({ message: 'Verification email sent.', signUpId: signUp._id }); // Send only the ID or essential info
   } catch (error) {
     console.error('Error creating signup:', error);
     return res.status(500).json({ error: error.message || 'Failed to create signup' });
