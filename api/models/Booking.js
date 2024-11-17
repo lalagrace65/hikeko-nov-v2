@@ -12,7 +12,7 @@ const BookingSchema = new mongoose.Schema({
     homeAddress: {type: String, required: true},
     emergencyContactPerson: {type: String, required: true},
     emergencyContactNumber: {type: String, required: true},
-    medicalCondition: {type: String, required: true},
+    medicalCondition: {type: Boolean, required: true},
     conditionDetails: {type: String, required: false},
     proofOfPayment: [{type: String, required: true}],
     paymentType: {type: String, required: true},
