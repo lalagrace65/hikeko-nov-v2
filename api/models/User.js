@@ -23,6 +23,7 @@ const UserSchema = new mongoose.Schema({
   avatar: { type: String },
   role: { type: String, enum: ['user', 'admin', 'staff'], default: 'user' },
   adminId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   suspended: { type: Boolean, default: false },
 
   // Admin-specific fields (optional for non-admins)

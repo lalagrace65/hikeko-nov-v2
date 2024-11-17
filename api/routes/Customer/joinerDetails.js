@@ -4,101 +4,85 @@ const jwt = require('jsonwebtoken');
 const { jwtSecret } = require('../../middleware/auth');
 const Booking = require('../../models/Booking.js');
 const Package = require('../../models/Package');
-const { createBooking } = require('../../controller/bookingController');
 
 // Router for public routes
 const router = express.Router();
 
 router.post('/booking', async (req, res) => {
-    console.log('Received booking:', req.body);
-
     const { 
-        joinerName,
-        email,
+        joinerName, 
+        email, 
         contactNumber,
         pickupLocation,
-        age,
-        sex,
-        homeAddress,
+        age, 
+        sex, 
+        homeAddress, 
         emergencyContactPerson,
-        emergencyContactNumber,
-        medicalCondition,
-        conditionDetails,
-        proofOfPayment,
-        paymentType,
-        termsAccepted,
-        packageId
+        emergencyContactNumber, 
+        medicalCondition, 
+        conditionDetails, 
+        proofOfPayment, 
+        paymentType, 
+        termsAccepted, 
+        packageId 
     } = req.body;
 
-    let userData;
-
-    // Token authentication
-    const token = req.headers['authorization']?.split(' ')[1]; // Get token after "Bearer "
-
+    const token = req.headers['authorization']?.split(' ')[1];
     if (!token) {
         return res.status(401).send('Token is required');
     }
 
+    let userData;
     try {
-        userData = await new Promise((resolve, reject) => {
-            jwt.verify(token, jwtSecret, (err, decoded) => {
-                if (err) {
-                    console.log('Token verification failed:', err);
-                    reject('Unauthorized: Invalid token');
-                }
-                resolve(decoded);
-            });
-        });
+        userData = jwt.verify(token, jwtSecret);
+        console.log('Decoded token data:', userData); // Debugging log
     } catch (err) {
         console.error('Token verification error:', err);
         return res.status(401).send('Unauthorized: Invalid token');
     }
 
-    if (!packageId) {
-        return res.status(400).send('Package ID is required');
+    if (!userData || !userData.id) {
+        return res.status(401).send('Unauthorized: User ID missing in token');
     }
 
-    // Check if the packageId is a valid ObjectId
     if (!mongoose.Types.ObjectId.isValid(packageId)) {
         return res.status(400).send('Invalid Package ID');
     }
 
     try {
-        // Fetch package and populate the travelAgency reference
         const packageDoc = await Package.findById(packageId).populate('travelAgency', 'businessName');
-
         if (!packageDoc || !packageDoc.travelAgency) {
             return res.status(404).send('Package not found or travelAgency not associated.');
         }
 
-        const travelAgencyId = packageDoc.travelAgency._id;  // Get the travel agency ID from the populated package
-
-        // Now create the booking document with the correct travelAgencyId
+        const travelAgencyId = packageDoc.travelAgency._id;
         const bookingDoc = await Booking.create({
-            joinerName,
-            email,
-            contactNumber,
-            pickupLocation,
-            age,
-            sex,
+            joinerName, 
+            email, 
+            contactNumber, 
+            pickupLocation, 
+            age, 
+            sex, 
             homeAddress,
-            emergencyContactPerson,
-            emergencyContactNumber,
+            emergencyContactPerson, 
+            emergencyContactNumber, 
             medicalCondition,
-            conditionDetails,
-            proofOfPayment,
-            paymentType,
+            conditionDetails, 
+            proofOfPayment, 
+            paymentType, 
             termsAccepted,
-            travelAgency: travelAgencyId,  // Set the travelAgency from populated package
-            packageId,
-            userId: userData ? userData.id : null, // Add user ID from token (if available)
+            travelAgency: travelAgencyId, 
+            userId: userData.id,
+            packageId, 
         });
 
         res.json(bookingDoc);
     } catch (e) {
         console.error('Error creating booking:', e.message);
-        res.status(422).json(e);
+        res.status(500).json({ message: 'Error creating booking', error: e.message });
     }
 });
+
+
 
 module.exports = router;

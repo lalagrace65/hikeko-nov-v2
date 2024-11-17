@@ -1,12 +1,17 @@
-const mongoose = require('mongoose');
 const express = require('express');
 const Booking = require('../../models/Booking.js');
+const { requireRole } = require('../../middleware/auth.js');
 
 const router = express.Router();
 
-router.get('/joiner/bookings', async (req, res) => {
+// Get bookings for the logged-in user
+router.get('/joiner/bookings', requireRole(['user', 'admin']), async (req, res) => {
     try {
-        const bookings = await Booking.find()
+        // Extract the user ID from the middleware
+        const userId = req.userData.id;
+
+        // Fetch bookings for the logged-in user
+        const bookings = await Booking.find({ userId }) // Ensure Booking schema has a userId field
             .populate({
                 path: 'packageId',
                 populate: [
@@ -19,7 +24,8 @@ router.get('/joiner/bookings', async (req, res) => {
                         select: 'name', // Select only the name field from the travelAgency
                     },
                 ],
-            });        
+            });
+
         res.json(bookings);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching bookings', error: error.message });
