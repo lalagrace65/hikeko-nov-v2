@@ -37,6 +37,7 @@ export default function LoginPage() {
         ev.preventDefault();
         try {
             const { data } = await axios.post(`${baseUrl}/login`, { email, password }, { withCredentials: true });
+            
             setUser(data);
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data));
@@ -54,6 +55,8 @@ export default function LoginPage() {
         } catch (e) {
             if (e.response && e.response.status === 403) {
                 toast.error('Your account is suspended');
+            } else if (e.response && e.response.status === 401) {
+                toast.error('Account not verified');
             } else if (e.response && e.response.status === 422) {
                 toast.error('Invalid email or password');
             } else if (e.response && e.response.status === 404) {
@@ -70,7 +73,7 @@ export default function LoginPage() {
 
     return (
         <div className="mt-4 grow flex items-center justify-around">
-            <Card className="mx-auto w-full max-w-[24rem] mt-6">
+            <Card className="mx-auto w-full max-w-[24rem] border mt-6">
                 <CardBody className="flex flex-col gap-2">
                     <div>
                         <Typography variant="h6" className="text-2xl text-center">Login</Typography>

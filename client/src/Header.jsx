@@ -5,16 +5,16 @@ import axios from 'axios';
 import { baseUrl } from "./Url.jsx";
 
 export default function Header() {
-    const { user, setUser, ready } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [exploreDropdownOpen, setExploreDropdownOpen] = useState(false);
+    const [loading, setLoading] = useState(true);
     const dropdownRef = useRef(null);
     const exploreDropdownRef = useRef(null);
     const navigate = useNavigate();
 
     // Check if the user is an admin or staff
     const isAdminOrStaff = user && (user.role === 'admin' || user.role === 'staff');
-
     // Function to handle logout
     async function handleLogout() {
         await axios.post(`${baseUrl}/logout`, {}, { withCredentials: true });
@@ -23,6 +23,22 @@ export default function Header() {
         setUser(null);
         navigate('/');
     }
+
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            try {
+                const response = await axios.get('/profile', { withCredentials: true });
+                setUser(response.data);
+            } catch (err) {
+                setError('Unable to fetch profile name.');
+                console.error(err);
+            } finally {
+                setLoading(false);  // Set loading to false once the fetch is done
+            }
+        };
+
+        fetchUserProfile();
+    }, [])
 
     // Handle closing user dropdown on clicking outside
     useEffect(() => {
@@ -94,8 +110,10 @@ export default function Header() {
                                 </div>
                             )}
                         </div>
-
-                        <Link to="/book" className="hover:text-hoverColor">Book</Link>
+                            
+                        {user && (
+                            <Link to="/book" className="hover:text-hoverColor">Book</Link>
+                        )}
                         <Link to="/about" className="hover:text-hoverColor">About</Link>
                     </nav>
 
@@ -110,7 +128,7 @@ export default function Header() {
                                     <path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clipRule="evenodd" />
                                 </svg>
                             </div>
-                            {!!user && (
+                            {!!user && !loading &&  (
                                 <div>{user.firstName}</div>
                             )}
                         </div>

@@ -1,3 +1,4 @@
+
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -11,39 +12,47 @@ router.post('/login', async (req, res) => {
     console.log('Received login request:', { email });
 
     try {
-        // Try to find the user in the User collection first
-        let userDoc = await User.findOne({ email });
-        let userType = 'user';
-
-        // If not found in User, try to find in TravelAgencySignUp
+        // Fetch the user document
+        const userDoc = await User.findOne({ email });
         if (!userDoc) {
-            userDoc = await User.findOne({ email: email });
+            return res.status(404).json('User not found');
         }
 
-        if (!userDoc) {
-            return res.status(404).json('User or Travel Agency not found');
+        console.log('User document:', userDoc);
+        console.log('User role:', userDoc.role);
+
+        // Role-specific validation
+        if (userDoc.role === 'admin') {
+            console.log('Admin role detected');
+            
+            // Check account status for admins
+            if (userDoc.status !== 'Approved') {
+                console.log('Admin account not approved');
+                return res.status(401).json('Account not approved. Please contact support.');
+            }
+            if (!userDoc.emailVerified) {
+                console.log('Admin email not verified');
+                return res.status(401).json('Email not verified. Please verify your email.');
+            }
+        } else if (userDoc.role === 'user') {
+            console.log('User role detected');
+            if (userDoc.suspended) {
+                console.log('User account suspended');
+                return res.status(403).json('Account is suspended. Please contact support.');
+            }
+        } else {
+            console.log('Invalid role detected:', userDoc.role);
+            return res.status(403).json('Invalid user role. Access denied.');
         }
 
-        // For travel agencies, ensure account is approved
-        if (userType === 'admin' && userDoc.status !== 'Approved') {
-            return res.status(403).json('Account not approved');
-        }
-
-        // For users, check if account is suspended
-        if (userType === 'user' && userDoc.suspended) {
-            return res.status(403).json('Account is suspended');
-        }
-
+        // Password validation
         const now = new Date();
         let passOk = false;
 
-        // Check temporary password if it exists and hasn't expired
         if (userDoc.temporaryPassword && userDoc.temporaryPasswordExpiry > now) {
-            console.log('Checking temporary password');
             passOk = await bcrypt.compare(password, userDoc.temporaryPassword);
         }
 
-        // If temporary password check fails, check the permanent password
         if (!passOk && userDoc.password) {
             passOk = await bcrypt.compare(password, userDoc.password);
         }
@@ -52,19 +61,13 @@ router.post('/login', async (req, res) => {
             return res.status(422).json('Invalid email or password');
         }
 
-        // Set up user-specific payload for JWT
+        // Generate JWT token
         const payload = {
-            email: userType === 'user',
+            email: userDoc.email,
             id: userDoc._id,
             role: userDoc.role
         };
 
-        if (userType === 'user') {
-            payload.firstName = userDoc.firstName;
-            payload.lastName = userDoc.lastName;
-        }
-
-        // Generate JWT token
         jwt.sign(payload, jwtSecret, {}, (err, token) => {
             if (err) throw err;
 
@@ -72,17 +75,10 @@ router.post('/login', async (req, res) => {
                 email: payload.email,
                 id: payload.id,
                 role: payload.role,
-                token
+                token,
+                requiresPasswordChange:
+                    userDoc.temporaryPassword && userDoc.temporaryPasswordExpiry > now
             };
-
-            // Add requiresPasswordChange to the response if temporary password is used
-            if (userDoc.temporaryPassword && userDoc.temporaryPasswordExpiry > now) {
-                response.requiresPasswordChange = true;
-                console.log('Temporary password valid. Requires password change.');
-            } else {
-                response.requiresPasswordChange = false;
-                console.log('Login successful with permanent password.');
-            }
 
             res.cookie('token', token).json(response);
         });
@@ -91,5 +87,6 @@ router.post('/login', async (req, res) => {
         res.status(500).json('Server error');
     }
 });
+
 
 module.exports = router;
