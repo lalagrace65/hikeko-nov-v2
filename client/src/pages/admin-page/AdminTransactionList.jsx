@@ -17,7 +17,7 @@ export default function AdminTransactionList() {
     useEffect(() => {
         const fetchBookings = async () => {
             try {
-                const response = await axios.get(`${baseUrl}/booking-list`, { withCredentials: true });
+                const response = await axios.get(`${baseUrl}/booking-list/transactions`, { withCredentials: true });
                 setBookings(response.data);
             } catch (error) {
                 console.error("Error fetching bookings:", error);
