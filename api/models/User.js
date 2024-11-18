@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const uniqid = require('uniqid');
 
 const CounterSchema = new mongoose.Schema({
-  role: { type: String, unique: true }, // e.g., 'user', 'admin', or 'staff'
+  role: { type: String, unique: true }, 
   count: { type: Number, default: 0 }
 });
 
@@ -21,6 +21,8 @@ const UserSchema = new mongoose.Schema({
   emergencyContactNo: String,
   dateOfBirth: Date,
   avatar: { type: String },
+  rewardPoints: { type: Number, default: 0 }, // for reward points system
+  bookingCount: { type: Number, default: 0 }, // for reward points system - counting bookings
   role: { type: String, enum: ['user', 'admin', 'staff'], default: 'user' },
   adminId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
@@ -41,7 +43,6 @@ const UserSchema = new mongoose.Schema({
   termsAccepted: { type: Boolean, default: false },
   status: { type: String, enum: ['Pending Verification', 'Approved', 'Rejected'], default: 'Pending Verification' },
   emailVerified: { type: Boolean, default: false },
-  verificationToken: { type: String },
 
   // Temporary password for first-time login
   temporaryPassword: { type: String, unique: true },
@@ -54,7 +55,7 @@ UserSchema.pre('save', async function (next) {
     // Define prefixes based on role
     const rolePrefixes = {
       admin: 'admin',
-      user: 'user',
+      user: 'customer',
       staff: 'staff'
     };
 

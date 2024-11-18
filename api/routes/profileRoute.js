@@ -25,7 +25,8 @@ router.get('/profile', async (req, res) => {
                 contactNo,
                 emergencyContactNo,
                 dateOfBirth, 
-                email, 
+                email,
+                rewardPoints,  
                 _id, 
                 role,
              } = user;
@@ -38,6 +39,7 @@ router.get('/profile', async (req, res) => {
                 emergencyContactNo,
                 dateOfBirth,
                 email,
+                rewardPoints,
                  _id, 
                  role 
             });

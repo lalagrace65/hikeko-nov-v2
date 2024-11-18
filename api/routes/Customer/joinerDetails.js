@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const { jwtSecret } = require('../../middleware/auth');
 const Booking = require('../../models/Booking.js');
 const Package = require('../../models/Package');
+const User = require('../../models/User.js');
 
 // Router for public routes
 const router = express.Router();
@@ -56,6 +57,8 @@ router.post('/booking', async (req, res) => {
         }
 
         const travelAgencyId = packageDoc.travelAgency._id;
+
+        // Create the booking
         const bookingDoc = await Booking.create({
             joinerName, 
             email, 
@@ -76,13 +79,25 @@ router.post('/booking', async (req, res) => {
             packageId, 
         });
 
-        res.json(bookingDoc);
+        // Calculate reward points (e.g., 1 point for every $10 of the package price)
+        const rewardPointsEarned = Math.floor(packageDoc.price / 20); // Adjust rate as needed
+
+        // Update user's reward points
+        await User.findByIdAndUpdate(
+            userData.id,
+            { $inc: { rewardPoints: rewardPointsEarned } },
+            { new: true }
+        );
+
+        res.json({ 
+            booking: bookingDoc, 
+            message: `Booking successful! You earned ${rewardPointsEarned} reward points.`,
+        });
     } catch (e) {
         console.error('Error creating booking:', e.message);
         res.status(500).json({ message: 'Error creating booking', error: e.message });
     }
 });
-
 
 
 module.exports = router;

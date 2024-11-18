@@ -8,6 +8,21 @@ const ProfilePage = () => {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
+    // Function to calculate age from date of birth
+    const calculateAge = (dateOfBirth) => {
+        const birthDate = new Date(dateOfBirth);
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDifference = today.getMonth() - birthDate.getMonth();
+            
+        // Adjust age if the birthday hasn't occurred yet this year
+        if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+            return age;
+    };
+    
+
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
@@ -23,8 +38,12 @@ const ProfilePage = () => {
         fetchUserProfile();
     }, [navigate]);
 
+
     if (error) return <div>{error}</div>;
     if (!user) return <div>Loading...</div>;
+
+    const age = calculateAge(user.dateOfBirth);
+
 
     return (
         <div className="grow bg-profileContainer flex justify-center items-center gap-0">
@@ -39,6 +58,8 @@ const ProfilePage = () => {
                     <p><strong>Contact Number:</strong> {user.contactNo}</p>
                     <p><strong>Emergency Contact Number:</strong> {user.emergencyContactNo}</p>
                     <p><strong>Date of Birth:</strong> {user.dateOfBirth}</p>
+                    <p><strong>Reward points:</strong> {user.rewardPoints}</p>
+                    <p><strong>Age:</strong> {age}</p> 
                 </div>
             </div>
         </div>

@@ -1,4 +1,4 @@
-import React , { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     Input, 
     Select, 
@@ -18,61 +18,67 @@ import toast from "react-hot-toast";
 import JoinerTermsService from '@/context/JoinerTermsService';
 import FloatingLabelInput from '../icons/FloatingLabelInput';
 import { baseUrl } from '@/Url';
+import  emailjs  from '@emailjs/browser';
 
-
-function JoinerDetailsForm({packageId}) {
+function JoinerDetailsForm({packageId, packageDetail}) {
     const [proofPaymentImages, setProofPaymentImages] = useState([]);
     const [joinerContactNo, setJoinerContactNo] = useState("");
     const [emergencyContactNumber, setEmergencyContactNumber] = useState("");
     const [open, setOpen] = React.useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
+    const form = React.useRef();
 
     const [autofillChecked, setAutofillChecked] = useState(false);
-     // Fetch user profile data if autofill checkbox is checked
-  useEffect(() => {
-    if (autofillChecked) {
-      // Assuming you have a function to fetch user data from the backend
-      axios.get('/profile')
-        .then(response => {
-          const user = response.data;
-          setFormData({
-            joinerName: user.firstName + ' ' + user.lastName,
-            email: user.email,
-            pickupLocation: "",  // You can add defaults if necessary
-            age: "",              // You may have to calculate or leave it blank
-            homeAddress: user.address,
-            emergencyContactPerson: "", // Set defaults if necessary
-            medicalCondition: "No",  // Default to 'No' if no data available
-            conditionDetails: "",
-            paymentType: "Downpayment",
-            termsAccepted: false
-          });
-          setJoinerContactNo(user.contactNo);
-          setEmergencyContactNumber(user.emergencyContactNo);
-        })
-        .catch(error => {
-          console.error("Error fetching user data:", error);
-          toast.error("Failed to load user data.");
-        });
-    } else {
-        // Reset form when checkbox is unchecked
-        setFormData({
-          joinerName: "",
-          email: "",
-          pickupLocation: "",
-          age: "",
-          homeAddress: "",
-          emergencyContactPerson: "",
-          medicalCondition: "",
-          conditionDetails: "",
-          paymentType: "Downpayment",
-          termsAccepted: false,
-        });
-        setJoinerContactNo("");
-        setEmergencyContactNumber("");
-      }
-  }, [autofillChecked]);
+
+    // Function to calculate age from date of birth
+    const calculateAge = (dateOfBirth) => {
+        const birthDate = new Date(dateOfBirth);
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDifference = today.getMonth() - birthDate.getMonth();
+            
+        // Adjust age if the birthday hasn't occurred yet this year
+        if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+            return age;
+    };  
+
+    // Fetch user profile data if autofill checkbox is checked
+    useEffect(() => {
+        if (autofillChecked) {
+        // Assuming you have a function to fetch user data from the backend
+        axios.get('/profile')
+            .then(response => {
+            console.log(response.data);  
+            const user = response.data;
+            const age = calculateAge(user.dateOfBirth); 
+            setFormData({
+                joinerName: user.firstName + ' ' + user.lastName,
+                email: user.email,
+                pickupLocation: "",  // You can add defaults if necessary
+                age: age,              // You may have to calculate or leave it blank
+                homeAddress: user.address,
+                emergencyContactPerson: "", // Set defaults if necessary
+                medicalCondition: "No",  // Default to 'No' if no data available
+                conditionDetails: "",
+                paymentType: "",
+                termsAccepted: false
+            });
+                setJoinerContactNo(user.contactNo);
+                setEmergencyContactNumber(user.emergencyContactNo);
+            }).catch(error => {
+                console.error("Error fetching user data:", error);
+                toast.error("Failed to load user data.");
+            });
+        } else {
+            // Reset form when checkbox is unchecked
+            setFormData(initialFormData);
+            setJoinerContactNo("");
+            setEmergencyContactNumber("");
+        }
+    }, [autofillChecked]);
 
     const toggleModal = () => {
         setOpenModal(!openModal);
@@ -87,7 +93,7 @@ function JoinerDetailsForm({packageId}) {
         emergencyContactPerson: "",
         medicalCondition: "",
         conditionDetails: "",
-        paymentType: "Downpayment",
+        paymentType: "",
         termsAccepted: false,
     };
 
@@ -139,16 +145,51 @@ function JoinerDetailsForm({packageId}) {
         return true;
     };
 
+    // const formatDate = (dateString) => {
+    //     const date = new Date(dateString);
+    //     const options = { month: 'long', day: 'numeric', year: 'numeric' };
+    //     return date.toLocaleDateString('en-US', options);
+    // };
+
+    // Helper function to format time (hours and minutes) to 12-hour format
+    const formatTime = (hours, minutes) => {
+        if (hours == null || minutes == null) return "N/A";
+        
+        // Convert hours to 12-hour format
+        const period = hours >= 12 ? "PM" : "AM";
+        const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    
+        return `${formattedHours}:${formattedMinutes} ${period}`;
+    };
+    // Function to format both checkIn and checkOut times
+    const formatBookingTime = (checkIn, checkOut) => {
+        const formattedCheckIn = formatTime(checkIn?.hours, checkIn?.minutes);
+        const formattedCheckOut = formatTime(checkOut?.hours, checkOut?.minutes);
+    
+        return `${formattedCheckIn} - ${formattedCheckOut}`;
+    };
+
     const handleSubmit = async () => {
-        if (!validateForm()) return;
-            // Prepare the booking data
-            const bookingData = {
-                ...formData,
-                proofOfPayment: proofPaymentImages,
-                contactNumber: joinerContactNo,
-                emergencyContactNumber: emergencyContactNumber,
-                packageId,
-            };
+        if (!validateForm() || !packageDetail) {
+            toast.error("Package details are missing.");
+            return;
+        }
+    
+        // Convert 'medicalCondition' to a Boolean
+        const medicalConditionBool = formData.medicalCondition === "Yes"; 
+        // Prepare the booking data
+        const bookingData = {
+            ...formData,
+            medicalCondition: medicalConditionBool,
+            proofOfPayment: proofPaymentImages,
+            contactNumber: joinerContactNo,
+            emergencyContactNumber: emergencyContactNumber,
+            packageId,
+        };
+        console.log("Form Data Before Sending Email:", formData);
+        console.log("Package Details:", packageDetail);
+    
         try {
             // Retrieve the token
             const token = localStorage.getItem('token'); // or however you store the token
@@ -156,13 +197,47 @@ function JoinerDetailsForm({packageId}) {
                 toast.error("User is not authenticated.");
                 return;
             }
-             // Add the Authorization header
-             await axios.post(`${baseUrl}/api/booking`, bookingData, {
+    
+            // Submit booking data to the server
+            const response = await axios.post(`${baseUrl}/api/booking`, bookingData, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
-            toast.success("Booking successfully submitted!");
+    
+            const { booking, message } = response.data;
+    
+            // Display the points earned message
+            if (message) {
+                toast.success(message); // Includes the points earned message from the server
+            }
+    
+            // Prepare the email data
+            const emailData = {
+                to_joinerName: formData.joinerName, 
+                to_email: formData.email,
+                to_contactNum: joinerContactNo,
+                to_pickupLocation: formData.pickupLocation,
+                to_age: formData.age,
+                to_address: formData.homeAddress,
+                to_emergencyContactPerson: formData.emergencyContactPerson,
+                to_emergencyContactNumber: emergencyContactNumber,
+                to_medicalCondition: formData.medicalCondition,
+                to_conditionDetails: formData.conditionDetails,
+                to_paymentType: formData.paymentType,
+                to_travelAgency: packageDetail?.travelAgency?.businessName,
+                to_packagePrice: packageDetail?.price,
+                to_dateTravel: packageDetail.date,
+                to_time: formatBookingTime(packageDetail.checkIn, packageDetail.checkOut),
+                to_coordinator: packageDetail?.coordinatorName,
+                to_trail: packageDetail.trailId.title,
+                to_referenceCode: booking.referenceCode
+            };
+    
+            console.log("Email Data:", emailData);
+            console.log("Preparing to send email...");
+            await emailjs.send('service_qjiocya', 'template_ge9ir44', emailData, 'jooaQAKBdAerURta8');
+            
             // Reset the form data
             setFormData(initialFormData);
             setProofPaymentImages([]);
@@ -173,7 +248,7 @@ function JoinerDetailsForm({packageId}) {
             toast.error("Failed to submit booking.");
         }
     };
-
+    
 
     //Sortable image upload
     async function uploadProofPayment(ev){
@@ -203,6 +278,7 @@ function JoinerDetailsForm({packageId}) {
 
     return (
         <div className="bg-cardPrice p-8 text-primary">
+        <form ref={form}>
             <div className="relative w-full">
             <Checkbox
                 checked={autofillChecked}
@@ -255,7 +331,7 @@ function JoinerDetailsForm({packageId}) {
                         placeholder="Enter phone number"
                         value={joinerContactNo}
                         onChange={setJoinerContactNo}
-                        
+                        name="contactNumber"
                     />  
                 </div>
                 <div className="relative w-full">
@@ -322,6 +398,7 @@ function JoinerDetailsForm({packageId}) {
                         placeholder="Enter phone number"
                         value={emergencyContactNumber}
                         onChange={setEmergencyContactNumber}
+                        name="emergencyContactNumber"
                     />  
                 </div>
                 <div className="relative w-full">
@@ -353,9 +430,11 @@ function JoinerDetailsForm({packageId}) {
                 </label>
                 </div>
                     
-                <Select label="Type Payment" color="black" >
-                    <Option className='text-black'>Downpayment</Option>
-                    <Option className='text-black'>Full Payment</Option>
+                <Select label="Type Payment" color="black" 
+                onChange={(value) => setFormData({...formData, paymentType: value})}
+                >
+                    <Option className='text-black' value='Downpayment'>Downpayment</Option>
+                    <Option className='text-black' value='Full Payment'>Full Payment</Option>
                 </Select>
             </div>
             <ReactSortable
@@ -403,7 +482,7 @@ function JoinerDetailsForm({packageId}) {
                 <Button 
                     color="red"
                     onClick={handleSubmit} 
-                disabled={!formData.termsAccepted}
+                    disabled={!formData.termsAccepted}
                 >
                     Book
                 </Button>
@@ -411,8 +490,9 @@ function JoinerDetailsForm({packageId}) {
 
             {/* Terms and Conditions Modal */}
             <JoinerTermsService open={openModal} onClose={toggleModal} />
+
+        </form>
         </div>
     );
 }
-
 export default JoinerDetailsForm;
