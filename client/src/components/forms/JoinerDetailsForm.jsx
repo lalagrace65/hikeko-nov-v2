@@ -24,12 +24,21 @@ function JoinerDetailsForm({packageId, packageDetail}) {
     const [proofPaymentImages, setProofPaymentImages] = useState([]);
     const [joinerContactNo, setJoinerContactNo] = useState("");
     const [emergencyContactNumber, setEmergencyContactNumber] = useState("");
+    const [rewardPoints, setRewardPoints] = useState(0);
+    const [redeemPoints, setRedeemPoints] = useState(); // User input for redeem points
+    const [bookingTotal, setBookingTotal] = useState(packageDetail.price); // Original package price
+    const [usePoints, setUsePoints] = useState(false); // State to toggle redeem points
     const [open, setOpen] = React.useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const form = React.useRef();
 
     const [autofillChecked, setAutofillChecked] = useState(false);
+
+    const handleToggle = () => {
+        setUsePoints(!usePoints); // Toggle the checkbox state
+        if (!usePoints) setRedeemPoints(0); // Reset redeem points when unchecking
+    };
 
     // Function to calculate age from date of birth
     const calculateAge = (dateOfBirth) => {
@@ -68,6 +77,7 @@ function JoinerDetailsForm({packageId, packageDetail}) {
             });
                 setJoinerContactNo(user.contactNo);
                 setEmergencyContactNumber(user.emergencyContactNo);
+                setRewardPoints(user.rewardPoints || 0); 
             }).catch(error => {
                 console.error("Error fetching user data:", error);
                 toast.error("Failed to load user data.");
@@ -77,6 +87,7 @@ function JoinerDetailsForm({packageId, packageDetail}) {
             setFormData(initialFormData);
             setJoinerContactNo("");
             setEmergencyContactNumber("");
+            setRewardPoints(0);
         }
     }, [autofillChecked]);
 
@@ -138,11 +149,13 @@ function JoinerDetailsForm({packageId, packageDetail}) {
             }
         }
         // Check if proof of payment images are uploaded
-        if (proofPaymentImages.length === 0) {
-            toast.error("Proof of Payment is required.");
+         // Check if proof of payment images are uploaded
+         if (redeemPoints < packageDetail.price && proofPaymentImages.length === 0) {
+            toast.error("Proof of Payment is required unless redeem points fully cover the price.");
             return false;
         }
         return true;
+        
     };
 
     // const formatDate = (dateString) => {
@@ -170,6 +183,29 @@ function JoinerDetailsForm({packageId, packageDetail}) {
         return `${formattedCheckIn} - ${formattedCheckOut}`;
     };
 
+    // Function to handle redeem points
+    const handleRedeemPoints = (e) => {
+        e.preventDefault();
+        if (redeemPoints > rewardPoints) {
+            alert("Not enough points");
+            return;
+        }
+    
+        const discountAmount = redeemPoints * 1; // Redeem 1 point = 1 Peso
+        const newBookingTotal = packageDetail.price - discountAmount;
+        if (newBookingTotal < 0) {
+            alert("You cannot redeem more points than the booking total");
+            return;
+        }
+    
+        setBookingTotal(newBookingTotal); // Update booking total with the discount applied
+        
+        if (newBookingTotal === 0) {
+            toast.success("Full payment is made with points. Proof of Payment is not required.");
+        }
+    };
+    
+
     const handleSubmit = async () => {
         if (!validateForm() || !packageDetail) {
             toast.error("Package details are missing.");
@@ -185,6 +221,8 @@ function JoinerDetailsForm({packageId, packageDetail}) {
             proofOfPayment: proofPaymentImages,
             contactNumber: joinerContactNo,
             emergencyContactNumber: emergencyContactNumber,
+            rewardPointsRedeemed: redeemPoints,
+            finalBookingAmount: bookingTotal,
             packageId,
         };
         console.log("Form Data Before Sending Email:", formData);
@@ -439,6 +477,7 @@ function JoinerDetailsForm({packageId, packageDetail}) {
             </div>
             <ReactSortable
                 list={proofPaymentImages}
+                disabled={bookingTotal === 0}
                 className="flex flex-relative w-full"
                 setList={updateProofImagesOrder}>
                 {!!proofPaymentImages?.length && proofPaymentImages.map(link => {
@@ -450,37 +489,75 @@ function JoinerDetailsForm({packageId, packageDetail}) {
                 })}
                 
             </ReactSortable>
-
+            
             {/*Voucher*/}
-            <Input
-                label="Voucher (Optional)">
-            </Input>
+            <Checkbox
+            label={
+                <Typography
+                variant="small"
+                color="gray"
+                className="flex items-center font-normal "
+                >
+                Use Reward Points to Pay
+                </Typography>
+            }
+            containerProps={{ className: "-ml-2.5" }}
+            checked={usePoints} 
+            onChange={handleToggle}
+            />
+            
+            <div className='ml-8'>
+                {usePoints && (  
+                    <div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <Typography className='font-medium'>Points to redeem: </Typography>
+                            <input
+                                style={{ width: '100px', padding: '5px', border: '1px solid #ccc', borderRadius: '10px' }}
+                                type="number"
+                                value={redeemPoints}
+                                onChange={(e) => setRedeemPoints(Number(e.target.value))}
+                                max={rewardPoints}
+                            />
+                            <Button
+                                type="button"
+                                className='bg-primary'
+                                onClick={handleRedeemPoints}
+                                style={{ padding: '10px', height: '35px' }}
+                            >
+                                Redeem
+                            </Button>
+                        </div>
+                        <Typography variant='small'>Booking Price: {bookingTotal}</Typography>
+                        <Typography variant='small'>Reward Points: {rewardPoints} </Typography>
+                    </div>
+                )}  
+            </div>    
 
             {/* Checkbox */}
-                <Checkbox
-                label={
-                    <Typography
-                    variant="small"
-                    color="gray"
-                    className="flex items-center font-normal "
-                    >
-                    I agree the
-                    <a
-                        onClick={toggleModal}
-                        className="font-medium text-primary transition-colors hover:text-gray-900"
-                    >
-                        &nbsp;Terms of Service and Conditions
-                    </a>
-                    </Typography>
-                }
-                containerProps={{ className: "-ml-2.5" }}
-                onChange={handleTermsChange}
-                />
+            <Checkbox
+            label={
+                <Typography
+                variant="small"
+                color="gray"
+                className="flex items-center font-normal "
+                >
+                I agree the
+                <a
+                    onClick={toggleModal}
+                    className="font-medium text-primary transition-colors hover:text-gray-900"
+                >
+                    &nbsp;Terms of Service and Conditions
+                </a>
+                </Typography>
+            }
+            containerProps={{ className: "-ml-2.5" }}
+            onChange={handleTermsChange}
+            />
             
             {/* Book Button */}
             <div className="flex justify-end">
                 <Button 
-                    color="red"
+                    className='bg-primary'
                     onClick={handleSubmit} 
                     disabled={!formData.termsAccepted}
                 >

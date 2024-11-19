@@ -25,7 +25,8 @@ router.post('/booking', async (req, res) => {
         proofOfPayment, 
         paymentType, 
         termsAccepted, 
-        packageId 
+        packageId, 
+        rewardPointsRedeemed 
     } = req.body;
 
     const token = req.headers['authorization']?.split(' ')[1];
@@ -36,9 +37,7 @@ router.post('/booking', async (req, res) => {
     let userData;
     try {
         userData = jwt.verify(token, jwtSecret);
-        console.log('Decoded token data:', userData); // Debugging log
     } catch (err) {
-        console.error('Token verification error:', err);
         return res.status(401).send('Unauthorized: Invalid token');
     }
 
@@ -56,7 +55,41 @@ router.post('/booking', async (req, res) => {
             return res.status(404).send('Package not found or travelAgency not associated.');
         }
 
+        const userDoc = await User.findById(userData.id);
+        if (!userDoc) {
+            return res.status(404).send('User not found.');
+        }
+
         const travelAgencyId = packageDoc.travelAgency._id;
+
+        // Validate reward points
+        const packagePrice = packageDoc.price;
+        let finalPrice = packagePrice;
+
+        if (rewardPointsRedeemed > 0) {
+            if (rewardPointsRedeemed > userDoc.rewardPoints) {
+                return res.status(400).send('Insufficient reward points.');
+            }
+
+            if (rewardPointsRedeemed > packagePrice) {
+                return res.status(400).send('Redeemed points cannot exceed package price.');
+            }
+
+            // Deduct points from the total price
+            finalPrice -= rewardPointsRedeemed;
+
+            // Deduct points from the user's account
+            await User.findByIdAndUpdate(
+                userData.id,
+                { $inc: { rewardPoints: -rewardPointsRedeemed } },
+                { new: true }
+            );
+        }
+
+        // Require proof of payment only if points don't cover full price
+        if (finalPrice > 0 && proofOfPayment.length === 0) {
+            return res.status(400).send('Proof of payment is required if points do not cover full price.');
+        }
 
         // Create the booking
         const bookingDoc = await Booking.create({
@@ -77,12 +110,12 @@ router.post('/booking', async (req, res) => {
             travelAgency: travelAgencyId, 
             userId: userData.id,
             packageId, 
+            rewardPointsRedeemed, 
+            finalBookingAmount: finalPrice, 
         });
 
-        // Calculate reward points (e.g., 1 point for every $10 of the package price)
-        const rewardPointsEarned = Math.floor(packageDoc.price / 20); // Adjust rate as needed
-
-        // Update user's reward points
+        // Calculate reward points earned (if applicable)
+        const rewardPointsEarned = Math.floor(packagePrice / 50); // Adjust rate as needed
         await User.findByIdAndUpdate(
             userData.id,
             { $inc: { rewardPoints: rewardPointsEarned } },
@@ -98,6 +131,7 @@ router.post('/booking', async (req, res) => {
         res.status(500).json({ message: 'Error creating booking', error: e.message });
     }
 });
+
 
 
 module.exports = router;
