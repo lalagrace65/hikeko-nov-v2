@@ -78,9 +78,9 @@ export default function CustomerBookPage() {
                 <Typography variant="h5" color="blue-gray" className="mb-2">
                   {booking.referenceCode}
                   <br />
-                  {/* {booking.packageId.trailId.title} */}
+                  {booking.packageId.trailId.title}
                    &nbsp;  &nbsp; booking to &nbsp;
-                  {/* {booking.packageId.travelAgency.name}  */}
+                  {booking.packageId.travelAgency.businessName} 
 
                 </Typography>
                 <Typography>
@@ -89,9 +89,9 @@ export default function CustomerBookPage() {
                   {booking.email} 
                 </Typography>
                 <Typography>
-                  {/* {formatDate(booking.packageId.date)} */}
+                {formatDate(booking.packageId.date)}
                   <br /> 
-                  {/* {booking.packageId.price} */}
+                {booking.packageId.price}
                 </Typography>
 
                 {/* Conditionally render additional details */}

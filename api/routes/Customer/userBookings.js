@@ -21,7 +21,7 @@ router.get('/joiner/bookings', requireRole(['user', 'admin']), async (req, res) 
                     },
                     {
                         path: 'travelAgency', // Populate travelAgency
-                        select: 'name', // Select only the name field from the travelAgency
+                        select: 'businessName',
                     },
                 ],
             });

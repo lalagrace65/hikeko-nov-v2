@@ -4,7 +4,7 @@ import Packages from '../admin-components/Packages'; // Import the Packages comp
 import { baseUrl } from '@/Url';
 
 export default function EditEvent({ updatedData, setUpdatedData, setEditMode, packageId }) {
-    const [trails, setTrails] = useState([]);
+    const [trails, setTrails] = useState([]); 
 
     useEffect(() => {
         const fetchPackageData = async () => {
@@ -67,7 +67,6 @@ export default function EditEvent({ updatedData, setUpdatedData, setEditMode, pa
                 <label className="block text-gray-700 text-sm font-bold mb-2">Select Trail</label>
                 <select
                     value={updatedData.trailId || ""} // Pre-select current trail if available
-                    onChange={(e) => setUpdatedData({ ...updatedData, trailId: e.target.value })}
                     className="w-full px-3 py-2 border rounded-md"
                     required
                     disabled
@@ -83,47 +82,95 @@ export default function EditEvent({ updatedData, setUpdatedData, setEditMode, pa
                 <label className="block text-gray-700 text-sm font-bold mb-2">Packages</label>
                 <Packages 
                     selected={updatedData.packages || []}
-                    onChange={(newSelected) => setUpdatedData({ ...updatedData, packages: newSelected })}
-                    
+                    disabled
                 />
             </div>
             
             <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">Price</label>
+                <label className="block text-gray-700 text-sm font-bold mb-2">Additional Package Inclusions</label>
                 <input 
-                    type="number" 
-                    value={updatedData.price || ''}
-                    onChange={(e) => setUpdatedData({ ...updatedData, price: e.target.value })} 
+                    type="text" 
+                    value={updatedData.additionalPackages || 'N/A'}
                     className="w-full px-3 py-2 border rounded-md" 
-                    placeholder="Enter price" 
                     disabled
                 />
             </div>
-
             <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">Payment Options</label>
+                <label className="block text-gray-700 text-sm font-bold mb-2">Package Exclusions</label>
                 <input 
                     type="text" 
-                    value={updatedData.paymentOptions || ''}
-                    onChange={(e) => setUpdatedData({ ...updatedData, paymentOptions: e.target.value })} 
+                    value={updatedData.exclusions || ''} 
                     className="w-full px-3 py-2 border rounded-md" 
-                    placeholder="Enter payment options"
                     disabled 
                 />
             </div>
-
             <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">Extra Info</label>
+                <label className="block text-gray-700 text-sm font-bold mb-2">Coordinator's Name</label>
+                <input 
+                    type="text" 
+                    value={updatedData.coordinatorName || ''}
+                    onChange={(e) => setUpdatedData({ ...updatedData, coordinatorName: e.target.value })} 
+                    className="w-full px-3 py-2 border rounded-md" 
+                />
+            </div>
+            <div className="grid gap-1 sm:grid-cols-3">
+                <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">Price</label>
+                    <input 
+                        type="number" 
+                        value={updatedData.price || ''}
+                        className="w-full px-3 py-2 border rounded-md"  
+                        disabled
+                    />
+                </div>
+                <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">Downpayment Policy</label>
+                    <input 
+                        type="number" 
+                        value={updatedData.dpPolicy || ''} 
+                        className="w-full px-3 py-2 border rounded-md"  
+                        disabled
+                    />
+                </div>
+                <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">Payment Options</label>
+                    <input 
+                        type="text" 
+                        value={updatedData.paymentOptions || ''}
+                        className="w-full px-3 py-2 border rounded-md" 
+                        disabled 
+                    />
+                </div>
+            </div>
+            <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2">Extra Information</label>
                 <textarea 
-                    value={updatedData.extraInfo || ''}
-                    onChange={(e) => setUpdatedData({ ...updatedData, extraInfo: e.target.value })} 
+                    value={updatedData.extraInfo || 'N/A'}
                     className="w-full px-3 py-2 border rounded-md" 
                     placeholder="Enter extra information"
                     disabled 
                 />
             </div>
+            <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2">Pickup Location</label>
+                <input 
+                    type="text" 
+                    value={updatedData.pickupLocation || ''}
+                    className="w-full px-3 py-2 border rounded-md" 
+                    disabled 
+                />
+            </div>
+            <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2">Max Guests</label>
+                <input 
+                    type="text" 
+                    value={updatedData.maxGuests || ''}
+                    className="w-full px-3 py-2 border rounded-md" 
+                    disabled 
+                />
+            </div>
 
-            <button onClick={handleSave} className="bg-blue-500 text-white p-2 rounded">Save</button>
+            <button onClick={handleSave} className="bg-primary text-white p-2 rounded">Save</button>
             <button type="button" className="bg-gray-500 text-white p-2 rounded ml-4" onClick={() => setEditMode(false)}>Cancel</button>
         </div>
     );

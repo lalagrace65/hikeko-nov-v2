@@ -194,16 +194,12 @@ export default function BusDets() {
             setBusinessContactNo("");
             // Navigate to the next page
             navigate('/travelAgencySignUp/credentialsProcess');
-
-
         } catch (error) {
             console.error("Submission error:", error);
             toast.error("Submission failed.");
         } finally {
             setIsSubmitting(false);
         }
-
-
     };
 
     return (
@@ -212,7 +208,7 @@ export default function BusDets() {
                 {/* Left Side - Background Color/Image */}
                 <div className="flex-1 bg-gray-200 relative">
                     {/* Optional: Add a background image */}
-                    {/* <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/path-to-your-image.jpg')" }} /> */}
+                    <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/scenery3.png')" }} />
                 </div>
 
                 {/* Right Side - Form Container */}
@@ -431,12 +427,10 @@ export default function BusDets() {
                     <Button
                         disabled={isSubmitting}
                         type="submit"
-                        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                        className="bg-primary hover:bg-orange-700 text-white font-bold py-2 px-4 rounded mt-4"
                     >
                         Submit
                     </Button>
-
-                    
                   </form>
                 </div>
             </div>

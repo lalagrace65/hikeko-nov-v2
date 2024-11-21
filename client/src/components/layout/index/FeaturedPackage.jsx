@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
     }
 
     return (
-    <div className="flex justify-center items-center mt-10">
+    <div className="flex justify-center items-center mt-5 md:px-40 lg:px-120">
         <div className="h-[20rem] w-full max-w-[365px] mb-10">
             <CardHeader onClick={handleSimagaysay} floated={false} color="blue-gray" className="cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 ">
                 <img
@@ -33,21 +33,21 @@ import { useNavigate } from "react-router-dom";
             </CardHeader>
             <CardBody>
             <div className="flex items-center justify-between">
-                <Typography variant="h5" color="blue-gray" className="font-medium">
+                <Typography variant="h5" color="blue-gray" className="font-medium -mt-2">
                 Mt. Simagaysay
                 </Typography>
             </div>
-            <Typography color="gray">
+            <Typography color="gray"  className="font-small text-sm mt-1">
                 Alfonso cavite, Philippines
             </Typography>
                 <Typography
-                    className="flex items-center gap-1.5 font-normal text-gray-600"
+                    className="flex items-center gap-1.5 font-small text-gray-600 text-sm"
                     >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
                         fill="currentColor"
-                        className="-mt-0.5 h-4 w-4 text-gray-600"
+                        className="-mt-0.5 h-3 w-3 text-gray-600"
                     >
                         <path
                         fillRule="evenodd"
@@ -70,21 +70,21 @@ import { useNavigate } from "react-router-dom";
             </CardHeader>
             <CardBody>
             <div className="flex items-center justify-between">
-                <Typography variant="h5" color="blue-gray" className="font-medium">
+                <Typography variant="h5" color="blue-gray" className="font-medium -mt-2">
                 Mt. Timarid
                 </Typography>
             </div>
-            <Typography color="gray">
+            <Typography color="gray" className="font-small text-sm mt-1">
                 Alfonso cavite, Philippines
             </Typography>
                 <Typography
-                    className="flex items-center gap-1.5 font-normal text-gray-600"
+                    className="flex items-center gap-1.5 font-small text-gray-600 text-sm"
                     >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
                         fill="currentColor"
-                        className="-mt-0.5 h-4 w-4 text-gray-600"
+                        className="-mt-0.5 h-3 w-3 text-gray-600"
                     >
                         <path
                         fillRule="evenodd"
@@ -100,28 +100,28 @@ import { useNavigate } from "react-router-dom";
         <div className="h-[20rem] w-full max-w-[365px] mb-10 ">
             <CardHeader onClick={handleTiradpass} floated={false} color="blue-gray" className="cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105">
                 <img
-                    src="scenery1.png"
+                    src="scenery1-card.png"
                     alt="ui/ux review check"
                 />
             <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/60 " />
             </CardHeader>
             <CardBody>
             <div className="flex items-center justify-between">
-                <Typography variant="h5" color="blue-gray" className="font-medium">
+                <Typography variant="h5" color="blue-gray" className="font-medium -mt-2">
                 Tirad-pass
                 </Typography>
             </div>
-            <Typography color="gray">
+            <Typography color="gray" className="font-small text-sm mt-1">
                 Alfonso cavite, Philippines
             </Typography>
                 <Typography
-                    className="flex items-center gap-1.5 font-normal text-gray-600"
+                    className="flex items-center gap-1.5 font-small text-gray-600 text-sm"
                     >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
                         fill="currentColor"
-                        className="-mt-0.5 h-4 w-4 text-gray-600"
+                        className="-mt-0.5 h-3 w-3 text-gray-600"
                     >
                         <path
                         fillRule="evenodd"
@@ -144,21 +144,21 @@ import { useNavigate } from "react-router-dom";
             </CardHeader>
             <CardBody>
             <div className="flex items-center justify-between">
-                <Typography variant="h5" color="blue-gray" className="font-medium">
+                <Typography variant="h5" color="blue-gray" className="font-medium -mt-2">
                 Mt. Palemlem
                 </Typography>
             </div>
-            <Typography color="gray">
+            <Typography color="gray" className="font-small text-sm mt-1">
                 Alfonso cavite, Philippines
             </Typography>
                 <Typography
-                    className="flex items-center gap-1.5 font-normal text-gray-600"
+                    className="flex items-center gap-1.5 font-small text-gray-600 text-sm"
                     >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
                         fill="currentColor"
-                        className="-mt-0.5 h-4 w-4 text-gray-600"
+                        className="-mt-0.5 h-3 w-3 text-gray-600"
                     >
                         <path
                         fillRule="evenodd"

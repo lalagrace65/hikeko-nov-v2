@@ -277,10 +277,15 @@ function JoinerDetailsForm({packageId, packageDetail}) {
             await emailjs.send('service_qjiocya', 'template_ge9ir44', emailData, 'jooaQAKBdAerURta8');
             
             // Reset the form data
-            setFormData(initialFormData);
+            setFormData(prevState => ({
+                ...prevState,
+                termsAccepted: false // Reset termsAccepted to false
+            }));            
             setProofPaymentImages([]);
             setJoinerContactNo("");
             setEmergencyContactNumber("");
+            setRedeemPoints("");
+            setAutofillChecked("");
         } catch (error) {
             console.error('Error submitting booking:', error);
             toast.error("Failed to submit booking.");
@@ -298,7 +303,7 @@ function JoinerDetailsForm({packageId, packageDetail}) {
                 data.append('file', file);
             }
             try {
-                const res = await axios.post(`${baseUrl}/api/upload`, data);
+                const res = await axios.post('/api/upload', data);
                 setProofPaymentImages(oldImages => {
                     return [...oldImages, ...res.data.links];
                 });
@@ -551,6 +556,7 @@ function JoinerDetailsForm({packageId, packageDetail}) {
                 </Typography>
             }
             containerProps={{ className: "-ml-2.5" }}
+            checked={formData.termsAccepted}
             onChange={handleTermsChange}
             />
             

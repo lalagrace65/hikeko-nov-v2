@@ -8,10 +8,14 @@ export default function TrailsPage() {
   const [trailList, setTrailList] = useState([]);
   const [loading,setLoading]=useState(true);
 
+  useEffect(() => {
+    // Scroll to top on component mount
+    window.scrollTo(0, 0);
+  }, []);
 
-useEffect(()=>{
-  getGooglePlace();
-},[])
+  useEffect(()=>{
+    getGooglePlace();
+  },[])
 
   const getGooglePlace=()=>{
     setLoading(true)

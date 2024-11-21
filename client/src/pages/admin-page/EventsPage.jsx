@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import dayjs from "dayjs";
 import EditEvent from "../../components/admin-components/EditEvent";
@@ -6,6 +6,7 @@ import { MultiLevelSidebar } from "@/components/admin-components/AdminSidebar";
 import PackageModal from "@/components/admin-components/AdminEventModal";
 import toast from "react-hot-toast";
 import { baseUrl } from "@/Url";
+import { UserContext } from "@/UserContext";
 
 export default function EventsPage() {
     const [open, setOpen] = React.useState(false);
@@ -14,6 +15,10 @@ export default function EventsPage() {
     const [filter, setFilter] = useState("");
     const [selectedPackageId, setSelectedPackageId] = useState(null); 
     const [packages, setPackages] = useState([]); 
+    const [currentPage, setCurrentPage] = useState(1); // State for current page
+    const [itemsPerPage] = useState(5); // Number of items per page
+    const { user, setUser } = useContext(UserContext);
+
     const [updatedData, setUpdatedData] = useState({
         trailId: '',
         packages: '',
@@ -129,10 +134,41 @@ export default function EventsPage() {
         return (
             mountainName.toLowerCase().includes(filter.toLowerCase()) ||
             coordinatorName.toLowerCase().includes(filter.toLowerCase()) ||
-            price.toLowerCase().includes(filter.toLowerCase()) ||
+            price.toString().toLowerCase().includes(filter.toLowerCase()) ||
             status.toLowerCase().includes(filter.toLowerCase())
         );
     });
+
+    // Calculate pagination data
+    const totalItems = filteredPackages.length;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const currentItems = filteredPackages.slice(startIndex, endIndex);
+
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+    };
+
+    function formatCurrency(amount, currency = 'PHP') {
+        return new Intl.NumberFormat('en-PH', {
+            style: 'currency',
+            currency,
+        }).format(amount);
+    }    
+
+    // To set user-friendly names for package types
+    const packageNames = {
+        vanTransfer: 'Van Transfer',
+        registrationFee: 'Registration Fee',
+        coordinatorFee: "Coordinator's Fee",
+        tourGuideFee: 'Tour Guide Fee',
+        environmentalFee: 'Environmental Fee',
+        parkingFee: 'Parking Fee',
+        bagTag: 'Bag Tag',
+        driverFee: "Driver's Fee",
+        droneService: 'Drone Shot Service',
+    }; 
 
     const handleOpen = (pkg) => {
         setSelectedPackage(pkg); // Set the selected package
@@ -140,6 +176,7 @@ export default function EventsPage() {
     };
     const handleClose = () => {
         setOpen(false);
+        setSelectedPackage(null); // Clear the selected package
     };
 
     return (
@@ -147,7 +184,6 @@ export default function EventsPage() {
             <MultiLevelSidebar className="min-h-screen" />
             <div className="flex-1 p-8 flex flex-col">
                 <div className="flex-grow">
-                
                     {editMode ? (
                         <form onSubmit={handleSaveEdit} className="mb-6">
                             <EditEvent 
@@ -169,7 +205,7 @@ export default function EventsPage() {
                                     className="p-2 border rounded w-full"
                                 />
                             </div>
-                                {filteredPackages.length > 0 ? (
+                                {currentItems.length > 0 ? (
                                     <table className="min-w-full">
                                         <thead className="bg-gray-100">
                                             <tr>
@@ -177,6 +213,7 @@ export default function EventsPage() {
                                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Packages</th>
                                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Coordinator</th>
                                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Slot</th>
                                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Event Date</th>
                                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time Created</th>
                                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
@@ -186,7 +223,7 @@ export default function EventsPage() {
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-gray-100">
-                                            {filteredPackages.map((pkg) => {
+                                            {currentItems.map((pkg) => {
                                                 const formattedDate = dayjs(pkg.date).format('MM-DD-YYYY');
                                                 return (
                                                     <tr key={pkg._id}>
@@ -196,12 +233,15 @@ export default function EventsPage() {
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                                                             <ul className="list-disc list-inside">
                                                                 {pkg.packages.map((item, index) => (
-                                                                    <li key={index} className="py-1">{item}</li>
+                                                                    <li key={index} className="py-1">
+                                                                        {packageNames[item] || item}
+                                                                    </li>
                                                                 ))}
                                                             </ul>
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{pkg.coordinatorName}</td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{pkg.price}</td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{formatCurrency(pkg.price, 'PHP')}</td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600"> / {pkg.maxGuests}</td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{formattedDate}</td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{formatTimestamp(pkg.dateCreated)}</td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
@@ -235,6 +275,7 @@ export default function EventsPage() {
                                                                         </svg>
                                                                         <span>Edit</span>
                                                                 </button>
+                                                                {user && user.role === 'admin' && (
                                                                 <button 
                                                                     className="flex items-center gap-1 bg-transparent text-red-600 hover:text-red-900 md:font-semibold" 
                                                                     onClick={() => handleArchive(pkg._id)}>
@@ -243,6 +284,7 @@ export default function EventsPage() {
                                                                         </svg>
                                                                         <span>Archive</span>
                                                                 </button>
+                                                                )}
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -253,10 +295,31 @@ export default function EventsPage() {
                                 ) : (
                                     <p>No event packages found.</p>
                                 )}
+                                {/* Pagination Controls */}
+                        <div className="flex justify-between items-center mt-4">
+                            <button
+                                onClick={() => handlePageChange(currentPage - 1)}
+                                disabled={currentPage === 1}
+                                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+                            >
+                                Previous
+                            </button>
+                            <span>
+                                Page {currentPage} of {totalPages}
+                            </span>
+                            <button
+                                onClick={() => handlePageChange(currentPage + 1)}
+                                disabled={currentPage === totalPages}
+                                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+                            >
+                                Next
+                            </button>
+                        </div>
                             </div>
                         </div>
                     )}
                 </div>
+                
             </div>
              {/* Add the PackageModal component */}
              <PackageModal className="shadow-2xl"

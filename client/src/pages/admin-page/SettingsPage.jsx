@@ -29,7 +29,7 @@ export default function AdminDetails() {
    useEffect(() => {
     const fetchLogo = async () => {
       try {
-        const response = await axios.get('/admin-details/settings/getSystemLogo'); // Endpoint to get saved logo
+        const response = await axios.get(`${baseUrl}/admin-details/settings/getSystemLogo`); // Endpoint to get saved logo
         if (response.data.avatar) {
           setLogo({ link: response.data.avatar });
         }
@@ -69,7 +69,7 @@ export default function AdminDetails() {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      await axios.post('/admin-details/settings/addSystemLogo', { 
+      await axios.post(`${baseUrl}/admin-details/settings/addSystemLogo`, { 
         avatar: logo.link,
       });
 
@@ -104,7 +104,7 @@ export default function AdminDetails() {
 
   function inputHeader(text) {
     return (
-        <h2 className="text-2xl mt-4">{text}</h2>
+        <h2 className="text-2xl mt-4 mb-1">{text}</h2>
     );
   }
 
@@ -261,15 +261,14 @@ export default function AdminDetails() {
             />
             {passwordError && <p className="text-red-500 text-sm">{passwordError}</p>}
             {/* Button to update password */}
+            {/* Success or error message */}
+            {updateMessage && <p className="text-green-500 mt-2">{updateMessage}</p>}
             <button
               onClick={handleUpdatePassword}
               className="mt-4 px-4 w-full py-2 primary text-white rounded hover:shadow-lg transition duration-300 ease-in-out"
             >
               Update Password
             </button>
-      
-            {/* Success or error message */}
-            {updateMessage && <p className="text-green-500 mt-2">{updateMessage}</p>}
           </div>
   
           {/* Right Column */}

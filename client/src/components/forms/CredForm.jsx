@@ -45,7 +45,7 @@ export default function CredForm() {
 
   return (
       <form onSubmit={handleSubmit(onSubmit)} 
-       className="space-y-4">
+       className="space-y-6">
         
         {/* Owner First Name */}
         <div>
@@ -59,7 +59,7 @@ export default function CredForm() {
             
           />
           {errors.firstName && (
-            <span className="text-red-500">{errors.firstName.message}</span>
+            <span className="text-red-500 text-sm ml-1">{errors.firstName.message}</span>
           )}
         </div>
 
@@ -74,7 +74,7 @@ export default function CredForm() {
            
           />
           {errors.lastName && (
-            <span className="text-red-500">{errors.lastName.message}</span>
+            <span className="text-red-500 text-sm ml-1">{errors.lastName.message}</span>
           )}
         </div>
 
@@ -98,7 +98,7 @@ export default function CredForm() {
             className="mt-2 mb-2 w-full px-3 py-2 border border-gray-300 rounded-lg"
           />
           {errors.ownerMobileNum && (
-            <span className="text-red-500">{errors.contactNo.message}</span>
+            <span className="text-red-500 text-sm ml-1">{errors.contactNo.message}</span>
           )}
         </div>
 
@@ -126,7 +126,7 @@ export default function CredForm() {
             </label>
           </div>
           {errors.birCertificate && (
-            <span className="text-red-500">{errors.birCertificate.message}</span>
+            <span className="text-red-500 text-sm ml-1">{errors.birCertificate.message}</span>
           )}
         </div>
 
@@ -146,7 +146,7 @@ export default function CredForm() {
             </label>
           </div>
           {errors.termsAccepted && (
-            <span className="text-red-500">{errors.termsAccepted.message}</span>
+            <span className="text-red-500 text-sm ml-1">{errors.termsAccepted.message}</span>
           )}
         </div>
 

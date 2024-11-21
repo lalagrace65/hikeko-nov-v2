@@ -19,303 +19,306 @@ const [logo, setLogo] = useState(null);
 const { user, setUser } = useContext(UserContext);
 const navigate = useNavigate();
 
-useEffect(() => {
-const fetchBusinessName = async () => {
-if (user && user.token) {
- try {
-   const response = await axios.get(`${baseUrl}/admin-details`, {
-     headers: { Authorization: `Bearer ${user.token}` },
-   });
-   setUser((prevUser) => ({
-     ...prevUser,
-     businessName: response.data.businessName,
-   }));
- } catch (error) {
-   console.error("Error fetching business name:", error);
- }
-}
-};
+  useEffect(() => {
+    const fetchBusinessName = async () => {
+    if (user && user.token) {
+      try {
+        const response = await axios.get(`${baseUrl}/admin-details`, {
+          headers: { Authorization: `Bearer ${user.token}` },
+        });
+        setUser((prevUser) => ({
+          ...prevUser,
+          businessName: response.data.businessName,
+        }));
+      } catch (error) {
+        console.error("Error fetching business name:", error);
+      }
+    }
+  };
 
-fetchBusinessName();
-}, []);  // Removed 'user' as dependency to avoid re-triggering the effect  
+  fetchBusinessName();
+  }, []);  // Removed 'user' as dependency to avoid re-triggering the effect  
 
-useEffect(() => {
-const fetchLogo = async () => {
- try {
-     const response = await axios.get(`${baseUrl}/admin-details/settings/getSystemLogo`);
-     const systemLogo = response.data.avatar; 
-     setLogo(systemLogo); 
- } catch (error) {
-     console.error("Error fetching logo:", error);
- }
-};
+  useEffect(() => {
+  const fetchLogo = async () => {
+    try {
+        const response = await axios.get(`${baseUrl}/admin-details/settings/getSystemLogo`);
+        const systemLogo = response.data.avatar; 
+        setLogo(systemLogo); 
+    } catch (error) {
+        console.error("Error fetching logo:", error);
+    }
+  };
 
-fetchLogo();
-}, []);
+  fetchLogo();
+  }, []);
 
-const handleOpen = (value) => {
-setOpen(open === value ? value : value);
-};
+  const handleOpen = (value) => {
+    setOpen(open === value ? value : value);
+  };
 
 // Function to handle logout
-const handleLogout = async () => {
-try {
-await axios.post(`${baseUrl}/logout`, {}, { withCredentials: true });
-localStorage.removeItem('token');
-localStorage.removeItem('user'); // Clear local storage on logout
-setUser(null);
-navigate('/'); // Redirect to the index after logout
-} catch (error) {
-console.error('Error logging out:', error);
-}
-};
+  const handleLogout = async () => {
+    try {
+      await axios.post(`${baseUrl}/logout`, {}, { withCredentials: true });
+        localStorage.removeItem('token');
+        localStorage.removeItem('user'); // Clear local storage on logout
+      setUser(null);
+      navigate('/'); // Redirect to the index after logout
+      } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
 
-const handleAnalytics = () => {
-navigate('/admin/dashboard/analytics'); 
-};
-const handleReports= () => {
-navigate('/admin/dashboard/reports'); 
-};
-const handleProjects= () => {
-navigate('/admin/dashboard/projects'); 
-};
-const handleEvent = () => {
-navigate('/admin/events'); 
-};
+  const handleAnalytics = () => {
+    navigate('/admin/dashboard/analytics'); 
+  };
+  const handleReports= () => {
+    navigate('/admin/dashboard/reports'); 
+  };
+  const handleProjects= () => {
+    navigate('/admin/dashboard/projects'); 
+  };
+  const handleEvent = () => {
+    navigate('/admin/events'); 
+  };
 
-const handlePackage = () => {
-navigate('/admin/add-package'); 
-};
+  const handlePackage = () => {
+    navigate('/admin/add-package'); 
+  };
 
-const handleBookingList = () => {
-navigate('/admin/bookings');
-};
+  const handleBookingList = () => {
+    navigate('/admin/bookings');
+  };
 
-const handleTransactions = () => {
-navigate('/admin/transactions');
-};
+  const handleTransactions = () => {
+    navigate('/admin/transactions');
+  };
 
-const handleEventArchives = () => {
-navigate('/admin/archives');
-};
+  const handleEventArchives = () => {
+    navigate('/admin/archives');
+  };
 
-const handleStaffList = () => {
-navigate('/admin/staff-list'); 
-};
+  const handleStaffList = () => {
+    navigate('/admin/staff-list'); 
+  };
 
-const handleAddStaff = () => {
-navigate('/admin/add-staff'); 
-};
+  const handleAddStaff = () => {
+    navigate('/admin/add-staff'); 
+  };
 
-const handleInbox = () => {
-navigate('/admin/inbox'); 
-};
+  const handleInbox = () => {
+    navigate('/admin/inbox'); 
+  };
 
-const handleSettings = () => {
-navigate('/admin/settings'); 
-};
+  const handleSettings = () => {
+    navigate('/admin/settings'); 
+  };
 
-return (
-<Card className=".h-screen w-80 p-4 shadow-xl shadow-blue-gray-900/5">
-<div className="mb-2 p-4 ">
- <Typography className="flex items-center gap-2" variant="h5" color="blue-gray">
-   <Avatar 
-       src={logo || "/default-logo.jpg"}  // Fallback to a default logo if the fetched logo is null
-       alt="Logo"
-   />
-   {!!user && (<div>{user.businessName}</div>)}
- </Typography>
-</div>
-<List>
- <Accordion
-   open={open === 1}
-   icon={
-     <ChevronDownIcon
-       strokeWidth={2.5}
-       className={`mx-auto h-4 w-4 transition-transform ${open === 1 ? "rotate-180" : ""}`}
-     />
-   }
- >
-   <ListItem className="p-0" selected={open === 1}>
-     <AccordionHeader onClick={() => handleOpen(1)} className="bg-transparent border-b-0 p-3">
-       <ListItemPrefix>
-         <PresentationChartBarIcon className="h-6 w-6 mr-2" />
-       </ListItemPrefix>
-       <Typography color="blue-gray" className="mr-auto font-normal">
-         Dashboard
-       </Typography>
-     </AccordionHeader>
-   </ListItem>
-   
-   <AccordionBody className="py-1">
-     <List className="p-0">
-       <ListItem onClick={handleAnalytics}>
-         <ListItemPrefix>
-           <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-         </ListItemPrefix>
-         Analytics
-       </ListItem>
-       <ListItem onClick={handleReports}>
-         <ListItemPrefix>
-           <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-         </ListItemPrefix>
-         Reports
-       </ListItem>
-       <ListItem onClick={handleProjects}>
-         <ListItemPrefix>
-           <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-         </ListItemPrefix>
-         Projects
-       </ListItem>
-     </List>
-   </AccordionBody>
- </Accordion>
+  return (
+    <Card className=".h-screen w-80 p-4 shadow-xl shadow-blue-gray-900/5">
+      <div className="mb-2 p-4 ">
+      <Typography className="flex items-center gap-2" variant="h5" color="blue-gray">
+        <Avatar 
+            src={logo || "/default-logo.jpg"}  // Fallback to a default logo if the fetched logo is null
+            alt="Logo"
+        />
+        {user.businessName ? user.businessName : `Incremented ID: ${user.incrementId}`}
+        </Typography>
+        </div>
+        <List>
+        {user && user.role === 'admin' && (
+          <Accordion
+              open={open === 1}
+              icon={
+                <ChevronDownIcon
+                  strokeWidth={2.5}
+                  className={`mx-auto h-4 w-4 transition-transform ${open === 1 ? "rotate-180" : ""}`}
+                />
+              }
+            >
+            
+            <ListItem className="p-0" selected={open === 1}>
+              <AccordionHeader onClick={() => handleOpen(1)} className="bg-transparent border-b-0 p-3">
+                <ListItemPrefix>
+                  <PresentationChartBarIcon className="h-6 w-6 mr-2" />
+                </ListItemPrefix>
+                <Typography color="blue-gray" className="mr-auto font-normal">
+                  Dashboard
+                </Typography>
+              </AccordionHeader>
+            </ListItem>
+          
+            <AccordionBody className="py-1">
+              <List className="p-0">
+                <ListItem onClick={handleAnalytics}>
+                  <ListItemPrefix>
+                    <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                  </ListItemPrefix>
+                  Analytics
+                </ListItem>
+                <ListItem onClick={handleReports}>
+                  <ListItemPrefix>
+                    <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                  </ListItemPrefix>
+                  Reports
+                </ListItem>
+                <ListItem onClick={handleProjects}>
+                  <ListItemPrefix>
+                    <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                  </ListItemPrefix>
+                  Projects
+                </ListItem>
+              </List>
+            </AccordionBody>
+          </Accordion>
+        )}
+        <Accordion
+          open={open === 2}
+          icon={
+            <ChevronDownIcon
+              strokeWidth={2.5}
+              className={`mx-auto h-4 w-4 transition-transform ${open === 2 ? "rotate-180" : ""}`}
+            />
+          }
+        >
+          <ListItem className="p-0" selected={open === 2}>
+            <AccordionHeader onClick={() => handleOpen(2)} className="bg-transparent border-b-0 p-3">
+              <ListItemPrefix>
+                <MdTour className="h-6 w-6 mr-2" />
+              </ListItemPrefix>
+              <Typography color="blue-gray" className="mr-auto font-normal">
+                Tours & Packages
+              </Typography>
+            </AccordionHeader>
+          </ListItem>
+          <AccordionBody className="py-1">
+            <List className="p-0">
+              <ListItem onClick={handleEvent}>
+                <ListItemPrefix>
+                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                </ListItemPrefix>
+                Event List
+              </ListItem>
+              <ListItem onClick={handlePackage}>
+                <ListItemPrefix>
+                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                </ListItemPrefix>
+                Create Event
+              </ListItem>
+              {user && user.role === 'admin' && ( 
+              <ListItem onClick={handleEventArchives}>
+                <ListItemPrefix>
+                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                </ListItemPrefix>
+                Event Archives
+              </ListItem>
+              )}
+            </List>
+          </AccordionBody>
+        </Accordion>
 
- <Accordion
-   open={open === 2}
-   icon={
-     <ChevronDownIcon
-       strokeWidth={2.5}
-       className={`mx-auto h-4 w-4 transition-transform ${open === 2 ? "rotate-180" : ""}`}
-     />
-   }
- >
-   <ListItem className="p-0" selected={open === 2}>
-     <AccordionHeader onClick={() => handleOpen(2)} className="bg-transparent border-b-0 p-3">
-       <ListItemPrefix>
-         <MdTour className="h-6 w-6 mr-2" />
-       </ListItemPrefix>
-       <Typography color="blue-gray" className="mr-auto font-normal">
-         Tours & Packages
-       </Typography>
-     </AccordionHeader>
-   </ListItem>
-   <AccordionBody className="py-1">
-     <List className="p-0">
-       <ListItem onClick={handleEvent}>
-         <ListItemPrefix>
-           <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-         </ListItemPrefix>
-         Event List
-       </ListItem>
-       <ListItem onClick={handlePackage}>
-         <ListItemPrefix>
-           <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-         </ListItemPrefix>
-         Create Event
-       </ListItem>
-       
-       
-       <ListItem onClick={handleEventArchives}>
-         <ListItemPrefix>
-           <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-         </ListItemPrefix>
-         Event Archives
-       </ListItem>
-     </List>
-   </AccordionBody>
- </Accordion>
+          <Accordion
+            open={open === 3}
+            icon={
+              <ChevronDownIcon
+                strokeWidth={2.5}
+                className={`mx-auto h-4 w-4 transition-transform ${open === 3 ? "rotate-180" : ""}`}
+              />
+            }
+          >
+            <ListItem className="p-0" selected={open === 3}>
+              <AccordionHeader onClick={() => handleOpen(3)} className="bg-transparent border-b-0 p-3">
+                <ListItemPrefix>
+                  <RiBookletFill  className="h-5 w-5 mr-2" />
+                </ListItemPrefix>
+                <Typography color="blue-gray" className="mr-auto font-normal">
+                  Bookings
+                </Typography>
+              </AccordionHeader>
+            </ListItem>
+            <AccordionBody className="py-1">
+              <List className="p-0">
+                <ListItem onClick={handleBookingList}>
+                  <ListItemPrefix>
+                    <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                  </ListItemPrefix>
+                  Booking list
+                </ListItem>
+                <ListItem onClick={handleTransactions}>
+                  <ListItemPrefix>
+                    <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                  </ListItemPrefix>
+                  Transactions
+                </ListItem>
+              </List>
+            </AccordionBody>
+          </Accordion>
 
- <Accordion
-   open={open === 3}
-   icon={
-     <ChevronDownIcon
-       strokeWidth={2.5}
-       className={`mx-auto h-4 w-4 transition-transform ${open === 3 ? "rotate-180" : ""}`}
-     />
-   }
- >
-   <ListItem className="p-0" selected={open === 3}>
-     <AccordionHeader onClick={() => handleOpen(3)} className="bg-transparent border-b-0 p-3">
-       <ListItemPrefix>
-         <RiBookletFill  className="h-5 w-5 mr-2" />
-       </ListItemPrefix>
-       <Typography color="blue-gray" className="mr-auto font-normal">
-         Bookings
-       </Typography>
-     </AccordionHeader>
-   </ListItem>
-   <AccordionBody className="py-1">
-     <List className="p-0">
-       <ListItem onClick={handleBookingList}>
-         <ListItemPrefix>
-           <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-         </ListItemPrefix>
-         Booking list
-       </ListItem>
-       <ListItem onClick={handleTransactions}>
-         <ListItemPrefix>
-           <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-         </ListItemPrefix>
-         Transactions
-       </ListItem>
-     </List>
-   </AccordionBody>
- </Accordion>
-
- {/*staff tab is hidden in the staff account upon login*/} 
- {user && user.role === 'admin' && (  
- <Accordion
-   open={open === 4}
-   icon={
-     <ChevronDownIcon
-       strokeWidth={2.5}
-       className={`mx-auto h-4 w-4 transition-transform ${open === 4 ? "rotate-180" : ""}`}
-     />
-   }
- >
-   <ListItem className="p-0" selected={open === 4}>
-     <AccordionHeader onClick={() => handleOpen(4)} className="bg-transparent border-b-0 p-3">
-       <ListItemPrefix>
-         <FaUserGroup  className="h-5 w-5 mr-2" />
-       </ListItemPrefix>
-       <Typography color="blue-gray" className="mr-auto font-normal">
-         Staff
-       </Typography>
-     </AccordionHeader>
-   </ListItem>
-   <AccordionBody className="py-1">
-     <List className="p-0">
-       <ListItem onClick={handleStaffList}>
-         <ListItemPrefix>
-           <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-         </ListItemPrefix>
-         Staff List
-       </ListItem>
-       <ListItem onClick={handleAddStaff}>
-         <ListItemPrefix>
-           <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-         </ListItemPrefix>
-         Create Staff
-       </ListItem>
-     </List>
-   </AccordionBody>
- </Accordion>)}
- 
- <ListItem onClick={handleInbox}>
-   <ListItemPrefix>
-     <InboxIcon className="h-5 w-5 mr-2" />
-   </ListItemPrefix>
-     Inbox
-   <ListItemSuffix>
-     <Chip value="14" size="sm" variant="ghost" color="blue-gray" className="rounded-full" />
-   </ListItemSuffix>
- </ListItem>
-
- <ListItem onClick={handleSettings}>
-   <ListItemPrefix>
-     <Cog6ToothIcon className="h-5 w-5 mr-2" />
-   </ListItemPrefix>
-     Settings
- </ListItem>
- 
- <ListItem onClick={handleLogout}>
-   <ListItemPrefix>
-     <PowerIcon className="h-5 w-5 mr-2" />
-   </ListItemPrefix>
-   Log Out
- </ListItem>
-</List>
-</Card>
-);
+          {/*staff tab is hidden in the staff account upon login*/} 
+          {user && user.role === 'admin' && (  
+            <Accordion
+              open={open === 4}
+              icon={
+                <ChevronDownIcon
+                  strokeWidth={2.5}
+                  className={`mx-auto h-4 w-4 transition-transform ${open === 4 ? "rotate-180" : ""}`}
+                />
+              }
+            >
+              <ListItem className="p-0" selected={open === 4}>
+                <AccordionHeader onClick={() => handleOpen(4)} className="bg-transparent border-b-0 p-3">
+                  <ListItemPrefix>
+                    <FaUserGroup  className="h-5 w-5 mr-2" />
+                  </ListItemPrefix>
+                  <Typography color="blue-gray" className="mr-auto font-normal">
+                    Staff
+                  </Typography>
+                </AccordionHeader>
+              </ListItem>
+              <AccordionBody className="py-1">
+                <List className="p-0">
+                  <ListItem onClick={handleStaffList}>
+                    <ListItemPrefix>
+                      <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                    </ListItemPrefix>
+                    Staff List
+                  </ListItem>
+                  <ListItem onClick={handleAddStaff}>
+                    <ListItemPrefix>
+                      <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                    </ListItemPrefix>
+                    Create Staff
+                  </ListItem>
+                </List>
+              </AccordionBody>
+            </Accordion>
+          )}
+          
+          <ListItem onClick={handleInbox}>
+            <ListItemPrefix>
+              <InboxIcon className="h-5 w-5 mr-2" />
+            </ListItemPrefix>
+              Inbox
+            <ListItemSuffix>
+              <Chip value="14" size="sm" variant="ghost" color="blue-gray" className="rounded-full" />
+            </ListItemSuffix>
+          </ListItem>
+          {user && user.role === 'admin' && (
+            <ListItem onClick={handleSettings}>
+              <ListItemPrefix>
+                <Cog6ToothIcon className="h-5 w-5 mr-2" />
+              </ListItemPrefix>
+                Settings
+            </ListItem>
+          )}
+          <ListItem onClick={handleLogout}>
+            <ListItemPrefix>
+              <PowerIcon className="h-5 w-5 mr-2" />
+            </ListItemPrefix>
+            Log Out
+          </ListItem>
+        </List>
+      </Card>
+    );
 }

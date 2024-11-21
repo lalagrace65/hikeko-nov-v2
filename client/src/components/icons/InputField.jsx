@@ -1,20 +1,14 @@
-// components/ui/InputField.js
-import React from 'react';
-import { Input } from "@material-tailwind/react";
+import React from "react";
 
-const InputField = ({ label, name, value, onChange, type = "text", className = "" }) => {
+export default function StyledInput({ label, name, value, onChange, type = "text", placeholder }) {
     return (
-        <Input
+        <input
             type={type}
-            label={label}
             name={name}
             value={value}
             onChange={onChange}
-            variant="outlined"
-            color="black"
-            className={`bg-gray-100 focus:bg-gray-50 text-black border-gray-300 ${className}`}
+            placeholder={placeholder}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-black focus:border-black"
         />
     );
-};
-
-export default InputField;
+}

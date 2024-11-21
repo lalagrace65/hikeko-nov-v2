@@ -123,7 +123,7 @@ export default function CreateStaffAccount() {
                             onChange={handlePhoneNumberChange}
                         />{error && <p className="text-red-500 text-sm mb-4">{error}</p>}
                         
-                        <button onClick={addNewStaff} className="w-full p-2 bg-primary text-white rounded-2xl"> Register </button>
+                        <button onClick={addNewStaff} className="w-full p-2 bg-primary text-white rounded-2xl"> Create Account </button>
                     </div>
                 </div>
             </div>

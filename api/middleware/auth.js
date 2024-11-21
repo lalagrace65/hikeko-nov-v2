@@ -1,4 +1,3 @@
-// middleware/auth.js
 const jwt = require('jsonwebtoken');
 const bcryptSalt = 10; 
 const jwtSecret = 'wsdfghjkqisoaklfksld';
@@ -22,6 +21,8 @@ function requireRole(roles) {
             }
 
             // Attach user data to request
+            req.userId = userData.id; 
+            req.userRole = userData.role;
             req.userData = userData;
             next();
         });

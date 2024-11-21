@@ -2,10 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-input[type="text"],
-input[type="password"],
-input[type="email"],
-input[type="number"],
+/*input[type="text"],
+/input[type="password"],
+/input[type="email"],
+/input[type="number"],*/
 input[type="time"],
 select {
   @apply w-full border my-1 py-2 px-3 rounded-2xl;
@@ -35,4 +35,23 @@ html {
   outline: none;
   border: none;
   box-shadow: none;
+}
+
+/* Custom styles for PhoneInput focus */
+.phone-input-container input:focus {
+  @apply border-black outline-none ring-0; /* Tailwind-based focus styling */
+}
+
+.phone-input-container .react-tel-input__input:focus {
+  @apply border-black outline-none ring-0; /* Focus styles for the inner input */
+}
+
+.phone-input-container .react-tel-input__country {
+  @apply border-black; /* Optional, if you want to style the country selector */
+}
+
+/*forum post*/
+.carousel img {
+  max-width: 100%;
+  max-height: 100%;
 }

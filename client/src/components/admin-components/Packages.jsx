@@ -1,6 +1,7 @@
-export default function Packages({ selected, onChange }) {
+export default function Packages({ selected, onChange, disabled }) {
     function handleCbClick(ev) {
         const { checked, name } = ev.target;
+        if (disabled) return; // Prevent interaction if disabled
         if (checked) {
             onChange([...selected, name]); // Add new item to selected array
         } else {
@@ -8,44 +9,35 @@ export default function Packages({ selected, onChange }) {
         }
     }
 
+    const options = [
+        { name: 'vanTransfer', label: 'Van transfer' },
+        { name: 'registrationFee', label: 'Registration fee' },
+        { name: 'coordinatorFee', label: "Coordinator's fee" },
+        { name: 'tourGuideFee', label: 'Tour guide fee' },
+        { name: 'environmentalFee', label: 'Environmental fee' },
+        { name: 'parkingFee', label: 'Parking fee' },
+        { name: 'bagTag', label: 'Bag tag' },
+        { name: 'driverFee', label: "Driver's fee" },
+        { name: 'droneService', label: 'Drone Shot Service' },
+    ];
+
     return (
         <div className="grid grid-cols-3 gap-4">
-            <label className="flex border rounded-2xl p-4 items-center gap-2 cursor-pointer">
-                <input type="checkbox" name="vanTransfer" checked={selected.includes('vanTransfer')} onChange={handleCbClick} />
-                <span>Van transfer</span>
-            </label>
-            <label className="flex border rounded-2xl p-4 items-center gap-2 cursor-pointer">
-                <input type="checkbox" name="registrationFee" checked={selected.includes('registrationFee')} onChange={handleCbClick} />
-                <span>Registration fee</span>
-            </label>
-            <label className="flex border rounded-2xl p-4 items-center gap-2 cursor-pointer">
-                <input type="checkbox" name="coordinatorFee" checked={selected.includes('coordinatorFee')} onChange={handleCbClick} />
-                <span>Coordinator's fee</span>
-            </label>
-            <label className="flex border rounded-2xl p-4 items-center gap-2 cursor-pointer">
-                <input type="checkbox" name="tourGuideFee" checked={selected.includes('tourGuideFee')} onChange={handleCbClick} />
-                <span>Tour guide fee</span>
-            </label>
-            <label className="flex border rounded-2xl p-4 items-center gap-2 cursor-pointer">
-                <input type="checkbox" name="environmentalFee" checked={selected.includes('environmentalFee')} onChange={handleCbClick} />
-                <span>Environmental fee</span>
-            </label>
-            <label className="flex border rounded-2xl p-4 items-center gap-2 cursor-pointer">
-                <input type="checkbox" name="parkingFee" checked={selected.includes('parkingFee')} onChange={handleCbClick} />
-                <span>Parking fee</span>
-            </label>
-            <label className="flex border rounded-2xl p-4 items-center gap-2 cursor-pointer">
-                <input type="checkbox" name="bagTag" checked={selected.includes('bagTag')} onChange={handleCbClick} />
-                <span>Bag tag</span>
-            </label>
-            <label className="flex border rounded-2xl p-4 items-center gap-2 cursor-pointer">
-                <input type="checkbox" name="driverFee" checked={selected.includes('driverFee')} onChange={handleCbClick} />
-                <span>Driver's fee</span>
-            </label>
-            <label className="flex border rounded-2xl p-4 items-center gap-2 cursor-pointer">
-                <input type="checkbox" name="droneService" checked={selected.includes('droneService')} onChange={handleCbClick} />
-                <span>Drone Shot Service</span>
-            </label>
+            {options.map(option => (
+                <label
+                    key={option.name}
+                    className={`flex border rounded-2xl p-4 items-center gap-2 ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                >
+                    <input
+                        type="checkbox"
+                        name={option.name}
+                        checked={selected.includes(option.name)}
+                        onChange={handleCbClick}
+                        disabled={disabled} // Disable checkbox if in edit mode
+                    />
+                    <span>{option.label}</span>
+                </label>
+            ))}
         </div>
     );
 }

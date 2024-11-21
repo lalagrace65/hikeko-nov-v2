@@ -21,9 +21,10 @@ function TrailDetail() {
     const fetchUser = async () => {
       try {
         const response = await axios.get(`${baseUrl}/api/book/auth/user`, { withCredentials: true });
+        console.log('Fetched user info:', response.data);
         setUser(response.data);
       } catch (error) {
-        console.error('Error fetching user info:', error);
+        console.error('Error fetching user info:', error.response?.data || error.message);
       }
     };
 
@@ -57,14 +58,17 @@ function TrailDetail() {
   }, [trail]);
 
   const handleBookNow = (packageId) => {
+    console.log('Current user state:', user);
     if (!user) {
       navigate('/login'); // Redirect to login if not authenticated
       return;
     }
     if (user.role !== 'user') {
+      console.log('User role is not valid for booking:', user.role);
       alert('Only users with a valid account can book packages.');
       return;
     }
+    console.log('Navigating to booking page with package ID:', packageId);
     navigate(`/bookings/packages/${packageId}`); // Navigate to booking page
   };
 

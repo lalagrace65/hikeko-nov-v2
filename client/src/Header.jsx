@@ -3,31 +3,42 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext.jsx";
 import axios from 'axios';
 import { baseUrl } from "./Url.jsx";
+import { Avatar, IconButton, Menu, MenuHandler, MenuList, MenuItem, Tooltip } from "@material-tailwind/react";
+import { IoNotificationsOutline } from "react-icons/io5";
 
 export default function Header() {
     const { user, setUser } = useContext(UserContext);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [exploreDropdownOpen, setExploreDropdownOpen] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [notifications, setNotifications] = useState([]);
+    const [notificationCount, setNotificationCount] = useState(0);
+
     const dropdownRef = useRef(null);
     const exploreDropdownRef = useRef(null);
     const navigate = useNavigate();
 
     // Check if the user is an admin or staff
     const isAdminOrStaff = user && (user.role === 'admin' || user.role === 'staff');
+
     // Function to handle logout
     async function handleLogout() {
-        await axios.post(`${baseUrl}/logout`, {}, { withCredentials: true });
-        localStorage.removeItem('token');
-        localStorage.removeItem('user'); // Clear local storage on logout
-        setUser(null);
-        navigate('/');
+        try {
+            await axios.post(`${baseUrl}/logout`, {}, { withCredentials: true });
+            localStorage.removeItem('token');
+            localStorage.removeItem('user'); // Clear local storage on logout
+            setUser(null);
+            navigate('/');
+        } catch (err) {
+            console.error("Error during logout:", err);
+        }
     }
 
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
-                const response = await axios.get('/profile', { withCredentials: true });
+                const response = await axios.get(`${baseUrl}/profile`, { withCredentials: true });
                 setUser(response.data);
             } catch (err) {
                 setError('Unable to fetch profile name.');
@@ -38,7 +49,7 @@ export default function Header() {
         };
 
         fetchUserProfile();
-    }, [])
+    }, [setUser]);
 
     // Handle closing user dropdown on clicking outside
     useEffect(() => {
@@ -78,6 +89,35 @@ export default function Header() {
         };
     }, [exploreDropdownOpen]);
 
+    // Fetch notifications after user profile is fetched
+    useEffect(() => {
+        const fetchNotifications = async () => {
+            if (user) {
+                try {
+                    const response = await axios.get(`${baseUrl}/api/notifications`, { withCredentials: true });
+                    setNotifications(response.data.notifications); // Assuming API returns an array of notifications
+                    setNotificationCount(response.data.notifications.filter(n => !n.isRead).length); // Count unread notifications
+                } catch (error) {
+                    console.error('Error fetching notifications:', error);
+                }
+            }
+        };
+
+        fetchNotifications();
+    }, [user]);
+
+    const handleNotificationClick = (notificationId) => {
+        // Mark the notification as read when clicked
+        axios.patch(`${baseUrl}/api/notifications/markAsRead/${notificationId}`)
+            .then(() => {
+                setNotifications(prev => prev.map(n =>
+                    n._id === notificationId ? { ...n, isRead: true } : n
+                ));
+                setNotificationCount(prev => prev - 1);
+            })
+            .catch(err => console.error('Error marking notification as read:', err));
+    };
+
     // Conditionally render header based on user's role
     if (isAdminOrStaff) {
         return null; // Hide Header if the user is admin or staff
@@ -85,20 +125,32 @@ export default function Header() {
 
     return (
         <div className="sticky top-0 z-50">
-            <header className="py-6 px-60 flex justify-between bg-white shadow-lg text-primary">
+            <header className="py-4 w-full sm:px-6 md:px-40 lg:px-120 flex justify-between bg-white shadow-lg text-primary">
                 <Link to={'/'} className="flex items-center gap-1 hover:scale-[1.03]">
                     <img src="HIKEKO-LOGO-BIG.png" alt="Logo" className="w-8 h-10" />
-                    <span className=" text-xl">HIKEKO</span>
+                    <span className="text-xl">HIKEKO</span>
                 </Link>
-
+    
                 {/* Navigation and User menu */}
-                <div className="flex items-center gap-6">
-                    <nav className="flex gap-6">
+                <div className="flex items-center gap-4 sm:gap-6">
+    
+                    {/* Hamburger menu for small screens */}
+                    <div className="lg:hidden flex items-center">
+                        <div onClick={() => setDropdownOpen(!dropdownOpen)} className="relative cursor-pointer">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                            </svg>
+                        </div>
+                    </div>
+    
+                    {/* Full Navigation Menu (for larger screens) */}
+                    <nav className="hidden lg:flex gap-6 items-center">
                         <Link to="/" className="hover:text-hoverColor">Home</Link>
-                        
+    
                         {/* Explore dropdown */}
                         <div ref={exploreDropdownRef} className="relative">
-                            <Link onClick={() => setExploreDropdownOpen(!exploreDropdownOpen)} className="hover:text-hoverColor inline-flex">Explore
+                            <Link onClick={() => setExploreDropdownOpen(!exploreDropdownOpen)} className="hover:text-hoverColor inline-flex">
+                                Explore
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-3 mt-2 ml-1">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                                 </svg>
@@ -110,43 +162,82 @@ export default function Header() {
                                 </div>
                             )}
                         </div>
-                            
+    
                         {user && (
                             <Link to="/book" className="hover:text-hoverColor">Book</Link>
                         )}
+    
                         <Link to="/about" className="hover:text-hoverColor">About</Link>
+    
+                        {/* Notifications Dropdown */}
+                        {user && (
+                            <div>
+                                <Tooltip content="Notifications" placement="bottom" className="bg-gray-700 mt-1 text-xs">
+                                    <Menu>
+                                        <MenuHandler>
+                                            <IconButton variant="text" className="relative bg-transparent text-primary hover:text-hoverColor">
+                                                <IoNotificationsOutline className="size-5" />
+                                                {notificationCount > 0 && (
+                                                    <div className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full text-xs text-white flex justify-center items-center">
+                                                        {notificationCount}
+                                                    </div>
+                                                )}
+                                            </IconButton>
+                                        </MenuHandler>
+                                        <MenuList className="max-h-64 overflow-auto">
+                                            {notifications.map((notification) => (
+                                                <MenuItem
+                                                    key={notification._id}
+                                                    className={`flex items-start gap-4 ${notification.isRead ? '' : 'bg-gray-100'}`}
+                                                    onClick={() => handleNotificationClick(notification._id)}
+                                                >
+                                                    <Avatar src={notification.avatar || '/default-avatar.png'} alt="Notification Avatar" size="xs" />
+                                                    <div>{notification.message}</div>
+                                                </MenuItem>
+                                            ))}
+                                            <MenuItem className="text-center">
+                                                <button
+                                                    className="w-full py-1 px-2 bg-primary text-white rounded-md hover:bg-primary-dark"
+                                                    onClick={() => setNotifications([])} // Clear notifications
+                                                >
+                                                    Mark all as read
+                                                </button>
+                                            </MenuItem>
+                                        </MenuList>
+                                    </Menu>
+                                </Tooltip>
+                            </div>
+                        )}
                     </nav>
-
+    
                     {/* User icon and dropdown */}
-                    <div onClick={() => setDropdownOpen(!dropdownOpen)} className="relative" ref={dropdownRef}>
-                        <div className="flex gap-2 border border-gray-300 rounded-full py-2 px-4 cursor-pointer shadow-none hover:shadow-md hover:shadow-gray-300 transition-shadow">
+                    <div onClick={() => setDropdownOpen(!dropdownOpen)} className="relative hidden lg:block" ref={dropdownRef}>
+                        <div className="flex items-center gap-2 border border-gray-300 rounded-full py-1 px-3 cursor-pointer shadow-none hover:shadow-md hover:shadow-gray-300 transition-shadow">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                             </svg>
-                            <div className="flex items-center gap-2 bg-primary text-white rounded-full border border-primary overflow-hidden">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6 relative top-1">
-                                    <path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clipRule="evenodd" />
-                                </svg>
-                            </div>
-                            {!!user && !loading &&  (
+                            <Avatar 
+                                src={user?.avatar || '/GUEST-PROFILE.png'} 
+                                size="sm" 
+                            />  
+                            {!!user && !loading && (
                                 <div>{user.firstName}</div>
                             )}
                         </div>
-
+    
                         {/* Dropdown menu */}
                         {dropdownOpen && (
                             <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 border">
                                 {!!user ? (
-                                    <>
-                                        <Link to="/account" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Account</Link>
+                                    <div>
                                         <Link to="/profile" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Profile</Link>
                                         <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-gray-700 bg-white hover:bg-gray-100">Logout</button>
-                                    </>
+                                    </div>
                                 ) : (
-                                    <>
+                                    <div>
                                         <Link to="/login" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Login</Link>
                                         <Link to="/register" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Register</Link>
-                                    </>
+                                    </div>
                                 )}
                             </div>
                         )}
@@ -155,4 +246,5 @@ export default function Header() {
             </header>
         </div>
     );
+    
 }

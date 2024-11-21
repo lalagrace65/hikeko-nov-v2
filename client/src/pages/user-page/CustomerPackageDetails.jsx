@@ -56,6 +56,7 @@ function CustomerPackageDetails() {
             <div className="p-4 grid grid-cols-2 gap-8">
                 {/* Left Side: Package Details */}
                 <div className="space-y-4">
+                    <Typography variant="h2">{packageDetail.trailId.title}</Typography>
                     <Typography variant="h2" className="flex items-center space-x-3">
                         You are Booking to: 
                         <div className="flex items-center space-x-3">
@@ -143,7 +144,7 @@ function CustomerPackageDetails() {
             </div>
 
             {/* Joiner Form */}
-            <JoinerDetailsForm packageId={packageId} />
+            <JoinerDetailsForm packageId={packageId} packageDetail={packageDetail} />
         </>
     );
 }

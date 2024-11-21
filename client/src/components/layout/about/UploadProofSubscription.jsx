@@ -36,7 +36,7 @@ export default function UploadProofSubscription() {
   
             setIsUploading(true);
             try {
-                const response = await axios.post(`${baseUrl}/api/upload`, data, {
+                const response = await axios.post('/api/upload', data, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },

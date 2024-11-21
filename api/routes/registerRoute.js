@@ -16,24 +16,13 @@ router.post('/register', async (req, res) => {
         address, 
         contactNo, 
         emergencyContactNo, 
-        dateOfBirth 
+        dateOfBirth,
+        avatar, 
     } = req.body;
-
-    console.log('Incoming user registration:', {
-        firstName, 
-        lastName, 
-        email, 
-        password, 
-        confirmPassword,
-        address, 
-        contactNo, 
-        emergencyContactNo, 
-        dateOfBirth 
-    });
 
     try {
         // Basic field validation for user registration
-        if (!firstName || !lastName || !email || !password || !address || !contactNo || !emergencyContactNo || !dateOfBirth) {
+        if (!firstName || !lastName || !email || !password || !confirmPassword || !address || !contactNo || !emergencyContactNo || !dateOfBirth) {
             return res.status(422).json({ message: 'All fields are required' });
         }
 
@@ -51,7 +40,8 @@ router.post('/register', async (req, res) => {
             contactNo,
             emergencyContactNo,
             dateOfBirth,
-            role: 'user'  // Force role to 'user'
+            role: 'user',
+            avatar
         });
 
         res.json(userDoc);

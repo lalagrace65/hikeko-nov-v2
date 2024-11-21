@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useContext, useState, useEffect } from "react";
-import { Button, Card, CardBody, CardFooter, Typography } from "@material-tailwind/react";
+import { Button, Card, CardBody, CardFooter, Input, Typography } from "@material-tailwind/react";
 import { Link, Navigate } from "react-router-dom";
 import { UserContext } from "../UserContext.jsx";
 import { baseUrl } from "@/Url.jsx";
@@ -79,20 +79,24 @@ export default function LoginPage() {
                         <Typography variant="h6" className="text-2xl text-center">Login</Typography>
                         <hr className="w-full border-t-1 border-gray-300 mx-auto mt-4 mb-4" />
                         <form className="max-w-md mx-auto" onSubmit={handleLoginSubmit}>
-                            <input 
-                                type="email"
-                                placeholder="your@email.com"
-                                value={email}
-                                onChange={ev => setEmail(ev.target.value)}
-                                required
-                            />
-                            <input 
-                                type="password"
-                                placeholder="Password"
-                                value={password}
-                                onChange={ev => setPassword(ev.target.value)}
-                                required
-                            />
+                            <div className="mb-4">
+                                <Input 
+                                    type="email"
+                                    label="Email"
+                                    value={email}
+                                    onChange={ev => setEmail(ev.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <Input 
+                                    type="password"
+                                    label="Password"
+                                    value={password}
+                                    onChange={ev => setPassword(ev.target.value)}
+                                    required
+                                />
+                            </div>
                             <Button className="primary mt-4" type="submit">Login</Button>
                         </form>
                     </div>

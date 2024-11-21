@@ -128,7 +128,7 @@ export default function StaffPage() {
                                         <tbody className="bg-white divide-y divide-gray-200">
                                             {staff.map((staffMember) => (
                                                 <tr key={staffMember._id}>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{staffMember._id}</td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{staffMember.incrementingId}</td>
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{staffMember.email}</td>
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{staffMember.contactNo}</td>
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">

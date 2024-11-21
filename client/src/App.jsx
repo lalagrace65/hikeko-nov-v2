@@ -1,14 +1,11 @@
 import { Route, Routes, Navigate } from "react-router-dom";
-import { useContext } from "react";
 import { UserContextProvider, UserContext } from "./UserContext";
 import ProtectRoute from "./ProtectedRoutes"; // Import the ProtectRoute component
 import axios from "axios";
-
 import IndexPage from "./pages/IndexPage";
 import LoginPage from "./pages/LoginPage";
 import Layout from "./Layout";
 import RegisterPage from "./pages/RegisterPage";
-import AccountPage from "./pages/AccountPage";
 import PackageForm from "./components/admin-components/PackageForm";
 import CreateStaffAccount from "./components/admin-components/CreateStaffAccount";
 import TrailsPage from "./pages/TrailsPage";
@@ -41,6 +38,8 @@ import InboxPage from "./pages/admin-page/InboxPage";
 import Dashboard_Projects from "./pages/admin-page/Dashboard_Projects";
 import Dashboard_Reports from "./pages/admin-page/Dashboard_Reports";
 import Dashboard_AnalyticsPage from "./pages/admin-page/Dashboard_AnalyticsPage";
+import NotificationsPage from "./pages/forum-page/NotificationsPage";
+
 
 // Set default axios settings
 axios.defaults.baseURL = `${baseUrl}`;
@@ -56,6 +55,10 @@ function App() {
             <Route index element={<IndexPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/forum" element={<Forum />} />
+            <Route path="/notification" element={<NotificationsPage />} />
+            <Route path="/about" element={<AboutPage />}/>
+            <Route path="/hikingFAQs" element={<HikingFAQs />}/>
             <Route path="/trails" element={<TrailsPage />} />
             <Route path="/trails/:id" element={<TrailDetail />} />
             <Route path="/trails/adminPackage/:id" element={<AdminTrailDetails />} />
@@ -63,20 +66,24 @@ function App() {
             <Route path="/travelAgencySignUp/credentialsProcess" element={<AgencyCredentialsProcess />} />
             <Route path="/travelAgencySignUp/businessDetails" element={<BusinessDetails />} />
             <Route path="/bookings/packages/:packageId" element={<CustomerPackageDetails />}/>
-            <Route path="/account/:subpage?/:action?" element={<AccountPage />} />
             <Route path="/account/events/adminTrails" element={<AddPackageTrails />} />
-            <Route path="/book" element={<CustomerBookPage />}/>
-            <Route path="/about" element={<AboutPage />}/>
-            <Route path="/profile" element={<ProfilePage />}/>
-            <Route path="/hikingFAQs" element={<HikingFAQs />}/>
             <Route path="/uploadProofSubscription" element={<UploadProofSubscription />} />
             <Route path="/basicPlanSubscription" element={<CheckBasicPlan />} />
-            <Route path="/staff-db" element={<Dashboard_StaffPage />} />
 
+            {/*  Customer with Account Routes */}
+            <Route path="/profile" element={<ProfilePage />}/>
+            <Route path="/book" element={<CustomerBookPage />}/>
             
-            <Route path="/forum" element={<Forum />} />
-            
-            {/* Protect Admin Routes */}
+
+            {/* Protect Admin Routes and Staff Routes*/}
+            <Route 
+              path="/staff-db" 
+              element={
+                <ProtectRoute>
+                  <Dashboard_StaffPage />
+                </ProtectRoute>
+              }
+            />
             <Route
               path="/admin"
               element={

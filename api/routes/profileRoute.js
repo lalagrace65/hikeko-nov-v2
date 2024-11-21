@@ -27,8 +27,10 @@ router.get('/profile', async (req, res) => {
                 dateOfBirth, 
                 email,
                 rewardPoints,  
+                incrementingId,
                 _id, 
                 role,
+                avatar
              } = user;
 
             return res.json({
@@ -40,8 +42,10 @@ router.get('/profile', async (req, res) => {
                 dateOfBirth,
                 email,
                 rewardPoints,
-                 _id, 
-                 role 
+                incrementingId,
+                _id, 
+                role,
+                avatar 
             });
 
         } catch (err) {

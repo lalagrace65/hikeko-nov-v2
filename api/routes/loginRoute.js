@@ -34,6 +34,13 @@ router.post('/login', async (req, res) => {
                 console.log('Admin email not verified');
                 return res.status(401).json('Email not verified. Please verify your email.');
             }
+        } else if (userDoc.role === 'staff') {
+            console.log('Staff role detected');
+            // Add check for staff account suspension
+            if (userDoc.suspended) {
+                console.log('Staff account suspended');
+                return res.status(403).json('Account is suspended. Please contact support.');
+            }
         } else if (userDoc.role === 'user') {
             console.log('User role detected');
             if (userDoc.suspended) {

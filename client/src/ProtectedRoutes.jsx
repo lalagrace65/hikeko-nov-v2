@@ -19,7 +19,7 @@ function ProtectRoute({ children, requirePasswordChange = false }) {
         }
     }
 
-    if (user.role !== 'admin') {
+    if (user.role !== 'admin' && user.role !== 'staff') {
         // Redirect non-admin users to the home page
         return <Navigate to="/" />;
     }

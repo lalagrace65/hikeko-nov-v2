@@ -3,6 +3,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
+const helmet = require('helmet');
 require('dotenv').config();
 
 //imported routes
@@ -14,18 +15,20 @@ const travel_agencyRoute = require('./routes/travel_agencyRoute');
 const user_dashboardRoute = require('./routes/user_dashboardRoute');
 const packageRoute = require('./routes/packageRoute');
 const trailsRoute = require('./routes/trailsRoute');
-const bookingListRoute = require('./routes/bookingListRoute');
+const bookingListRoute = require('./routes/TravelAgency/bookingListRoute.js');
 const uploadRoute = require('./routes/uploadRoute');
 const customerPackagesRoute = require('./routes/Customer/packages');
 const bookingRoute = require('./routes/Customer/joinerDetails'); //public view
 const joinerBookingsRoute = require('./routes/Customer/userBookings');
-
 const travelAgencySettingsRoute = require('./routes/TravelAgency/adminDetailsRoute.js');
 const premiumPlanRoute = require('./routes/Subscription/PremiumPlan');
 const basicPlanRoute = require('./routes/Subscription/BasicPlan');
 const createForumPost = require('./routes/Forum/createPostForum');
-const adminRegisterRoute = require('./routes/adminRegisterRoute.js');
+const adminRegisterRoute = require('./routes/TravelAgency/adminRegisterRoute.js');
 const bookAuthUserRoute = require('./routes/Customer/restrictBook');
+const userProfileRoute = require('./routes/Customer/avatar');
+const notificationRoute = require('./routes/Forum/notification');
+
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -34,10 +37,35 @@ app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(express.json());
 
+// Add security headers with Helmet
+app.use(
+    helmet({
+        contentSecurityPolicy: {
+            useDefaults: true,
+            directives: {
+                "default-src": ["'self'"],
+                "script-src": ["'self'", "https://trusted-scripts.example.com"],
+                "img-src": ["'self'", "data:"],
+                "object-src": ["'none'"],
+            },
+        },
+        frameguard: { action: 'sameorigin' }, // Sets X-Frame-Options: SAMEORIGIN
+        referrerPolicy: { policy: 'no-referrer-when-downgrade' },
+        crossOriginEmbedderPolicy: true,
+    })
+);
+
+// Custom headers for additional security
+app.use((req, res, next) => {
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+    res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+    next();
+});
+
 app.use(cors({
     credentials: true,
     origin: ['http://localhost:5173'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
@@ -52,8 +80,6 @@ const startServer = async () => {
         console.error("MongoDB connection error:", error);
     }
 };
-
-
 
 app.get("/", (req, res) => {
     res.send({ message: "Hello World!" });
@@ -80,7 +106,8 @@ app.use(premiumPlanRoute);
 app.use(basicPlanRoute);
 app.use('/api',createForumPost);
 app.use('/api',bookAuthUserRoute);
-
+app.use(userProfileRoute);
+app.use('/api',notificationRoute);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
