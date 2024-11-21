@@ -3,7 +3,7 @@ import React from 'react';
 
 export default function Partners() {
   return (
-    <div className="flex justify-center items-center mx-60">
+    <div className="flex justify-center items-center py-4 px-4 w-full sm:px-6 md:px-60">
       <div className="w-full max-w-[100rem] flex items-center justify-center gap-10">
         {/* Image on the Right */}
         <div className="w-[40rem] p-10 flex justify-center items-center">

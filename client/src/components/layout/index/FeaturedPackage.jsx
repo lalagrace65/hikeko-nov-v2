@@ -22,8 +22,8 @@ import { useNavigate } from "react-router-dom";
     }
 
     return (
-    <div className="flex justify-center items-center mt-5 md:px-40 lg:px-120">
-        <div className="h-[20rem] w-full max-w-[365px] mb-10">
+    <div className="flex flex-wrap md:flex-row lg:flex-row justify-center items-center mt-5 sm:px-10 md:px-40 lg:px-120">
+        <div className="h-[20rem] w-full sm:w-1/2 max-w-[365px] mb-8">
             <CardHeader onClick={handleSimagaysay} floated={false} color="blue-gray" className="cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 ">
                 <img
                     src="mt.batulao.jpg"
@@ -60,10 +60,10 @@ import { useNavigate } from "react-router-dom";
             </CardBody>
         </div>
         {/*feature 2*/}
-        <div className="h-[20rem] w-full max-w-[365px] mb-10 ">
-            <CardHeader onClick={handleTimarid} floated={false} color="blue-gray" className="cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105">
+        <div className="h-[20rem] w-full sm:w-1/2 max-w-[365px] mb-8">
+            <CardHeader onClick={handleSimagaysay} floated={false} color="blue-gray" className="cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 ">
                 <img
-                    src="gulugud-baboy.jpg"
+                    src="mt.batulao.jpg"
                     alt="ui/ux review check"
                 />
             <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/60 " />
@@ -71,10 +71,10 @@ import { useNavigate } from "react-router-dom";
             <CardBody>
             <div className="flex items-center justify-between">
                 <Typography variant="h5" color="blue-gray" className="font-medium -mt-2">
-                Mt. Timarid
+                Mt. Simagaysay
                 </Typography>
             </div>
-            <Typography color="gray" className="font-small text-sm mt-1">
+            <Typography color="gray"  className="font-small text-sm mt-1">
                 Alfonso cavite, Philippines
             </Typography>
                 <Typography
@@ -97,10 +97,10 @@ import { useNavigate } from "react-router-dom";
             </CardBody>
         </div>
         {/*feature 3*/}
-        <div className="h-[20rem] w-full max-w-[365px] mb-10 ">
-            <CardHeader onClick={handleTiradpass} floated={false} color="blue-gray" className="cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105">
+        <div className="h-[20rem] w-full sm:w-1/2 max-w-[365px] mb-8">
+            <CardHeader onClick={handleSimagaysay} floated={false} color="blue-gray" className="cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 ">
                 <img
-                    src="scenery1-card.png"
+                    src="mt.batulao.jpg"
                     alt="ui/ux review check"
                 />
             <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/60 " />
@@ -108,10 +108,10 @@ import { useNavigate } from "react-router-dom";
             <CardBody>
             <div className="flex items-center justify-between">
                 <Typography variant="h5" color="blue-gray" className="font-medium -mt-2">
-                Tirad-pass
+                Mt. Simagaysay
                 </Typography>
             </div>
-            <Typography color="gray" className="font-small text-sm mt-1">
+            <Typography color="gray"  className="font-small text-sm mt-1">
                 Alfonso cavite, Philippines
             </Typography>
                 <Typography
@@ -134,10 +134,10 @@ import { useNavigate } from "react-router-dom";
             </CardBody>
         </div>
         {/*feature 4*/}
-        <div className="h-[20rem] w-full max-w-[365px] mb-10 ">
-            <CardHeader onClick={handlPalemlem} floated={false} color="blue-gray" className="cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105">
+        <div className="h-[20rem] w-full sm:w-1/2 max-w-[365px] mb-8">
+            <CardHeader onClick={handleSimagaysay} floated={false} color="blue-gray" className="cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 ">
                 <img
-                    src="scenery2.png"
+                    src="mt.batulao.jpg"
                     alt="ui/ux review check"
                 />
             <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/60 " />
@@ -145,10 +145,10 @@ import { useNavigate } from "react-router-dom";
             <CardBody>
             <div className="flex items-center justify-between">
                 <Typography variant="h5" color="blue-gray" className="font-medium -mt-2">
-                Mt. Palemlem
+                Mt. Simagaysay
                 </Typography>
             </div>
-            <Typography color="gray" className="font-small text-sm mt-1">
+            <Typography color="gray"  className="font-small text-sm mt-1">
                 Alfonso cavite, Philippines
             </Typography>
                 <Typography

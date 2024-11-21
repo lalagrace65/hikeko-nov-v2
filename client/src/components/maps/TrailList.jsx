@@ -50,7 +50,7 @@ export default function TrailList() {
             strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
       </svg>
 
-      <h2 className="text-xl font-bold">Trail List</h2>
+      <h2 className="text-xl font-bold p-2">Trail List</h2>
       {trailData.length > 0 ? (
         <div className="flex overflow-x-auto gap-2 
         scrollbar-hide scroll-smooth" ref={elementRef}>

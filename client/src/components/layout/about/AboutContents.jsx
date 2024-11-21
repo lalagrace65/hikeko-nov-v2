@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
         navigate('/about');
     }
     return (
-        <div className="mt-20 mr-60 ml-60">
+        <div className="mt-20 py-4 px-4 w-full sm:px-6 md:px-60 flex justify-between">
             <div className="text-center">
                 <h4 className="mb-4 text-4xl font-bold text-primary">
                     OUR COMMITMMENT

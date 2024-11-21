@@ -22,20 +22,20 @@ export default function AboutPage() {
                 <h5 className="text-white font-bold text-5xl">DISCOVER THE WONDERS OF NATURE WITH HIKEKO</h5>
             </div>
             <AboutContents />
-            <div className="text-center">
-                <h4 className="mt-20 mb-2 text-4xl font-bold text-primary">
+            <div className="text-center p-2">
+                <h4 className="mt-10 mb-2 text-4xl font-bold text-primary">
                     OUR HIKING PARTNER
                 </h4>
             </div>
             <Partners />
-            {/* Container with ml-60 and mr-60 applied to both sections */}
-            <div className="flex justify-between items-center ml-60 mr-60 mt-10 gap-10 bg-profileContainer p-10 rounded-md">
+            {/* Container with responsive margin */}
+            <div className="flex flex-col lg:flex-row justify-between items-center mx-4 lg:mx-60 mt-10 gap-10 bg-profileContainer p-10 rounded-md">
                 {/* Left Side - Basic Plan */}
-                <div className="ml-20 w-1/2 max-w-lg text-left">
+                <div className="w-full lg:w-1/2 max-w-lg text-left">
                     <h1 className="text-xl font-bold mb-4">
-                    Basic Plan
-                    <br />
-                    "Get Started with Our Basic Plan!"
+                        Basic Plan
+                        <br />
+                        "Get Started with Our Basic Plan!"
                     </h1>
                     <div className="text-sm">
                         <span className="block mb-4">
@@ -50,12 +50,12 @@ export default function AboutPage() {
                             <span className="text-primary font-medium">Your Gateway to Nature Lovers:</span> Step into the Hikeko community and let nature lovers discover your hiking events effortlessly!
                         </span>
                     </div>
-
+    
                     {/* Left Side - Premium Plan */}
                     <h1 className="mt-4 text-xl font-bold mb-4">
-                    Premium Plan
-                    <br />
-                    "Unlock Maximum Visibility with Our Premium Plan!"
+                        Premium Plan
+                        <br />
+                        "Unlock Maximum Visibility with Our Premium Plan!"
                     </h1>
                     <div className="text-sm">
                         <span className="block mb-4">
@@ -69,13 +69,13 @@ export default function AboutPage() {
                         </span>
                     </div>
                 </div>
-
+    
                 {/* Right Side - Pricing Card */}
-                <div id="pricing" className="flex-shrink-0 mr-20">
+                <div id="pricing" className="flex-shrink-0 w-full lg:w-auto">
                     <PricingCard />
                 </div>
             </div>
         </div>
-      );
-      
+    );
+   
 }

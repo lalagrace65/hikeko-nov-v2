@@ -18,7 +18,7 @@ import { useNavigate } from "react-router-dom";
                 <CardHeader
                     shadow={false}
                     floated={false}
-                    className="m-0 w-2/5 shrink-0 rounded-r-none"
+                    className="m-0 w-2/5 shrink-0 rounded-r-none hidden lg:block"
                     >
                     <img
                         src="praisedTA_1.jpg"

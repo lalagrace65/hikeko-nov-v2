@@ -9,6 +9,7 @@ import { IoNotificationsOutline } from "react-icons/io5";
 export default function Header() {
     const { user, setUser } = useContext(UserContext);
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [hamburgerOpen, setHamburgerOpen] = useState(false);
     const [exploreDropdownOpen, setExploreDropdownOpen] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -17,6 +18,7 @@ export default function Header() {
 
     const dropdownRef = useRef(null);
     const exploreDropdownRef = useRef(null);
+    const hamburgerDropdownRef = useRef(null);
     const navigate = useNavigate();
 
     // Check if the user is an admin or staff
@@ -69,6 +71,25 @@ export default function Header() {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, [dropdownOpen]);
+
+    // Handle closing user hamburger on clicking outside
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (hamburgerDropdownRef.current && !hamburgerDropdownRef.current.contains(event.target)) {
+                setHamburgerOpen(false);
+            }
+        }
+
+        if (hamburgerOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+        } else {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [hamburgerOpen]);
 
     // Handle closing explore dropdown on clicking outside
     useEffect(() => {
@@ -125,7 +146,7 @@ export default function Header() {
 
     return (
         <div className="sticky top-0 z-50">
-            <header className="py-4 w-full sm:px-6 md:px-40 lg:px-120 flex justify-between bg-white shadow-lg text-primary">
+            <header className="py-4 px-4 w-full sm:px-6 md:px-60 flex justify-between bg-white shadow-lg text-primary">
                 <Link to={'/'} className="flex items-center gap-1 hover:scale-[1.03]">
                     <img src="HIKEKO-LOGO-BIG.png" alt="Logo" className="w-8 h-10" />
                     <span className="text-xl">HIKEKO</span>
@@ -135,12 +156,48 @@ export default function Header() {
                 <div className="flex items-center gap-4 sm:gap-6">
     
                     {/* Hamburger menu for small screens */}
-                    <div className="lg:hidden flex items-center">
-                        <div onClick={() => setDropdownOpen(!dropdownOpen)} className="relative cursor-pointer">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                    <div className="md:hidden lg:hidden flex items-center" ref={hamburgerDropdownRef}>
+                    <button
+                        onClick={() => setHamburgerOpen(!hamburgerOpen)}
+                        className="flex items-center gap-2 border border-gray-300 bg-white rounded-full py-1 px-3 cursor-pointer shadow-none hover:shadow-md hover:shadow-gray-300 transition-shadow"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                             </svg>
+                            <Avatar 
+                                src={user?.avatar || '/GUEST-PROFILE.png'} 
+                                size="sm" 
+                            />  
+                    </button>
+
+                    {/* Dropdown menu for small screens */}
+                    {hamburgerOpen && (
+                        <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 border z-50 ">
+                            <Link to="/" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Home</Link>
+                            <Link to="/trails" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Tour & Packages</Link>
+                            <Link to="/forum" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Community</Link>
+                            {user && (
+                                <Link to="/book" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Book</Link>
+                            )}
+                            <Link to="/about" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">About</Link>
+                            {!!user ? (
+                                <div>
+                                    <Link to="/profile" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Profile</Link>
+                                    <button
+                                        onClick={handleLogout}
+                                        className="block w-full text-left px-4 py-2 text-gray-700 bg-white hover:bg-gray-200"
+                                    >
+                                        Logout
+                                    </button>
+                                </div>
+                            ) : (
+                                <div>
+                                    <Link to="/login" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Login</Link>
+                                    <Link to="/register" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Register</Link>
+                                </div>
+                            )}
                         </div>
+                        )}
                     </div>
     
                     {/* Full Navigation Menu (for larger screens) */}
@@ -211,7 +268,7 @@ export default function Header() {
                     </nav>
     
                     {/* User icon and dropdown */}
-                    <div onClick={() => setDropdownOpen(!dropdownOpen)} className="relative hidden lg:block" ref={dropdownRef}>
+                    <div onClick={() => setDropdownOpen(!dropdownOpen)} className="relative hidden md:block lg:block" ref={dropdownRef}>
                         <div className="flex items-center gap-2 border border-gray-300 rounded-full py-1 px-3 cursor-pointer shadow-none hover:shadow-md hover:shadow-gray-300 transition-shadow">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
