@@ -66,60 +66,65 @@ export default function CustomerBookPage() {
           My Bookings
         </Typography>
       </div>
-
+  
       {/* Booking Cards */}
       <div className="space-y-6 w-full px-4 md:px-8 mt-16">
         {loading ? (
           <Typography>Loading...</Typography> // Show loading text while fetching
-        ) : (
+        ) : bookings.length > 0 ? (
           bookings.map((booking) => (
-            <Card key={booking._id} className="w-full">
+            <Card key={booking?._id || Math.random()} className="w-full">
               <CardBody>
                 <Typography variant="h5" color="blue-gray" className="mb-2">
-                  {booking.referenceCode}
+                  {booking?.referenceCode || "No Reference Code"}
                   <br />
-                  {booking.packageId.trailId.title}
-                   &nbsp;  &nbsp; booking to &nbsp;
-                  {booking.packageId.travelAgency.businessName} 
-
+                  {booking?.packageId?.trailId?.title || "No Trail Title"} &nbsp; &nbsp; booking to &nbsp;
+                  {booking?.packageId?.travelAgency?.businessName || "No Business Name"} 
                 </Typography>
                 <Typography>
-                  {booking.joinerName} 
+                  {booking?.joinerName || "No Joiner Name"} 
                   <br />
-                  {booking.email} 
+                  {booking?.email || "No Email"} 
                 </Typography>
                 <Typography>
-                {formatDate(booking.packageId.date)}
-                  <br /> 
-                {booking.packageId.price}
+                  {formatDate(booking?.packageId?.date) || "No Date Available"}
+                  <br />
+                  {booking?.packageId?.price || "No Price Available"}
                 </Typography>
-
+  
                 {/* Conditionally render additional details */}
-                {expandedBookingId === booking._id && (
+                {expandedBookingId === booking?._id && (
                   <div className="mt-4">
-                    <Typography className='flex items-center'>
+                    <Typography className="flex items-center">
                       <FaCircleInfo /> Additional Booking Details:
                     </Typography>
                     <ul className="ml-6 mt-2">
-                      {booking.packageId.packages.map((pkg, index) => (
-                        <li key={index} className="flex items-start">
-                          <span className="mr-2">🟠</span> {/* Bullet point */}
-                          {pkg} {/* Display the package name */}
-                        </li>
-                      ))}
-                    </ul>                  
+                      {booking?.packageId?.packages?.length > 0 ? (
+                        booking.packageId.packages.map((pkg, index) => (
+                          <li key={index} className="flex items-start">
+                            <span className="mr-2">🟠</span> {/* Bullet point */}
+                            {pkg || "No Package Name"} {/* Display the package name */}
+                          </li>
+                        ))
+                      ) : (
+                        <Typography>No packages available</Typography>
+                      )}
+                    </ul>
                   </div>
                 )}
               </CardBody>
               <CardFooter className="pt-0 flex justify-end">
-                <Button onClick={() => toggleDetails(booking._id)}>
-                  {expandedBookingId === booking._id ? 'Hide Details' : 'Read More'}
+                <Button onClick={() => toggleDetails(booking?._id)}>
+                  {expandedBookingId === booking?._id ? 'Hide Details' : 'Read More'}
                 </Button>
               </CardFooter>
             </Card>
           ))
+        ) : (
+          <Typography>No bookings available</Typography>
         )}
       </div>
     </div>
   );
+  
 }

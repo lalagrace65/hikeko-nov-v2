@@ -1,12 +1,12 @@
-import { Card, Typography, List, ListItem, ListItemPrefix,
-  ListItemSuffix, Chip, Accordion, AccordionHeader, AccordionBody,} from "@material-tailwind/react";
+import { Card, Typography, List, ListItem, ListItemPrefix, ListItemSuffix, Chip, Accordion, AccordionHeader, AccordionBody, } from "@material-tailwind/react";
 import { PresentationChartBarIcon, Cog6ToothIcon, InboxIcon, PowerIcon, } from "@heroicons/react/24/solid";
 import { Avatar } from "@material-tailwind/react";
 import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { MdTour } from "react-icons/md";
 import { RiBookletFill } from "react-icons/ri";
 import { FaUserGroup } from "react-icons/fa6";
-import React, { useContext, useEffect, useState,  } from "react";
+import React, { useContext, useEffect, useState, } from "react";
+import { FaBars, FaTimes } from 'react-icons/fa';
 import axios from 'axios';
 
 import { useNavigate } from "react-router-dom";
@@ -14,174 +14,154 @@ import { UserContext } from "@/UserContext";
 import { baseUrl } from "@/Url";
 
 export function MultiLevelSidebar() {
-const [open, setOpen] = React.useState(0);
-const [logo, setLogo] = useState(null);
-const { user, setUser } = useContext(UserContext);
-const navigate = useNavigate();
+  const [open, setOpen] = React.useState(0);
+  const [logo, setLogo] = useState(null);
+  const { user, setUser } = useContext(UserContext);
+  const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false); // To manage the sidebar toggle on mobile
 
   useEffect(() => {
     const fetchBusinessName = async () => {
-    if (user && user.token) {
-      try {
-        const response = await axios.get(`${baseUrl}/admin-details`, {
-          headers: { Authorization: `Bearer ${user.token}` },
-        });
-        setUser((prevUser) => ({
-          ...prevUser,
-          businessName: response.data.businessName,
-        }));
-      } catch (error) {
-        console.error("Error fetching business name:", error);
+      if (user && user.token) {
+        try {
+          const response = await axios.get(`${baseUrl}/admin-details`, {
+            headers: { Authorization: `Bearer ${user.token}` },
+          });
+          setUser((prevUser) => ({
+            ...prevUser,
+            businessName: response.data.businessName,
+          }));
+        } catch (error) {
+          console.error("Error fetching business name:", error);
+        }
       }
-    }
-  };
-
-  fetchBusinessName();
-  }, []);  // Removed 'user' as dependency to avoid re-triggering the effect  
+    };
+    fetchBusinessName();
+  }, []);
 
   useEffect(() => {
-  const fetchLogo = async () => {
-    try {
+    const fetchLogo = async () => {
+      try {
         const response = await axios.get(`${baseUrl}/admin-details/settings/getSystemLogo`);
-        const systemLogo = response.data.avatar; 
-        setLogo(systemLogo); 
-    } catch (error) {
+        const systemLogo = response.data.avatar;
+        setLogo(systemLogo);
+      } catch (error) {
         console.error("Error fetching logo:", error);
-    }
-  };
-
-  fetchLogo();
+      }
+    };
+    fetchLogo();
   }, []);
 
   const handleOpen = (value) => {
-    setOpen(open === value ? value : value);
+    setOpen(open === value ? 0 : value);
   };
 
-// Function to handle logout
   const handleLogout = async () => {
     try {
       await axios.post(`${baseUrl}/logout`, {}, { withCredentials: true });
-        localStorage.removeItem('token');
-        localStorage.removeItem('user'); // Clear local storage on logout
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
       setUser(null);
-      navigate('/'); // Redirect to the index after logout
-      } catch (error) {
+      navigate('/');
+    } catch (error) {
       console.error('Error logging out:', error);
     }
   };
 
-  const handleAnalytics = () => {
-    navigate('/admin/dashboard/analytics'); 
-  };
-  const handleReports= () => {
-    navigate('/admin/dashboard/reports'); 
-  };
-  const handleProjects= () => {
-    navigate('/admin/dashboard/projects'); 
-  };
-  const handleEvent = () => {
-    navigate('/admin/events'); 
+  const handleSidebarToggle = () => {
+    setSidebarOpen(!sidebarOpen);
   };
 
-  const handlePackage = () => {
-    navigate('/admin/add-package'); 
-  };
-
-  const handleBookingList = () => {
-    navigate('/admin/bookings');
-  };
-
-  const handleTransactions = () => {
-    navigate('/admin/transactions');
-  };
-
-  const handleEventArchives = () => {
-    navigate('/admin/archives');
-  };
-
-  const handleStaffList = () => {
-    navigate('/admin/staff-list'); 
-  };
-
-  const handleAddStaff = () => {
-    navigate('/admin/add-staff'); 
-  };
-
-  const handleInbox = () => {
-    navigate('/admin/inbox'); 
-  };
-
-  const handleSettings = () => {
-    navigate('/admin/settings'); 
-  };
+  const handleAnalytics = () => navigate('/admin/dashboard/analytics');
+  const handleReports = () => navigate('/admin/dashboard/reports');
+  const handleProjects = () => navigate('/admin/dashboard/projects');
+  const handleEvent = () => navigate('/admin/events');
+  const handlePackage = () => navigate('/admin/add-package');
+  const handleBookingList = () => navigate('/admin/bookings');
+  const handleTransactions = () => navigate('/admin/transactions');
+  const handleEventArchives = () => navigate('/admin/archives');
+  const handleStaffList = () => navigate('/admin/staff-list');
+  const handleAddStaff = () => navigate('/admin/add-staff');
+  const handlePayment = () => navigate('/admin/payments');
+  const handleSettings = () => navigate('/admin/settings');
 
   return (
-    <Card className=".h-screen w-80 p-4 shadow-xl shadow-blue-gray-900/5">
-      <div className="mb-2 p-4 ">
-      <Typography className="flex items-center gap-2" variant="h5" color="blue-gray">
-        <Avatar 
-            src={logo || "/default-logo.jpg"}  // Fallback to a default logo if the fetched logo is null
-            alt="Logo"
-        />
-        {user.businessName ? user.businessName : `Incremented ID: ${user.incrementId}`}
-        </Typography>
-        </div>
-        <List>
-        {user && user.role === 'admin' && (
-          <Accordion
-              open={open === 1}
-              icon={
-                <ChevronDownIcon
-                  strokeWidth={2.5}
-                  className={`mx-auto h-4 w-4 transition-transform ${open === 1 ? "rotate-180" : ""}`}
-                />
-              }
+    <div>
+      {/* Hamburger menu on mobile */}
+      <button
+        className="lg:hidden p-4 text-white"
+        onClick={handleSidebarToggle}
+      >
+        {sidebarOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+      </button>
+
+      
+      {/* Sidebar */}
+      <div
+        className={`lg:w-80 w-full h-full p-4 shadow-xl shadow-blue-gray-900/5 bg-white absolute lg:relative top-0 left-0 z-50
+          transform transition-all duration-300 ease-in-out 
+          ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 overflow-y-auto`}
+      >
+       
+          <div className="mb-2 p-4">
+            <div className="flex items-center gap-2 cursor-pointer">
+            <Typography variant="h5" color="blue-gray"
+              onClick={() => navigate('/admin/dashboard/analytics')}
             >
-            
-            <ListItem className="p-0" selected={open === 1}>
-              <AccordionHeader onClick={() => handleOpen(1)} className="bg-transparent border-b-0 p-3">
-                <ListItemPrefix>
-                  <PresentationChartBarIcon className="h-6 w-6 mr-2" />
-                </ListItemPrefix>
-                <Typography color="blue-gray" className="mr-auto font-normal">
-                  Dashboard
-                </Typography>
-              </AccordionHeader>
-            </ListItem>
-          
-            <AccordionBody className="py-1">
-              <List className="p-0">
-                <ListItem onClick={handleAnalytics}>
-                  <ListItemPrefix>
-                    <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                  </ListItemPrefix>
-                  Analytics
+              <Avatar
+                src={logo || "/default-logo.jpg"}  // Fallback to a default logo if the fetched logo is null
+                alt="Logo"
+              />
+              {user.businessName ? user.businessName : `Incremented ID: ${user.incrementId}`}
+            </Typography>
+            </div>
+          </div>
+          <List>
+            {user && user.role === 'admin' && (
+              <Accordion open={open === 1} icon={<ChevronDownIcon strokeWidth={2.5} className={`mx-auto h-4 w-4 transition-transform ${open === 1 ? "rotate-180" : ""}`} />}>
+                <ListItem className="p-0" selected={open === 1}>
+                  <AccordionHeader onClick={() => handleOpen(1)} className="bg-transparent border-b-0 p-3">
+                    <ListItemPrefix>
+                      <PresentationChartBarIcon className="h-6 w-6 mr-2" />
+                    </ListItemPrefix>
+                    <Typography color="blue-gray" className="mr-auto font-normal">
+                      Dashboard
+                    </Typography>
+                  </AccordionHeader>
                 </ListItem>
-                <ListItem onClick={handleReports}>
-                  <ListItemPrefix>
-                    <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                  </ListItemPrefix>
-                  Reports
-                </ListItem>
-                <ListItem onClick={handleProjects}>
-                  <ListItemPrefix>
-                    <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                  </ListItemPrefix>
-                  Projects
-                </ListItem>
-              </List>
-            </AccordionBody>
-          </Accordion>
-        )}
-        <Accordion
-          open={open === 2}
-          icon={
-            <ChevronDownIcon
-              strokeWidth={2.5}
-              className={`mx-auto h-4 w-4 transition-transform ${open === 2 ? "rotate-180" : ""}`}
-            />
-          }
-        >
+                <AccordionBody className="py-1">
+                  <List className="p-0">
+                    <ListItem onClick={handleAnalytics}>
+                      <ListItemPrefix>
+                        <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                      </ListItemPrefix>
+                      Analytics
+                    </ListItem>
+                    <ListItem onClick={handleReports}>
+                      <ListItemPrefix>
+                        <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                      </ListItemPrefix>
+                      Reports
+                    </ListItem>
+                    <ListItem onClick={handleProjects}>
+                      <ListItemPrefix>
+                        <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                      </ListItemPrefix>
+                      Projects
+                    </ListItem>
+                  </List>
+                </AccordionBody>
+              </Accordion>
+            )}
+          <Accordion
+            open={open === 2}
+            icon={
+              <ChevronDownIcon
+                strokeWidth={2.5}
+                className={`mx-auto h-4 w-4 transition-transform ${open === 2 ? "rotate-180" : ""}`}
+              />
+            }
+          >
           <ListItem className="p-0" selected={open === 2}>
             <AccordionHeader onClick={() => handleOpen(2)} className="bg-transparent border-b-0 p-3">
               <ListItemPrefix>
@@ -217,8 +197,7 @@ const navigate = useNavigate();
             </List>
           </AccordionBody>
         </Accordion>
-
-          <Accordion
+        <Accordion
             open={open === 3}
             icon={
               <ChevronDownIcon
@@ -254,7 +233,6 @@ const navigate = useNavigate();
               </List>
             </AccordionBody>
           </Accordion>
-
           {/*staff tab is hidden in the staff account upon login*/} 
           {user && user.role === 'admin' && (  
             <Accordion
@@ -295,11 +273,11 @@ const navigate = useNavigate();
             </Accordion>
           )}
           
-          <ListItem onClick={handleInbox}>
+          <ListItem onClick={handlePayment}>
             <ListItemPrefix>
               <InboxIcon className="h-5 w-5 mr-2" />
             </ListItemPrefix>
-              Inbox
+              Payments
             <ListItemSuffix>
               <Chip value="14" size="sm" variant="ghost" color="blue-gray" className="rounded-full" />
             </ListItemSuffix>
@@ -312,13 +290,15 @@ const navigate = useNavigate();
                 Settings
             </ListItem>
           )}
-          <ListItem onClick={handleLogout}>
-            <ListItemPrefix>
-              <PowerIcon className="h-5 w-5 mr-2" />
-            </ListItemPrefix>
-            Log Out
-          </ListItem>
-        </List>
-      </Card>
-    );
+            <ListItem onClick={handleLogout}>
+              <ListItemPrefix>
+                <PowerIcon className="h-5 w-5 mr-2" />
+              </ListItemPrefix>
+              Log Out
+            </ListItem>
+          </List>
+        
+      </div>
+    </div>
+  );
 }

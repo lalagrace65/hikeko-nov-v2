@@ -268,7 +268,7 @@ function JoinerDetailsForm({packageId, packageDetail}) {
                 to_dateTravel: packageDetail.date,
                 to_time: formatBookingTime(packageDetail.checkIn, packageDetail.checkOut),
                 to_coordinator: packageDetail?.coordinatorName,
-                to_trail: packageDetail.trailId.title,
+                to_trail: packageDetail?.trailId?.title,
                 to_referenceCode: booking.referenceCode
             };
     
@@ -286,12 +286,14 @@ function JoinerDetailsForm({packageId, packageDetail}) {
             setEmergencyContactNumber("");
             setRedeemPoints("");
             setAutofillChecked("");
-        } catch (error) {
-            console.error('Error submitting booking:', error);
-            toast.error("Failed to submit booking.");
+        } catch (e) {
+            if (e.response && e.response.status === 400) {
+                toast.error('Sorry, Slot is already full.');
+            } else {
+                toast.error('Failed to book. Please try again.');
+            }
         }
     };
-    
 
     //Sortable image upload
     async function uploadProofPayment(ev){

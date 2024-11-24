@@ -8,6 +8,7 @@ import { Carousel } from "@material-tailwind/react";
 import Legend from './Legend';
 import GuidelinesToHiking from './GuidelinesToHiking';
 import { Typography } from "@material-tailwind/react";
+import toast from 'react-hot-toast';
 
 function TrailDetail() {
   const { id } = useParams();
@@ -194,14 +195,19 @@ const formatBookingTime = (checkIn, checkOut) => {
                 </ul>
               </div>
               <Button
-                    onClick={() => handleBookNow(pkg._id)}
-                    disabled={!user || user.role !== 'user'} // Disable button if not authorized
-                    className={`mt-4 py-2 px-4 rounded ${
-                      !user || user.role !== 'user' ? 'bg-gray-300 cursor-not-allowed' : 'bg-orange-400 hover:bg-amber-500 text-white'
-                    }`}
-                  >
-                    {user ? 'Book Now' : 'Login to Book'}
-                </Button>
+                onClick={() => {
+                    if (!user) {
+                        toast.error('Login or Register an Account to Book');
+                        navigate('/login'); // Redirect to login if no user is logged in
+                    } else if (user.role === 'user') {
+                        handleBookNow(pkg._id); // Proceed with booking if the user is authorized
+                    }
+                }}
+                className='mt-4 bg-primary text-white hover:bg-primary/90'
+            >
+                Book Now
+            </Button>
+
 
             </div>
 

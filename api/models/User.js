@@ -22,7 +22,6 @@ const UserSchema = new mongoose.Schema({
   dateOfBirth: Date,
   avatar: { type: String },
   rewardPoints: { type: Number, default: 0 }, // for reward points system
-  bookingCount: { type: Number, default: 0 }, // for reward points system - counting bookings
   role: { type: String, enum: ['user', 'admin', 'staff'], default: 'user' },
   adminId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
@@ -46,6 +45,7 @@ const UserSchema = new mongoose.Schema({
 
   // Temporary password for first-time login
   temporaryPassword: { type: String, unique: true },
+  plainTempPassword: { type: String, select: false },
   temporaryPasswordExpiry: { type: Date },
 }, { timestamps: true });
 

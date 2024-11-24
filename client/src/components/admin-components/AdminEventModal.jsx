@@ -4,6 +4,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import { baseUrl } from "@/Url";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
+import {toast, Toaster} from "react-hot-toast";
 
 const PackageModal = ({ open, handleClose, packageData }) => {
     const [bookings, setBookings] = useState([]);
@@ -72,6 +73,31 @@ const PackageModal = ({ open, handleClose, packageData }) => {
         navigate(`/admin/transactions?highlighted=${referenceCode}`); // Navigate to transactions page
     };
 
+    const handleStatusChange = async (e, bookingId) => {
+        const newStatus = e.target.value; // Get selected status
+    
+        try {
+            // Update the payment status in the database
+            await axios.put(`${baseUrl}/api/bookings/${bookingId}`, {
+                paymentStatus: newStatus,
+            });
+    
+            // Optionally, update the state or re-fetch the bookings to reflect the changes
+            setBookings((prevBookings) =>
+                prevBookings.map((booking) =>
+                    booking._id === bookingId ? { ...booking, paymentStatus: newStatus } : booking
+                )
+            );
+    
+            // Show a success message or notify the user
+            toast.success("Booking status updated successfully!");
+        } catch (error) {
+            console.error("Error updating status:", error);
+            toast.error("Failed to update booking status.");
+        }
+    };
+    
+
     return (
         <Dialog
             size="xl"
@@ -97,7 +123,7 @@ const PackageModal = ({ open, handleClose, packageData }) => {
                             <span><b>Mountain name:</b> {packageData ? packageData.trailId?.title : 'N/A'}</span>
                         </Typography>
                         <Typography className="custom-paragraph font-normal" variant="paragraph" color="gray">
-                            <span><b>Status:</b> {packageData ? packageData.status : 'N/A'}</span>
+                            <span><b>Event Status:</b> {packageData ? packageData.status : 'N/A'}</span>
                         </Typography>
                         <Typography className="custom-paragraph font-normal" variant="paragraph" color="gray">
                             <span><b>Packages:</b> </span>
@@ -185,6 +211,20 @@ const PackageModal = ({ open, handleClose, packageData }) => {
                                                         <Typography className="text-sm"><span className="font-semibold">Email:</span> {booking.email}</Typography>
                                                         <Typography className="text-sm"><span className="font-semibold">Contact:</span> {booking.contactNumber}</Typography>
                                                         <Typography className="text-sm"><span className="font-semibold">Pickup Location:</span> {booking.pickupLocation}</Typography>
+                                                        <div className="flex items-center">
+                                                            <Typography className="text-sm font-semibold">Payment Status:</Typography>
+                                                            <select
+                                                                value={booking.paymentStatus}
+                                                                onChange={(e) => handleStatusChange(e, booking._id)}
+                                                                className="bg-gray-200 p-0 rounded-md lg:w-32 ml-2 text-sm" // ml-2 to add margin between the text and the select box
+                                                            >
+                                                                {['Pending', 'Confirmed', 'Completed', 'Cancelled', 'Refunded'].map((status) => (
+                                                                    <option key={status} value={status}>{status}</option>
+                                                                ))}
+                                                            </select>
+                                                        </div>
+
+                                                        
                                                         <Typography className="text-sm"><span className="font-semibold">Booking Reference:</span>
                                                             <span
                                                                 className="cursor-pointer hover:text-blue-500"
@@ -209,7 +249,7 @@ const PackageModal = ({ open, handleClose, packageData }) => {
                         
                     </div>
                     {/* Pagination Controls */}
-                    <div className="flex justify-between items-center mt-4 col-span-2">
+                    <div className="flex justify-between items-center col-span-2">
                         <Button
                             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                             disabled={currentPage === 1}
@@ -227,6 +267,14 @@ const PackageModal = ({ open, handleClose, packageData }) => {
                         >
                             Next
                         </Button>
+                        {/* Toast container with customized z-index */}
+                        <Toaster
+                            toastOptions={{
+                                style: {
+                                    zIndex: 10,  // Ensure toast is above the modal
+                                },
+                            }}
+                        />
                     </div>
                 </CardBody>
             </Card>

@@ -35,6 +35,7 @@ export default function Forum() {
     const fetchPosts = async () => {
       try {
         const response = await axios.get(`${baseUrl}/api/getForumPosts`);
+        console.log(response.data); 
         setPosts(response.data);
       } catch (error) {
         console.error('Failed to fetch posts:', error);
@@ -103,7 +104,8 @@ const handleContentChange = (e) => {
         dateCreated: new Date(),
       };
       const response = await axios.post(`${baseUrl}/api/createForumPost`, newPost);
-      setPosts([response.data, ...posts]);
+      console.log(response.data);
+      setPosts([response.data.post, ...posts]);
       setTitle("");
       setContent("");
       setForumImages([]);// Clear uploaded images after submission
@@ -163,19 +165,15 @@ const handleContentChange = (e) => {
     );
   };
 
+
+  /*useEffect(() => {
+    // Scroll to top on component mount
+    window.scrollTo(0, 0);
+  }, []);*/
+
   return (
     <div className="flex bg-gray-100 min-h-screen">
-      <aside className="w-1/5 p-4 bg-white shadow-md">
-        <Typography variant="h6" className="mb-4">Forum Categories</Typography>
-        <ul className="space-y-2">
-          <li><Button variant="text" color="blue-gray">General</Button></li>
-          <li><Button variant="text" color="blue-gray">News</Button></li>
-          <li><Button variant="text" color="blue-gray">Technology</Button></li>
-          <li><Button variant="text" color="blue-gray">Entertainment</Button></li>
-        </ul>
-      </aside>
-
-      <main className="flex-1 p-6">
+      <main className="flex-1 px-4 sm:px-6 md:px-60 mb-20 mt-10">
         {/* Forum Posts */}
         <Typography variant="h4" className="mb-6">Forum Posts</Typography>
 
@@ -248,7 +246,7 @@ const handleContentChange = (e) => {
               )}
           </div>
 
-          <Button onClick={handleCreatePost} color="blue-gray" className="mt-4">Submit</Button>
+          <Button onClick={handleCreatePost} className="mt-4 bg-primary hover:opacity-80">Submit</Button>
           {/* Error Message */}
           {errorMessage && (
             <Typography variant="body2" color="red" className="mt-2">
@@ -260,29 +258,41 @@ const handleContentChange = (e) => {
         {/* Forum See All Posts */}
         <div className="space-y-6">
           {posts.map((post) => (
-            <Card key={post._id} className="flex flex-row items-start p-4">
-              <Avatar src={post.userId?.avatar} alt="Profile" size="lg" className="mr-4" />
-              <div className="flex-1">
-                <div className='flex justify-between'>
-                  <Typography variant='h6' className='font-extralight'>{post.userId?.firstName || 'Anonymous'}</Typography>
-                  <span className="text-sm text-gray-500">{formatDistanceToNow(new Date(post.dateCreated))} ago</span>
+            <Card key={post._id} className="p-4">
+              <div className="flex items-start mb-4">
+                <Avatar src={post.userId?.avatar} alt="Profile" size="lg" className="mr-4" />
+                <div className="flex-1">
+                  <div className="flex justify-between">
+                    <Typography variant="h6" className="font-extralight">
+                      {post.userId?.firstName || "Anonymous"}
+                    </Typography>
+                    <span className="text-sm text-gray-500">
+                      {formatDistanceToNow(new Date(post.dateCreated))} ago
+                    </span>
+                  </div>
+                  <Typography variant="h6" className="font-bold">{post.title}</Typography>
                 </div>
-                <Typography variant="h6" className="font-bold mb-2">{post.title}</Typography>
+              </div>
+
+              {/* Post Body */}
+              <div className="w-full">
                 <Typography className="text-gray-700 mb-4 text-justify">{post.body}</Typography>
-                {/* Uploaded Images Carousel */}
-                {post.uploadPic && post.uploadPic.length > 0 && (
-                  <Carousel className="mt-4 rounded-xl h-64">
-                    {post.uploadPic.map((image, index) => (
-                      <img
-                        key={index}
-                        src={image}
-                        alt={`Post image ${index + 1}`}
-                        className="h-full w-full object-contain"
-                      />
-                    ))}
-                  </Carousel>
-                )}
-                
+                <div className="mb-4 border rounded-xl">
+                  {/* Uploaded Images Carousel */}
+                  {post.uploadPic && post.uploadPic.length > 0 && (
+                    <Carousel className="rounded-xl h-64 lg:h-[1040px]">
+                      {post.uploadPic.map((image, index) => (
+                        <img
+                          key={index}
+                          src={image}
+                          alt={`Post image ${index + 1}`}
+                          className="h-full w-full object-contain"
+                        />
+                      ))}
+                    </Carousel>
+                  )}
+                </div>
+
                 {/* Like and Comment Buttons */}
                 <div className="flex items-center space-x-4 text-sm text-gray-500">
                   <IconButton color="red" variant="text" onClick={() => handleLikePost(post._id)}>
@@ -298,17 +308,18 @@ const handleContentChange = (e) => {
                   onChange={(e) => setComment(e.target.value)}
                   placeholder="Add a comment..."
                   className="border p-2 rounded-md w-full mt-2"
-                  //onKeyDown={(e) => e.key === 'Enter' && handleCommentSubmit(post._id)}
+                  onKeyDown={(e) => e.key === "Enter" && handleCommentSubmit(post._id)}
                 />
-                <Button onClick={() => handleCommentSubmit(post._id)} color="blue">Submit</Button>
-                
+
                 {/* Show Comments */}
                 <div className="mt-4">
                   {post.comments.slice(0, expandedPosts.includes(post._id) ? post.comments.length : 4).map((comment, index) => (
                     <div key={index} className="flex items-center space-x-2 mb-2">
                       <Avatar src={comment.userId?.avatar} alt="Profile" size="sm" />
                       <div>
-                        <Typography variant="body2" className="font-bold">{comment.userId?.firstName || 'Anonymous'}</Typography>
+                        <Typography variant="body2" className="font-bold">
+                          {comment.userId?.firstName || "Anonymous"}
+                        </Typography>
                         <Typography variant="body2">{comment.comment}</Typography>
                       </div>
                     </div>
@@ -320,7 +331,7 @@ const handleContentChange = (e) => {
                       onClick={() => toggleExpandComments(post._id)}
                       className="text-sm"
                     >
-                      {expandedPosts.includes(post._id) ? 'Hide Comments' : `View More ${post.comments.length - 4} Comments `}
+                      {expandedPosts.includes(post._id) ? "Hide Comments" : `View More ${post.comments.length - 4} Comments`}
                     </Button>
                   )}
                 </div>

@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 export function Advertisement() {
   const images = [
     "https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2560&q=80",
-    "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80",
     "https://images.unsplash.com/photo-1518623489648-a173ef7824f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2762&q=80"
   ];
 
@@ -18,7 +17,7 @@ export function Advertisement() {
   }, [images.length]);
 
   return (
-    <div className="relative overflow-hidden mt-20">
+    <div className="relative overflow-hidden sm:mt-5 md:mt-10 lg:mt-20">
         <div className="mb-4">
             <span className="text-3xl font-bold">Start your adventure now and enjoy exclusive vouchers that make your hike even more rewarding</span>
         </div>

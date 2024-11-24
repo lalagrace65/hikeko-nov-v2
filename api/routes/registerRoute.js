@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User.js');
 const { bcryptSalt } = require('../middleware/auth');
+const Activity = require('../models/Activity.js');
 
 const router = express.Router();
 
@@ -43,6 +44,17 @@ router.post('/register', async (req, res) => {
             role: 'user',
             avatar
         });
+
+        // Log the activity: User registration
+        const newActivity = new Activity({
+            user: userDoc._id,
+            description: `${userDoc.firstName} ${userDoc.lastName} registered successfully.`,
+            type: 'User Registration',
+            createdAt: new Date(),
+        });
+
+        // Save the activity log
+        await newActivity.save();
 
         res.json(userDoc);
     } catch (e) {

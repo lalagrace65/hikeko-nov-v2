@@ -146,7 +146,7 @@ export default function Header() {
 
     return (
         <div className="sticky top-0 z-50">
-            <header className="py-4 px-4 w-full sm:px-6 md:px-60 flex justify-between bg-white shadow-lg text-primary">
+            <header className="py-4 px-4 w-full sm:px-6 md:px-40 lg:px-60 flex justify-between bg-white shadow-lg text-primary">
                 <Link to={'/'} className="flex items-center gap-1 hover:scale-[1.03]">
                     <img src="HIKEKO-LOGO-BIG.png" alt="Logo" className="w-8 h-10" />
                     <span className="text-xl">HIKEKO</span>
@@ -177,7 +177,7 @@ export default function Header() {
                             <Link to="/trails" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Tour & Packages</Link>
                             <Link to="/forum" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Community</Link>
                             {user && (
-                                <Link to="/book" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Book</Link>
+                                <Link to="/book" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Bookings</Link>
                             )}
                             <Link to="/about" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">About</Link>
                             {!!user ? (
@@ -221,7 +221,7 @@ export default function Header() {
                         </div>
     
                         {user && (
-                            <Link to="/book" className="hover:text-hoverColor">Book</Link>
+                            <Link to="/book" className="hover:text-hoverColor">Bookings</Link>
                         )}
     
                         <Link to="/about" className="hover:text-hoverColor">About</Link>

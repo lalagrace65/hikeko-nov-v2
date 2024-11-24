@@ -22,7 +22,7 @@ export default function LoginPage() {
             setRedirect(true);
             const parsedUser = JSON.parse(storedUser);
             if (parsedUser.role === 'admin') {
-                setRedirectPath('/admin');
+                setRedirectPath('/admin/dashboard/analytics');
             } else if (parsedUser.role === 'staff') {
                 setRedirectPath('/staff-db');
             } else if (parsedUser.role === 'user') {
@@ -43,7 +43,7 @@ export default function LoginPage() {
             localStorage.setItem('user', JSON.stringify(data));
             toast.success('Login successful');
             if (data.role === 'admin') {
-                setRedirectPath('/admin');
+                setRedirectPath('/admin/dashboard/analytics');
             } else if (data.role === 'staff') {
                 setRedirectPath('/staff-db');
             } else if (data.role === 'user') {

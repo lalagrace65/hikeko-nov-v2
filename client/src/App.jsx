@@ -34,12 +34,12 @@ import CheckBasicPlan from "./components/layout/about/CheckBasicPlan";
 import Forum from "./pages/forum-page/forum";
 import HikingFAQs from "./components/layout/index/HikingFAQs";
 import AdminDetails from "./pages/admin-page/SettingsPage";
-import InboxPage from "./pages/admin-page/InboxPage";
 import Dashboard_Projects from "./pages/admin-page/Dashboard_Projects";
 import Dashboard_Reports from "./pages/admin-page/Dashboard_Reports";
 import Dashboard_AnalyticsPage from "./pages/admin-page/Dashboard_AnalyticsPage";
 import NotificationsPage from "./pages/forum-page/NotificationsPage";
-
+import TrackPageVisit from "./TrackPageVisit";
+import PaymentPage from "./pages/admin-page/PaymentPage";
 
 // Set default axios settings
 axios.defaults.baseURL = `${baseUrl}`;
@@ -50,6 +50,7 @@ function App() {
     <UserContextProvider>
       <UserLocationProvider>
         <Toaster />
+        <TrackPageVisit />
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<IndexPage />} />
@@ -85,21 +86,21 @@ function App() {
               }
             />
             <Route
-              path="/admin"
+              path="/admin/dashboard/analytics"
               element={
                 <ProtectRoute>
                   <AdminPage />
                 </ProtectRoute>
               }
             />
-            <Route
+            {/*<Route
               path="/admin/dashboard/analytics"
               element={
                 <ProtectRoute>
                   <Dashboard_AnalyticsPage />
                 </ProtectRoute>
               }
-            />
+            />*/}
             <Route
               path="/admin/dashboard/reports"
               element={
@@ -205,10 +206,10 @@ function App() {
               }
             />
             <Route
-              path="/admin/inbox"
+              path="/admin/payments"
               element={
                 <ProtectRoute>
-                  <InboxPage />
+                  <PaymentPage />
                 </ProtectRoute>
               }
             />

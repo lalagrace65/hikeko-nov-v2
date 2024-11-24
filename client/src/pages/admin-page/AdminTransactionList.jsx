@@ -108,6 +108,7 @@ export default function AdminTransactionList() {
                                                             <span><strong>Sex:</strong> {booking.sex}</span>
                                                             <span><strong>Home Address:</strong> {booking.homeAddress}</span>
                                                             <span><strong>Emergency Contact Person:</strong> {booking.emergencyContactPerson} ({booking.emergencyContactNumber})</span>
+                                                            <span><strong>Payment Status:</strong> {booking.paymentStatus}</span>
                                                             <span className="flex items-center space-x-1">
                                                                 <strong>Medical Condition:</strong> {booking.medicalCondition ? "Yes" : "No"}
                                                                 {booking.medicalCondition && <MedicalCondiToolTip conditionDetails={booking.conditionDetails} />}

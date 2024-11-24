@@ -28,6 +28,11 @@ const adminRegisterRoute = require('./routes/TravelAgency/adminRegisterRoute.js'
 const bookAuthUserRoute = require('./routes/Customer/restrictBook');
 const userProfileRoute = require('./routes/Customer/avatar');
 const notificationRoute = require('./routes/Forum/notification');
+const trackVisitRoute = require('./routes/trackVisitRoute');
+const travelAgencyStaffCountRoute = require('./routes/TravelAgency/dashboardCounts/TravelAgencyDashboardRouter');
+const monthlyBookingsRoute = require('./routes/TravelAgency/dashboardCounts/monthlyBookingsRoute.js')
+
+const TravelAgencyRecentActivityRoute = require('./routes/TravelAgency/dashboardCounts/recentActivity');
 
 
 const app = express();
@@ -108,6 +113,11 @@ app.use('/api',createForumPost);
 app.use('/api',bookAuthUserRoute);
 app.use(userProfileRoute);
 app.use('/api',notificationRoute);
+app.use('/api',trackVisitRoute);
+app.use('/api',travelAgencyStaffCountRoute);
+app.use('/api',monthlyBookingsRoute);
+
+app.use(TravelAgencyRecentActivityRoute);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

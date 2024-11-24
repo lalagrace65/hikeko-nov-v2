@@ -20,6 +20,7 @@ const packageSchema = mongoose.Schema({
     checkIn: timeSchema,   
     checkOut: timeSchema, 
     maxGuests: String,
+    bookingCount: { type: Number, default: 0 },
     packageImages: [{type: String, required: true}],
     date: { type: Date, required: true },        
     dateCreated: { type: Date, required: true },

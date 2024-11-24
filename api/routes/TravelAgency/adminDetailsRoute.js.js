@@ -14,7 +14,11 @@ router.get('/admin-details', requireRole(['admin']), async (req, res) => {
         // Fetch the required details from the TravelAgencySignUpModel
         const adminDetails = await User.findById(adminId).select(
             'firstName lastName email contactNo businessName businessAddress businessType businessBranch businessContactNo birCertificateDocu dtiPermitDocu businessPermitDocu mayorsPermitDocu subscriptionId'
-        );
+        )
+        .populate({
+            path: 'subscriptionId', 
+            select: 'subscriptionStartDate subscriptionEndDate subscriptionStatus subscriptionPlan', 
+        });
 
         if (!adminDetails) {
             return res.status(404).json({ message: 'Admin details not found' });

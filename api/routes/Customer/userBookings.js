@@ -25,6 +25,12 @@ router.get('/joiner/bookings', requireRole(['user', 'admin']), async (req, res) 
                     },
                 ],
             });
+            // Check if bookings exist and ensure all required fields are populated
+        bookings.forEach(booking => {
+            if (!booking.packageId || !booking.packageId.trailId) {
+                console.log(`Booking ${booking._id} is missing trailId`);
+            }
+        });
 
         res.json(bookings);
     } catch (error) {

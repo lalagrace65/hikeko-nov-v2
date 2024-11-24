@@ -11,7 +11,8 @@ import {
   Dialog,
   DialogHeader,
   DialogBody,
-  DialogFooter
+  DialogFooter,
+  Spinner
 } from "@material-tailwind/react";
 import axios from 'axios';
 import { baseUrl } from '@/Url';
@@ -86,7 +87,7 @@ export default function UploadProofSubscription() {
             console.log('Submitting Data:', requestData); // Log the data
             
             const response = await axios.post(`${baseUrl}/premiumSubscription`, requestData);
-            console.log('API Response:', response); 
+            
             if (response.status === 200) {
                 toast.success('Subscription Proof uploaded successfully');
                 
@@ -132,7 +133,11 @@ export default function UploadProofSubscription() {
                                 accept="image/*" 
                                 label="Upload Proof" 
                             />
-                            {formData.proof.link && (
+                            {isUploading ? (
+                                <div className="flex justify-center items-center mt-4">
+                                    <Spinner className="text-blue-500" />
+                                </div>
+                            ) : formData.proof.link ? (
                                 <div className="mt-4">
                                     <Typography className="text-green-500 text-sm">
                                         Uploaded Proof:
@@ -143,7 +148,7 @@ export default function UploadProofSubscription() {
                                         className="mt-2 max-w-full h-[200px] object-cover"
                                     />
                                 </div>
-                            )}
+                            ) : null}
                         </div>
 
                         <div className="mt-4 flex items-center">

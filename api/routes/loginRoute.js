@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User.js');
 const { jwtSecret } = require('../middleware/auth');
+const Activity = require('../models/Activity.js');
 
 const router = express.Router();
 
@@ -75,7 +76,7 @@ router.post('/login', async (req, res) => {
             role: userDoc.role
         };
 
-        jwt.sign(payload, jwtSecret, {}, (err, token) => {
+        jwt.sign(payload, jwtSecret, {}, async (err, token) => {
             if (err) throw err;
 
             const response = {
@@ -86,6 +87,32 @@ router.post('/login', async (req, res) => {
                 requiresPasswordChange:
                     userDoc.temporaryPassword && userDoc.temporaryPasswordExpiry > now
             };
+
+            // Log the activity
+            let description;
+
+                // Construct the description dynamically based on role
+                if (userDoc.role === 'admin' || userDoc.role === 'staff') {
+                    description = `(${userDoc.businessName}) is logged in as ${userDoc.role}`;
+                } else {
+                    description = `${userDoc.firstName} ${userDoc.lastName} is logged in as ${userDoc.role}`;
+                }
+
+                // Log the activity
+                await Activity.create({
+                    user: userDoc._id,
+                    description,
+                    type: "Login",
+                    createdAt: new Date()
+                });
+            // Fetch the most recent activity
+            const recentActivity = await Activity.findOne({ user: userDoc._id })
+                .sort({ createdAt: -1 }) // Sort by most recent
+                .select('description type createdAt') // Include only relevant fields
+                .lean(); // Use lean to get a plain JS object
+
+            // Add the recent activity to the response
+            response.recentActivity = recentActivity;
 
             res.cookie('token', token).json(response);
         });

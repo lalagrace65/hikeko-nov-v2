@@ -241,7 +241,7 @@ export default function EventsPage() {
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{pkg.coordinatorName}</td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{formatCurrency(pkg.price, 'PHP')}</td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600"> / {pkg.maxGuests}</td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600"> {pkg.bookingCount}/ {pkg.maxGuests}</td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{formattedDate}</td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{formatTimestamp(pkg.dateCreated)}</td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">

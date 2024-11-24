@@ -8,8 +8,8 @@ export const UserLocationProvider = ({ children }) => {
 
   return (
     <LoadScript
-        googleMapsApiKey={"AIzaSyBm4BzQu1OZU5qB77IpAqr-lt21E21ctvU"}
-        mapId={'153fc44cfd5b457b'}
+        googleMapsApiKey={"AIzaSyAIWvAQBPApZHXoF3Ma_stP6uLoEz-umeo"}
+        mapId={'11f3b47a4deca79e'}
     >
       <UserLocationContext.Provider value={{ userLocation, setUserLocation }}>
         {children}

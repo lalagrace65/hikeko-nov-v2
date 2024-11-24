@@ -30,7 +30,7 @@ export function FooterWithSocialLinks() {
   const navigate = useNavigate();
 
   // Hide footer for admin or staff roles or if on the profile page
-  if (location.pathname === '/profile' || user?.role === 'admin' || user?.role === 'staff') {
+  if ( user?.role === 'admin' || user?.role === 'staff') {
     return null;
   }
 
@@ -39,13 +39,13 @@ export function FooterWithSocialLinks() {
   };
 
   return (
-    <footer className="relative w-full mt-40">
+    <footer className="relative w-full ">
       <hr className="mb-10"/>
       <div className="mx-auto px-4 w-full sm:w-1/2 md:w-3/4">
-        <div className="flex flex-col md:flex-row justify-between items-start text-center md:text-right"
-          onClick={handleHome}
-        >
-          <Typography className="cursor-pointer mb-6 text-primary flex items-center text-6xl font-semibold justify-center md:justify-start">
+        <div className="flex flex-col md:flex-row justify-between items-start text-center md:text-right">
+          <Typography className="cursor-pointer mb-6 text-primary flex items-center text-6xl font-semibold justify-center md:justify-start"
+            onClick={handleHome}
+          >
             <img src="HIKEKO-LOGO-BIG.png" alt="HikeKo Logo" className="w-30 h-40"/>
             HIKEKO
           </Typography>

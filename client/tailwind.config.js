@@ -11,9 +11,6 @@ export default {
     ],
     theme: {
         extend: {
-            screens: {
-                laptop: '1366px',
-            },
             colors: {
                 hoverColor: '#9e5809',
                 profileContainer: '#efe7da',

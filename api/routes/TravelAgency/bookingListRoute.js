@@ -118,8 +118,4 @@ router.get('/bookings/package/:packageId', async (req, res) => {
   }
 });
 
-
-
-
-
 module.exports = router;

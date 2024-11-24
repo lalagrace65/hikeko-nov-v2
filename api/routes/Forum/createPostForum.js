@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const ForumPost = require('../../models/ForumPost');
 const Notification = require('../../models/Notification');
+const Activity = require('../../models/Activity');
+const User = require('../../models/User');
 const { requireRole } = require('../../middleware/auth');
 
 // POST endpoint to create a new forum post
@@ -14,20 +16,44 @@ router.post('/createForumPost', requireRole(['user']), async (req, res) => {
       body,
       uploadPic,
     } = req.body;
+
+    const userId = req.userId; // Assuming `req.userId` holds the logged-in user's ID
+
+    // Fetch user data based on userId
+    const user = await User.findById(userId);
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    const userFullName = `${user.firstName || 'Anonymous'} ${user.lastName || ''}`;
     
     // Create a new forum post
     const newPost = new ForumPost({
       title,
       body,
       uploadPic,
-      userId: req.userId,
+      userId: userId,
       dateCreated: new Date(),
     });
     
     // Save to the database
     const savedPost = await newPost.save();
     
-    res.status(201).json(savedPost);
+     // Log activity
+     await Activity.create({
+      user: userId,
+      description: `${userFullName} created a post: ${title}`,
+      type: 'Post',
+      createdAt: new Date(),
+    });
+
+    // Fetch the most recent activity
+    const recentActivity = await Activity.findOne({ user: userId })
+    .sort({ createdAt: -1 }) // Sort by most recent
+    .select('description type createdAt') // Include only relevant fields
+    .lean(); // Use lean to get a plain JS object
+
+    res.status(201).json({post: savedPost, recentActivity});
   } catch (error) {
     console.error('Error creating post:', error);
     res.status(500).json({ message: 'Failed to create post' });
@@ -74,6 +100,24 @@ router.post('/commentPost/:postId', async (req, res) => {
     // Save the updated post
     await forumPost.save();
 
+    // Log activity
+    const user = await User.findById(userId);  // Ensure user is fetched
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    await Activity.create({
+      user: userId,
+      description: `${user.firstName} ${user.lastName} commented on the post: "${forumPost.title}"`,
+      type: 'Comment',
+      createdAt: new Date(),
+    });
+
+    // Fetch the most recent activity
+    const recentActivity = await Activity.findOne({ user: req.userId })
+    .sort({ createdAt: -1 }) // Sort by most recent
+    .select('description type createdAt') // Include only relevant fields
+    .lean(); // Use lean to get a plain JS object
+
    // Get the user's full name from req.user (ensure req.user is populated)
    const userFullName = req.user ? `${req.user.firstName} ${req.user.lastName}` : 'Anonymous';
 
@@ -92,7 +136,7 @@ router.post('/commentPost/:postId', async (req, res) => {
     
   }
 
-    res.status(200).json({ comments: forumPost.comments });
+  res.status(200).json({ comments: forumPost.comments, recentActivity });
   } catch (error) {
     console.error('Error adding comment:', error);
     res.status(500).json({ error: 'Failed to add comment' });
