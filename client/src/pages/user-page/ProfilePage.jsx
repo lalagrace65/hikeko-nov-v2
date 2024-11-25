@@ -17,6 +17,8 @@ const ProfilePage = () => {
 
     const navigate = useNavigate();
 
+    if (!user) return <p>You must be logged in to access this page.</p>;
+
     const calculateAge = (dateOfBirth) => {
         const birthDate = new Date(dateOfBirth);
         const today = new Date();
@@ -99,9 +101,7 @@ const ProfilePage = () => {
         const fetchUserProfile = async () => {
             try {
                 const response = await axios.get(`${baseUrl}/profile`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    },
+                    
                     withCredentials: true // If you still want to send cookies
                 });
                 setUser(response.data);
@@ -117,7 +117,7 @@ const ProfilePage = () => {
         };
 
         fetchUserProfile();
-    }, [navigate]);
+    }, [user.token]);
 
     if (error) return <div>{error}</div>;
     if (!user) return <div>Loading...</div>;
