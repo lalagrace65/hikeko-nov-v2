@@ -110,6 +110,14 @@ export default function AdminPage() {
       setLoading(false);
     }
   };
+
+  function formatCurrency(amount, currency = 'PHP') {
+    return new Intl.NumberFormat('en-PH', {
+        style: 'currency',
+        currency,
+    }).format(amount);
+  }  
+
   return (
     <div className="flex h-screen">
       <MultiLevelSidebar />
@@ -205,7 +213,7 @@ export default function AdminPage() {
                                     </svg>
                                     {/* Text on the right */}
                                     <div className="flex gap-2">
-                                    <Typography variant="h4">Total Earnings:</Typography><Typography variant="h3" className="font-light">₱{totalEarnings}.00</Typography> 
+                                    <Typography variant="h4">Total Earnings:</Typography><Typography variant="h3" className="font-light">{formatCurrency(totalEarnings, 'PHP')}</Typography> 
                                     </div>
                                 </div>
                             </CardBody>

@@ -24,7 +24,7 @@ const packageSchema = mongoose.Schema({
     packageImages: [{type: String, required: true}],
     date: { type: Date, required: true },        
     dateCreated: { type: Date, required: true },
-    status: { type: String, enum: ['upcoming','ongoing', 'ended'], default: null },
+    status: { type: String, enum: ['upcoming','ongoing', 'ended'], default: 'upcoming' },
     ongoingTimestamp: { type: Date, required: false },
     endedTimestamp: { type: Date, required: false },
     isArchived: { type: Boolean, default: false },

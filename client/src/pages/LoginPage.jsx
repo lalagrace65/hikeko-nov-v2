@@ -26,9 +26,9 @@ export default function LoginPage() {
             } else if (parsedUser.role === 'staff') {
                 setRedirectPath('/staff-db');
             } else if (parsedUser.role === 'user') {
-                setRedirectPath('/profile');
-            } else {
                 setRedirectPath('/');
+            } else {
+                setRedirectPath('/login');
             }
         }
     }, [setUser]);
@@ -47,9 +47,9 @@ export default function LoginPage() {
             } else if (data.role === 'staff') {
                 setRedirectPath('/staff-db');
             } else if (data.role === 'user') {
-                setRedirectPath('/profile');
-            } else {
                 setRedirectPath('/');
+            } else {
+                setRedirectPath('/login');
             }
             setRedirect(true);
         } catch (e) {

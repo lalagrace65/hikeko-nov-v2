@@ -13,6 +13,7 @@ import { Spinner } from '@material-tailwind/react';
 import { FiUpload } from 'react-icons/fi';
 
 export default function BusDets() {
+    const [isOpenImg, setIsOpenImg] = useState(false);
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         businessName: "",
@@ -25,9 +26,10 @@ export default function BusDets() {
         businessPermitDocu: { link: '', name: '' },
         mayorsPermitDocu: { link: '', name: '' }
     });
-    const [open, setOpen] = useState(false);
-    const openDrawer = () => setOpen(true);
-    const closeDrawer = () => setOpen(false);
+    {/*enlarge img*/}
+    const openModalImg = () => setIsOpenImg(true);
+    const closeModalImg = () => setIsOpenImg(false);
+
     const form = React.useRef();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [businessContactNo, setBusinessContactNo] = useState("");
@@ -213,7 +215,7 @@ export default function BusDets() {
         try {
 
             try {
-                const signupResult = await axios.post(`${baseUrl}/api/signup`, {
+                const signupResult = await axios.post(`${baseUrl}/api/admin-register`, {
                     ...submissionData,
                     subscriptionId
                 });
@@ -411,28 +413,28 @@ export default function BusDets() {
                                     href="#"
                                     color="white"
                                     className="font-medium !text-red-500 transition-colors hover:!text-red-300"
-                                    onClick={openDrawer}>
+                                    onClick={openModalImg}>
                                     See Sample BIR Form
                                 </Typography>
-                                <Drawer open={open} onClose={closeDrawer} placement="right" className="p-4">
-                                    <div className="mb-6 flex items-center justify-between">
-                                        <Typography variant="h5" color="blue-gray">
-                                            Material Tailwind
-                                        </Typography>
-                                        <IconButton color="blue-gray" className='h-6 w-6 rounded-full flex items-center justify-center' onClick={closeDrawer}>
-                                            <IoCloseCircleOutline className="h-5 w-5 "/>
-                                        </IconButton>
+                                {/* Modal for Enlarged Image */}
+                                {isOpenImg && (
+                                    <div
+                                        className="fixed inset-0 flex items-center justify-center bg-black/75 z-50"
+                                        onClick={closeModalImg} // Close modal when clicking on the background
+                                    >
+                                        <div
+                                            className="relative flex justify-center items-center" // Ensure center alignment for the image container
+                                            onClick={(e) => e.stopPropagation()} // Prevent the click event from reaching the background
+                                        >
+                                            {/* Enlarged Image */}
+                                            <img
+                                                src="/BIR_PH.jpg"
+                                                alt="Enlarged Sample BIR Form"
+                                                className="max-w-[55%] max-h-[55%] rounded z-50" // Adjust width/height percentage for responsiveness
+                                            />
+                                        </div>
                                     </div>
-                                    <Typography color="gray" className="mb-8 pr-4 font-normal">
-                                        Material Tailwind features multiple React and HTML components, all written with Tailwind CSS classes and Material Design guidelines.
-                                    </Typography>
-                                    <div className="flex gap-2">
-                                        <Button size="sm" variant="outlined">
-                                            Documentation
-                                        </Button>
-                                        <Button size="sm">Get Started</Button>
-                                    </div>
-                                </Drawer>
+                                )}
                             </div>
                         </div>
 
@@ -579,6 +581,7 @@ export default function BusDets() {
                             Submit
                         </Button>
                     </form>
+                    
                     </div>
                 </div>
             

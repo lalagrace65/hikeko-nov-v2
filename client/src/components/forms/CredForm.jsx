@@ -151,7 +151,7 @@ export default function CredForm() {
             className="ml-2 cursor-pointer text-gray-700"
             onClick={() => setIsDialogOpen(true)}
           >
-            I accept Terms of Service and Privacy Policy
+            I accept <b className="text-primary hover:underline">Terms of Service and Privacy Policy</b>
           </label>
         </div>
         {errors.termsAccepted && (

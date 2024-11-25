@@ -274,7 +274,7 @@ function JoinerDetailsForm({packageId, packageDetail}) {
     
             console.log("Email Data:", emailData);
             console.log("Preparing to send email...");
-            await emailjs.send('service_qjiocya', 'template_ge9ir44', emailData, 'jooaQAKBdAerURta8');
+            await emailjs.send('service_s3s9aed', 'template_8gb3rki', emailData, 'cqdhoCjeyjfyvdqDy');
             
             // Reset the form data
             setFormData(prevState => ({

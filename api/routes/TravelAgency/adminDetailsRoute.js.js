@@ -33,30 +33,43 @@ router.get('/admin-details', requireRole(['admin']), async (req, res) => {
 
 // PUT endpoint to set a new password
 router.put('/admin-details/set-password', requireRole(['admin']), async (req, res) => {
+    console.log("Incoming request to set-password");
+    console.log("Request body:", req.body);
+    console.log("Admin ID from token:", req.userData.id);
+
     const { newPassword } = req.body;
-    const adminId = req.userData.id; // Get admin ID from the verified token
+    const adminId = req.userData.id;
 
     if (!newPassword || newPassword.length < 8) {
+        console.log("Validation failed for newPassword");
         return res.status(400).json({ message: 'Password must be at least 8 characters long.' });
     }
 
     try {
         // Hash the new password
         const hashedPassword = await bcrypt.hash(newPassword, 10);
+        console.log("Hashed password:", hashedPassword);
 
-        // Update the admin's password and clear temporary password fields
-        await User.findByIdAndUpdate(adminId, {
+        // Update the admin's password
+        const updateResult = await User.findByIdAndUpdate(adminId, {
             password: hashedPassword,
             temporaryPassword: null,
             temporaryPasswordExpiry: null
         });
 
+        if (!updateResult) {
+            console.log("No user found with given adminId");
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        console.log("Password updated successfully for adminId:", adminId);
         res.json({ message: 'Password updated successfully' });
     } catch (error) {
         console.error('Error updating password:', error);
         res.status(500).json({ message: 'Server error', error });
     }
 });
+
 
 // Add or update system logo (avatar)
 router.post('/admin-details/settings/addSystemLogo', requireRole(['admin']), async (req, res) => {

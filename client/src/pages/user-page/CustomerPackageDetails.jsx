@@ -40,6 +40,13 @@ function CustomerPackageDetails() {
         return `${formattedHours}:${formattedMinutes} ${period}`;
     };
 
+    function formatCurrency(amount, currency = 'PHP') {
+        return new Intl.NumberFormat('en-PH', {
+            style: 'currency',
+            currency,
+        }).format(amount);
+    }  
+
     // Function to format both checkIn and checkOut times
     const formatBookingTime = (checkIn, checkOut) => {
         const formattedCheckIn = formatTime(checkIn?.hours, checkIn?.minutes);
@@ -72,7 +79,7 @@ function CustomerPackageDetails() {
                             <Typography variant="h4">{packageDetail.travelAgency.businessName}</Typography>
                         </div>
                         <Typography variant="h3" className="text-right ml-14">
-                            ₱{packageDetail.price}
+                            {formatCurrency(packageDetail.price, 'PHP')}
                         </Typography>
                     </Typography>
 

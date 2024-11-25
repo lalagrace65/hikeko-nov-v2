@@ -39,9 +39,12 @@ export default function RegisterPage() {
         const datepicker = flatpickr("#date-picker", {
             dateFormat: "Y-m-d",
             onChange: ([selectedDate]) => {
+                // Manually format the selected date to prevent UTC conversion issues
+                const localDate = new Date(selectedDate);
+                const formattedDate = localDate.toLocaleDateString("en-CA"); // "en-CA" gives us the YYYY-MM-DD format
                 setFormData((prevState) => ({
-                    ...prevState,
-                    dateOfBirth: selectedDate.toISOString().split("T")[0], // ISO format
+                  ...prevState,
+                  dateOfBirth: formattedDate,
                 }));
             },
         });
