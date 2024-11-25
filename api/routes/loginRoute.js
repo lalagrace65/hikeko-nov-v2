@@ -115,10 +115,12 @@ router.post('/login', async (req, res) => {
             response.recentActivity = recentActivity;
 
             res.cookie('token', token, {
-                httpOnly: true,      // Prevent client-side JavaScript from accessing the cookie
-                secure: true,        // Ensure the cookie is sent only over HTTPS
-                sameSite: 'None',    // Allow cross-origin requests
-            }).json(response);
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production', // Automatically adapt to environment
+                sameSite: 'None',
+                maxAge: 24 * 60 * 60 * 1000,
+            });
+            
             
         });
     } catch (error) {
