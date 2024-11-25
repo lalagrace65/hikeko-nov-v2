@@ -98,7 +98,12 @@ const ProfilePage = () => {
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
-                const response = await axios.get(`${baseUrl}/profile`, { withCredentials: true });
+                const response = await axios.get('/profile', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    },
+                    withCredentials: true // If you still want to send cookies
+                });
                 setUser(response.data);
                 setFormState(response.data); // Initialize formState with fetched user data
                 if (response.data.avatar) {
