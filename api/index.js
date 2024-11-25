@@ -69,7 +69,7 @@ app.use((req, res, next) => {
 
 app.use(cors({
     credentials: true,
-    origin: ['http://localhost:5173'],
+    origin: ['https://hikeko-nov-v2-client.onrender.com'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
