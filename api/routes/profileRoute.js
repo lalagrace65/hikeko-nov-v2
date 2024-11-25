@@ -6,7 +6,7 @@ const { jwtSecret, requireRole } = require('../middleware/auth'); // Adjust path
 const router = express.Router();
 
 // Profile route
-router.get('/profile', requireRole(['user']), async (req, res) => {
+router.get('/profile',  async (req, res) => {
     const token = req.cookies.token;
 
     if (token) {
@@ -57,7 +57,7 @@ router.get('/profile', requireRole(['user']), async (req, res) => {
     }
 });
 
-router.put('/profile/update', requireRole(['user']), async (req, res) => {
+router.put('/profile/update',  async (req, res) => {
     const token = req.cookies.token;
 
     if (!token) {

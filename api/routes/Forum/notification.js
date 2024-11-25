@@ -3,7 +3,7 @@ const router = express.Router();
 const Notification = require('../../models/Notification');
 const { requireRole } = require('../../middleware/auth');
 
-router.get('/notifications',requireRole(['user', 'admin', 'staff']), async (req, res) => {
+router.get('/notifications', async (req, res) => {
     try {
       const notifications = await Notification.find({ userId: req.userId });
       res.json({ notifications });
@@ -14,7 +14,7 @@ router.get('/notifications',requireRole(['user', 'admin', 'staff']), async (req,
   });
   
   // Route to mark notification as read
-  router.patch('/notifications/markAsRead/:id',requireRole(['user', 'admin', 'staff']), async (req, res) => {
+  router.patch('/notifications/markAsRead/:id', async (req, res) => {
     try {
       const notification = await Notification.findById(req.params.id);
       if (!notification) {
