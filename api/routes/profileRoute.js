@@ -9,27 +9,13 @@ const router = express.Router();
 router.get('/profile', requireRole(['user']), async (req, res) => {
     try {
         const userId =  userData.id; // Extract user ID from the middleware
-        const user = await User.findById(userId);
-
+        const user = await User.findById(userId).select(
+            'firstName lastName address contactNo emergencyContactNo dateOfBirth email rewardPoints incrementingId _id role avatar');
+        // Extract and send relevant fields
+        
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
-
-        // Extract and send relevant fields
-        const { 
-            firstName,
-            lastName,
-            address,
-            contactNo,
-            emergencyContactNo,
-            dateOfBirth, 
-            email,
-            rewardPoints,  
-            incrementingId,
-            _id, 
-            role,
-            avatar
-        } = user;
 
         return res.json({
             firstName,
@@ -51,7 +37,7 @@ router.get('/profile', requireRole(['user']), async (req, res) => {
     }
 });
 
-router.put('/profile/update', requireRole(['user']), async (req, res) => {
+/*router.put('/profile/update', requireRole(['user']), async (req, res) => {
     const token = req.cookies.token;
 
     if (!token) {
@@ -98,6 +84,6 @@ router.put('/profile/update', requireRole(['user']), async (req, res) => {
         console.error("Error updating user profile:", err);
         return res.status(500).json({ message: "Server error" });
     }
-});
+});*/
 
 module.exports = router;
