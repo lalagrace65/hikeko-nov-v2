@@ -113,7 +113,7 @@ router.post('/login', async (req, res) => {
 
             // Add the recent activity to the response
             response.recentActivity = recentActivity;
-
+            console.log('Setting cookie with token:', token);
             res.cookie('token', token, {
                 httpOnly: true, // Ensure the cookie cannot be accessed by JavaScript
                 secure: process.env.NODE_ENV === 'production', // Secure flag for HTTPS in production
