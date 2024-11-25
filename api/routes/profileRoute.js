@@ -1,13 +1,13 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User.js');
-const { jwtSecret } = require('../middleware/auth'); // Adjust path as needed
+const { jwtSecret, requireRole } = require('../middleware/auth'); // Adjust path as needed
 
 const router = express.Router();
 
 // Profile route
-router.get('/profile', async (req, res) => {
-    const { token } = req.cookies;
+router.get('/profile', requireRole(['user']), async (req, res) => {
+    const token = req.cookies.token;
 
     if (token) {
         try {
@@ -57,8 +57,8 @@ router.get('/profile', async (req, res) => {
     }
 });
 
-router.put('/profile/update', async (req, res) => {
-    const { token } = req.cookies;
+router.put('/profile/update', requireRole(['user']), async (req, res) => {
+    const token = req.cookies.token;
 
     if (!token) {
         return res.status(401).json({ message: "Unauthorized" });
