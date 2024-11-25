@@ -280,7 +280,7 @@ const handleContentChange = (e) => {
                 <div className="mb-4 border rounded-xl">
                   {/* Uploaded Images Carousel */}
                   {post.uploadPic && post.uploadPic.length > 0 && (
-                    <Carousel className="rounded-xl h-64 lg:h-[1040px]">
+                    <Carousel className="rounded-xl h-64 lg:h-[780px]">
                       {post.uploadPic.map((image, index) => (
                         <img
                           key={index}
