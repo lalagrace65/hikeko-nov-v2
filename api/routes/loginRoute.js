@@ -117,7 +117,7 @@ router.post('/login', async (req, res) => {
             res.cookie('token', token, {
                 httpOnly: true, // Ensure the cookie cannot be accessed by JavaScript
                 secure: process.env.NODE_ENV === 'production', // Secure flag for HTTPS in production
-                sameSite: 'Strict', // Prevents sending cookies with cross-origin requests
+                sameSite: 'None', // Prevents sending cookies with cross-origin requests
                 maxAge: 3600000 // 1 hour (optional)
             }).json(response);
             
