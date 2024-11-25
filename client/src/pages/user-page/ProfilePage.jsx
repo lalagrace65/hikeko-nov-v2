@@ -98,7 +98,7 @@ const ProfilePage = () => {
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
-                const response = await axios.get('/profile', {
+                const response = await axios.get(`${baseUrl}/profile`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     },
