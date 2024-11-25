@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 
 export function Advertisement() {
   const images = [
-    "https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2560&q=80",
-    "https://images.unsplash.com/photo-1518623489648-a173ef7824f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2762&q=80"
+    "1.png",
+    "2.png",
   ];
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -18,13 +18,15 @@ export function Advertisement() {
 
   return (
     <div className="relative overflow-hidden sm:mt-5 md:mt-10 lg:mt-20">
-        <div className="mb-4">
-            <span className="text-3xl font-bold">Start your adventure now and enjoy exclusive vouchers that make your hike even more rewarding</span>
-        </div>
+      <div className="mb-4">
+        <span className="text-3xl font-bold">
+          Start your adventure now and enjoy exclusive vouchers that make your hike even more rewarding
+        </span>
+      </div>
 
-      {/*Slider image*/}
+      {/* Slider image */}
       <div
-        className="flex transition-all duration-1000 ease-in-out"
+        className="flex transition-transform duration-1000 ease-in-out"
         style={{ transform: `translateX(-${activeIndex * 100}%)` }}
       >
         {images.map((image, index) => (
@@ -33,6 +35,7 @@ export function Advertisement() {
               src={image}
               alt={`slide ${index + 1}`}
               className="h-full w-full object-cover"
+              style={{ maxWidth: "100%", maxHeight: "100%" }}
             />
           </div>
         ))}
