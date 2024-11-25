@@ -114,14 +114,7 @@ router.post('/login', async (req, res) => {
             // Add the recent activity to the response
             response.recentActivity = recentActivity;
 
-            res.cookie('token', token, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production', // Automatically adapt to environment
-                sameSite: 'None',
-                maxAge: 24 * 60 * 60 * 1000,
-            });
-            
-            
+            res.cookie('token', token).json(response);
         });
     } catch (error) {
         console.error(error);
