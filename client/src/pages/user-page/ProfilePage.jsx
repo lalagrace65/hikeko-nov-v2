@@ -117,7 +117,7 @@ const ProfilePage = () => {
         };
 
         fetchUserProfile();
-    }, [user.token]);
+    }, []);
 
     if (error) return <div>{error}</div>;
     if (!user) return <div>Loading...</div>;
