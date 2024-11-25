@@ -59,19 +59,15 @@ app.use(
         crossOriginEmbedderPolicy: true,
     })
 );
+app.set('trust proxy', 1);
 
-// Custom headers for additional security
-app.use((req, res, next) => {
-    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
-    res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
-    next();
-});
 
+// CORS configuration
 app.use(cors({
     credentials: true,
     origin: ['https://hikeko-nov-v2-client.onrender.com', 'http://localhost:5174'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'Access-Control-Request-Method', 'Access-Control-Request-Headers']
 }));
 
 // Connect to MongoDB
