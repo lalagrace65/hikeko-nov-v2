@@ -50,14 +50,14 @@ export default function TravelAgencyCredentialsHome() {
 
       {/* New Opportunities Section */}
       <div className="bg-white p-8 text-center mt-40 mx-auto max-w-4xl relative">
-        <Typography className="text-6xl font-semibold text-primary">Brings new opportunities</Typography>
+        <Typography className="text-6xl font-semibold text-primary">Bring new opportunities</Typography>
         <p className="text-xl mt-10">
           Expand your horizons and explore new business opportunities with HikeKo. Join us today and be part of something big!
         </p>
       </div>
 
       {/* Three Cards in a Row */}
-      <div className="flex justify-center mt-10 space-x-8"> {/* Flexbox container for 3 cards */}
+      <div className="flex justify-center mt-10 space-x-8 mb-20"> {/* Flexbox container for 3 cards */}
         {/* Card 1 */}
         <Card className="mt-6 w-96 shadow-none">
           <CardBody className="flex flex-col items-center justify-center">
@@ -65,10 +65,9 @@ export default function TravelAgencyCredentialsHome() {
             <Typography variant="h5" color="blue-gray" className="mb-2">
               Connect With Hikers
             </Typography>
-            <Typography>
-              The place is close to Barceloneta Beach and bus stop just 2 min by
-              walk and near to &quot;Naviglio&quot; where you can enjoy the main
-              night life in Barcelona.
+            <Typography align="center">
+              Adding your business to the platform connects you with hikers worldwide, 
+              helps manage bookings seamlessly, and strengthens your visibility in the hiking community.
             </Typography>
           </CardBody>
         </Card>
@@ -77,13 +76,12 @@ export default function TravelAgencyCredentialsHome() {
         <Card className="mt-6 w-96 shadow-none">
           <CardBody className="flex flex-col items-center justify-center">
             <img src="key.png" className='h-40 w-40'/>
-            <Typography variant="h5" color="blue-gray" className="mb-2">
-              UI/UX Review Check
+            <Typography variant="h5" color="blue-gray" className="mb-2" >
+              Unlock Revenue
             </Typography>
-            <Typography>
-              The place is close to Barceloneta Beach and bus stop just 2 min by
-              walk and near to &quot;Naviglio&quot; where you can enjoy the main
-              night life in Barcelona.
+            <Typography align="center">
+              Reach more hikers and start earning additional 
+              revenue by showcasing your business and services through our platform.
             </Typography>
           </CardBody>
         </Card>
@@ -92,12 +90,12 @@ export default function TravelAgencyCredentialsHome() {
           <CardBody className="flex flex-col items-center justify-center">
             <img src="bag.png" className='h-40 w-40'/>
             <Typography variant="h5" color="blue-gray" className="mb-2">
-              UI/UX Review Check
+              Build Stronger Connections 
             </Typography>
-            <Typography>
-              The place is close to Barceloneta Beach and bus stop just 2 min by
-              walk and near to &quot;Naviglio&quot; where you can enjoy the main
-              night life in Barcelona.
+            <Typography align="center">
+              Our platform lets you showcase your packages, 
+              manage bookings, and stay in touch with hikers—ensuring a seamless experience 
+              from inquiry to adventure.
             </Typography>
           </CardBody>
         </Card>
