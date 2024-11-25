@@ -114,7 +114,12 @@ router.post('/login', async (req, res) => {
             // Add the recent activity to the response
             response.recentActivity = recentActivity;
 
-            res.cookie('token', token).json(response);
+            res.cookie('token', token, {
+                httpOnly: true,      // Prevent client-side JavaScript from accessing the cookie
+                secure: true,        // Ensure the cookie is sent only over HTTPS
+                sameSite: 'None',    // Allow cross-origin requests
+            }).json(response);
+            
         });
     } catch (error) {
         console.error(error);
