@@ -100,7 +100,6 @@ const ProfilePage = () => {
             try {
                 const token = localStorage.getItem('token');
                 const response = await axios.get(`${baseUrl}/profile`, {
-                    headers: { Authorization: `Bearer ${token}` },
                     withCredentials: true,
                 })
                 .then(response => {
