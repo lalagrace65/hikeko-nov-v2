@@ -115,10 +115,10 @@ router.post('/login', async (req, res) => {
             response.recentActivity = recentActivity;
 
             res.cookie('token', token, {
-                httpOnly: true, // Ensure the cookie cannot be accessed by JavaScript
-                secure: process.env.NODE_ENV === 'production', // Secure flag for HTTPS in production
-                sameSite: 'Lax', // Prevents sending cookies with cross-origin requests
-                maxAge: 3600000 // 1 hour (optional)
+                httpOnly: true, 
+                secure: process.env.NODE_ENV === 'production', 
+                sameSite: 'None', 
+                maxAge: 3600000 
             }).json(response);
             
         });
