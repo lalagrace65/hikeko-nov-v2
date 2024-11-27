@@ -48,7 +48,7 @@ export default function LoginPage() {
     async function handleLoginSubmit(ev) {
         ev.preventDefault();
         try {
-            const { data } = await axios.post(`${baseUrl}/login`, { email, password }, { withCredentials: true });
+            const { data } = await axios.post(`${baseUrl}/login`, { email, password },{withCredentials: true });
             
             setUser(data);
             localStorage.setItem('token', data.token);

@@ -98,10 +98,11 @@ const ProfilePage = () => {
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
-                const response = await axios.get(`${baseUrl}/profile`, { withCredentials: true });
-                if (response.data.token) {  // Check if token is present in response
-                    localStorage.setItem('token', response.data.token);
-                }
+                const token = localStorage.getItem('token');
+                const response = await axios.get(`${baseUrl}/profile`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                    withCredentials: true,
+                });
                 setUser(response.data);
                 setFormState(response.data); // Initialize formState with fetched user data
                 if (response.data.avatar) {

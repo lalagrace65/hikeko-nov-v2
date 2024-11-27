@@ -39,7 +39,7 @@ const app = express();
 const port = process.env.PORT || 4000;
 
 app.use(morgan('dev'));
-app.use(cookieParser());
+app.use(cookieParser(process.env.COOKIE_SECRET, { secure: process.env.NODE_ENV === 'production' }));
 app.use(express.json());
 
 // Add security headers with Helmet
