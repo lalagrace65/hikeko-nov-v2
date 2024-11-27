@@ -10,6 +10,13 @@ router.get('/profile', requireRole(['user']), async (req, res) => {
     try {
         const userId = req.userData.id; // Extract user ID from the middleware
         const user = await User.findById(userId);
+        const token = req.cookies.token;
+
+        if (!token) {
+            return res.status(401).json({ message: 'Not authenticated' });
+        }
+        const decoded = jwt.verify(token, jwtSecret); // Verify the token
+        req.userData = decoded; // Attach decoded user data to request
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
