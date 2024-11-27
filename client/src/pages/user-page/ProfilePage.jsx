@@ -102,14 +102,21 @@ const ProfilePage = () => {
                 const response = await axios.get(`${baseUrl}/profile`, {
                     headers: { Authorization: `Bearer ${token}` },
                     withCredentials: true,
-                });
-                setUser(response.data);
-                setFormState(response.data); // Initialize formState with fetched user data
+                })
+                .then(response => {
+                    setUser(response.data);
+                    setFormState(response.data); // Initialize formState with fetched user data
+                  })
+                  .catch(error => {
+                    setError('Unable to fetch profile. Please login again.');
+                    console.error('Error fetching profile data:', error);
+                  })
+                
+
                 if (response.data.avatar) {
                     setLogo({ link: response.data.avatar });
                 }
             } catch (err) {
-                setError('Unable to fetch profile. Please login again.');
                 console.error(err);
                 navigate('/login');
             }

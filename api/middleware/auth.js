@@ -4,6 +4,7 @@ const jwtSecret = 'wsdfghjkqisoaklfksld';
 
 function requireRole(roles) {
     return (req, res, next) => {
+        console.log(req.cookies);
         const token = req.cookies.token;
 
         if (!token) {
@@ -12,7 +13,7 @@ function requireRole(roles) {
 
         jwt.verify(token, jwtSecret, {}, (err, userData) => {
             if (err) {
-                return res.status(403).json({ message: 'Access denied' });
+                return res.status(403).json({ message: 'Token expired or invalid'});
             }
 
             // Check if user role is one of the allowed roles
