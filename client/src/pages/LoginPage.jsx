@@ -14,13 +14,21 @@ export default function LoginPage() {
     const { setUser } = useContext(UserContext);
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
+        // Check if the token exists in the cookies
+        const token = document.cookie.split('; ').find(row => row.startsWith('token='));
         const storedUser = localStorage.getItem('user');
-
+    
         if (token && storedUser) {
-            setUser(JSON.parse(storedUser));
+            // If token and storedUser exist, decode the token and set the user
+            const decodedToken = jwt.decode(token.split('=')[1]);
+            setUser(decodedToken || parsedUser);  // Use one source of truth
+
+            console.log('Decoded Token:', decodedToken);
+            
+    
             setRedirect(true);
-            const parsedUser = JSON.parse(storedUser);
+    
+            // Set the redirect path based on the user's role
             if (parsedUser.role === 'admin') {
                 setRedirectPath('/admin/dashboard/analytics');
             } else if (parsedUser.role === 'staff') {
@@ -30,8 +38,12 @@ export default function LoginPage() {
             } else {
                 setRedirectPath('/login');
             }
+        } else if (!token || !storedUser) {
+            // Optionally handle case when token or storedUser is missing
+            setRedirectPath('/login');
         }
     }, [setUser]);
+    
 
     async function handleLoginSubmit(ev) {
         ev.preventDefault();

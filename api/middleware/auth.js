@@ -20,10 +20,11 @@ function requireRole(roles) {
                 return res.status(403).json({ message: 'Access denied. Insufficient permissions.' });
             }
 
+            
+            req.userData = userData;
             // Attach user data to request
             req.userId = userData.id; 
             req.userRole = userData.role;
-            req.userData = userData;
             next();
         });
     };
