@@ -65,7 +65,7 @@ app.set('trust proxy', 1);
 // CORS configuration
 app.use(cors({
     credentials: true,
-    origin: ['https://hikeko-nov-v2-client.onrender.com', 'https://hikeko.vercel.app'],
+    origin: ['http://localhost:5173'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'Access-Control-Request-Method', 'Access-Control-Request-Headers']
 }));

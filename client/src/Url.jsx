@@ -1,1 +1,1 @@
-export const baseUrl = `https://hikeko-nov-v2.onrender.com`;
+export const baseURL = `http://localhost:4000`
