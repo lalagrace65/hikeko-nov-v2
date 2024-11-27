@@ -41,6 +41,10 @@ export default function LoginPage() {
             setUser(data);
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data));
+
+             // Optionally, set cookies manually
+            document.cookie = `token=${data.token}; path=/; secure; HttpOnly; SameSite=Lax`;
+
             toast.success('Login successful');
             if (data.role === 'admin') {
                 setRedirectPath('/admin/dashboard/analytics');
