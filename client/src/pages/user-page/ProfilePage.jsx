@@ -98,26 +98,19 @@ const ProfilePage = () => {
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
-                const token = localStorage.getItem('token');
                 const response = await axios.get(`${baseUrl}/profile`, {
-                    withCredentials: true,
-                })
-                .then(response => {
-                    setUser(response.data);
-                    setFormState(response.data); // Initialize formState with fetched user data
-                  })
-                  .catch(error => {
-                    setError('Unable to fetch profile. Please login again.');
-                    console.error('Error fetching profile data:', error);
-                  })
+                    withCredentials: true,  // Ensure cookies are sent along with the request
+                });
                 
-
+                // Process the response data
+                setUser(response.data);
+                setFormState(response.data);
                 if (response.data.avatar) {
                     setLogo({ link: response.data.avatar });
                 }
-            } catch (err) {
-                console.error(err);
-                navigate('/login');
+            } catch (error) {
+                setError('Unable to fetch profile. Please login again.');
+                console.error('Error fetching profile data:', error);
             }
         };
 
