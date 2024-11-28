@@ -19,7 +19,7 @@ router.post('/packages', requireRole(['admin', 'staff']), (req, res) => {
         price, 
         paymentOptions, 
         exclusions, 
-        pickupLocation, 
+        pickupLocations, 
         extraInfo,
         dpPolicy,
         coordinatorName, 
@@ -66,7 +66,7 @@ router.post('/packages', requireRole(['admin', 'staff']), (req, res) => {
                 price,
                 paymentOptions,
                 exclusions, 
-                pickupLocation,
+                pickupLocations,
                 extraInfo,
                 dpPolicy,
                 coordinatorName,
@@ -154,7 +154,7 @@ router.put('/packages/:id', requireRole(['admin', 'staff']), async (req, res) =>
         price, 
         paymentOptions, 
         exclusions, 
-        pickupLocation, 
+        pickupLocations, 
         extraInfo, 
         coordinatorName, 
         checkIn, 
@@ -186,7 +186,7 @@ router.put('/packages/:id', requireRole(['admin', 'staff']), async (req, res) =>
             packageDoc.price = price || packageDoc.price;
             packageDoc.paymentOptions = paymentOptions || packageDoc.paymentOptions;
             packageDoc.exclusions = exclusions || packageDoc.exclusions;
-            packageDoc.pickupLocation = pickupLocation || packageDoc.pickupLocation;
+            packageDoc.pickupLocations = pickupLocations || packageDoc.pickupLocations;
             packageDoc.extraInfo = extraInfo || packageDoc.extraInfo;
             packageDoc.coordinatorName = coordinatorName || packageDoc.coordinatorName;
             packageDoc.checkIn = checkIn || packageDoc.checkIn;
