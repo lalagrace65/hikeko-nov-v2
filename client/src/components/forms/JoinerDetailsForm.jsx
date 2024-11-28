@@ -33,7 +33,7 @@ function JoinerDetailsForm({packageId, packageDetail}) {
     const [isUploading, setIsUploading] = useState(false);
     const [locations, setLocations] = useState([]);
     const [dropdownOpen, setDropdownOpen] = useState(false);
-
+    const [companions, setCompanions] = useState([{ name: '', age: '' }]);
     const form = React.useRef();
 
     const [autofillChecked, setAutofillChecked] = useState(false);
@@ -96,6 +96,17 @@ function JoinerDetailsForm({packageId, packageDetail}) {
 
     const toggleModal = () => {
         setOpenModal(!openModal);
+    };
+
+    //add new companion
+    const addCompanion = () => {
+        setCompanions([...companions, { name: '', age: '' }]);
+    };
+    
+    const handleCompanionChange = (index, field, value) => {
+        const updatedCompanions = [...companions];
+        updatedCompanions[index][field] = value;
+        setCompanions(updatedCompanions);
     };
 
     const initialFormData = {
@@ -247,6 +258,7 @@ function JoinerDetailsForm({packageId, packageDetail}) {
             rewardPointsRedeemed: redeemPoints,
             finalBookingAmount: bookingTotal,
             packageId,
+            companions,
         };
         console.log("Form Data Before Sending Email:", formData);
         console.log("Package Details:", packageDetail);
@@ -519,7 +531,29 @@ function JoinerDetailsForm({packageId, packageDetail}) {
                     <Option className='text-black' value='Downpayment'>Downpayment</Option>
                     <Option className='text-black' value='Full Payment'>Full Payment</Option>
                 </Select>
-
+                {/* Add companion input fields */}
+                <div>
+                    <h3 className="text-xl font-bold mb-4">Companions</h3>
+                    {companions.map((companion, index) => (
+                        <div key={index} className="flex gap-4 mb-4">
+                            <Input
+                                label="Companion Name"
+                                value={companion.name}
+                                onChange={(e) => handleCompanionChange(index, 'name', e.target.value)}
+                                className="w-full"
+                            />
+                            <Input
+                                label="Companion Age"
+                                value={companion.age}
+                                onChange={(e) => handleCompanionChange(index, 'age', e.target.value)}
+                                className="w-full"
+                            />
+                        </div>
+                    ))}
+                    <Button onClick={addCompanion} className="bg-primary">
+                        Add Companion
+                    </Button>
+                </div>
                 
             </div>
             <ReactSortable

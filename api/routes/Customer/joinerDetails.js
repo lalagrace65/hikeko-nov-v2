@@ -27,7 +27,8 @@ router.post('/booking', async (req, res) => {
         paymentType, 
         termsAccepted, 
         packageId, 
-        rewardPointsRedeemed 
+        rewardPointsRedeemed,
+        companions
     } = req.body;
 
     const token = req.headers['authorization']?.split(' ')[1];
@@ -118,6 +119,7 @@ router.post('/booking', async (req, res) => {
             packageId, 
             rewardPointsRedeemed, 
             finalBookingAmount: finalPrice, 
+            companions
         });
 
         // Increment the booking count in the package

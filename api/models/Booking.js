@@ -28,6 +28,10 @@ const BookingSchema = new mongoose.Schema({
       enum: ['Pending', 'Confirmed', 'Completed', 'Cancelled', 'Refunded'], 
       default: 'Pending' 
     },
+    companions: [{ // New field for companions
+      name: { type: String, required: true },
+      age: { type: String, required: true }
+    }],
   }, 
 {timestamps: true}
 );
