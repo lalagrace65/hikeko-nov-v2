@@ -10,7 +10,7 @@ router.get('/trails/:trailId/packages', async (req, res) => {
     const { trailId } = req.params;
     try {
         const packages = await Package.find({ trailId })
-            .populate('travelAgency', 'businessName') 
+            .populate('travelAgency', 'businessName avatar') 
             .populate('trailId', 'title'); 
         console.log('Packages with populated travelAgency:', packages);
         res.json(packages);

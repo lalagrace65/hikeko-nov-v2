@@ -159,7 +159,6 @@ const formatBookingTime = (checkIn, checkOut) => {
   <div className="w-[900px] flex-shrink-0">
     <div className="justify-between items-center mb-4">
       <div>
-        <Button></Button>
       </div>
       <h2 className="text-xl font-semibold mb-4">Packages</h2>
       {packages.length > 0 ? (
@@ -171,9 +170,9 @@ const formatBookingTime = (checkIn, checkOut) => {
                 {/* Travel Agency Logo, Name, and Price */}
                 <div className="flex justify-between items-center mb-2">
                   <div className="flex items-center space-x-3">
-                    {pkg.travelAgency && pkg.travelAgency.logo ? (
+                    {pkg.travelAgency?.avatar?(
                       <img
-                        src={pkg.travelAgency.logo}
+                        src={pkg.travelAgency.avatar}
                         alt={`${pkg.travelAgency.businessName} Logo`}
                         className="w-12 h-12 object-cover rounded-full"
                       />
