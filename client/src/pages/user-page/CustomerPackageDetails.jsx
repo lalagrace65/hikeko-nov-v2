@@ -67,9 +67,9 @@ function CustomerPackageDetails() {
                     <Typography variant="h2" className="flex items-center space-x-3">
                         You are Booking to: 
                         <div className="flex items-center space-x-3">
-                            {packageDetail.travelAgency && packageDetail.travelAgency.logo ? (
+                            {packageDetail.travelAgency?.avatar? (
                                 <img
-                                    src={packageDetail.travelAgency.logo}
+                                    src={packageDetail.travelAgency.avatar}
                                     alt={`${packageDetail.travelAgency.name} Logo`}
                                     className="w-12 h-12 object-cover rounded-full"
                                 />
@@ -86,15 +86,15 @@ function CustomerPackageDetails() {
                     <Typography variant="h5" className="text-slate-500 italic">
                         Downpayment Policy:  ₱{packageDetail.dpPolicy}
                     </Typography>
-                    <p>Date: {formatDate(packageDetail.date)}</p>
-                    <p>Estimated Time: {formatBookingTime(packageDetail.checkIn, packageDetail.checkOut)}</p>
-                    <p>Max Joiners: {packageDetail.maxGuests}</p>
-                    <p>Coordinator: {packageDetail.coordinatorName}</p>
+                    <p><strong>Date: </strong>{formatDate(packageDetail.date)}</p>
+                    <p><strong>Estimated Time: </strong>{formatBookingTime(packageDetail.checkIn, packageDetail.checkOut)}</p>
+                    <p><strong>Max Joiners: </strong>{packageDetail.maxGuests}</p>
+                    <p><strong>Coordinator:</strong> {packageDetail.coordinatorName}</p>
 
                     {/* 3-Column Layout for Inclusions, Exclusions, and Payment Details */}
                     <div className="grid grid-cols-3 gap-4 mt-4">
                         <div>
-                            <h4 className="text-lg mb-2">Package Inclusions:</h4>
+                            <h4 className="text-lg mb-2"><strong>Package Inclusions:</strong></h4>
                             <ul className="list-disc pl-5">
                                 {packageDetail.packages && packageDetail.packages.length > 0 ? (
                                     packageDetail.packages.map((inclusion, idx) => (
@@ -106,11 +106,11 @@ function CustomerPackageDetails() {
                             </ul>
                         </div>
                         <div>
-                            <h4 className="text-lg mb-2">Package Exclusions:</h4>
+                            <h4 className="text-lg mb-2"><strong>Package Exclusions:</strong></h4>
                             <p>{packageDetail.exclusions || 'No exclusions provided.'}</p>
                         </div>
                         <div>
-                            <h4 className="text-lg mb-2">Payment Details:</h4>
+                            <h4 className="text-lg mb-2"><strong>Payment Details:</strong></h4>
                             <p>{packageDetail.paymentOptions || 'No payment details provided.'}</p>
                         </div>
                     </div>

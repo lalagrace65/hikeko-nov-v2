@@ -31,6 +31,9 @@ function JoinerDetailsForm({packageId, packageDetail}) {
     const [open, setOpen] = React.useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
+    const [locations, setLocations] = useState([]);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+
     const form = React.useRef();
 
     const [autofillChecked, setAutofillChecked] = useState(false);
@@ -110,6 +113,24 @@ function JoinerDetailsForm({packageId, packageDetail}) {
 
     const [formData, setFormData] = useState(initialFormData);
 
+    useEffect(() => {
+        if (packageDetail) {
+            setLocations(packageDetail.pickupLocations || []);
+            setFormData(prevState => ({
+                ...prevState,
+                pickupLocation: packageDetail.pickupLocations?.[0] || "" // Use the first location or an empty string
+            }));
+        }
+    }, [packageDetail]);
+    
+    const handleSelectChange = (value) => {
+        console.log('Selected pickup location:', value);
+        setFormData(prevState => ({
+            ...prevState,
+            pickupLocation: value // Set the selected value
+        }));
+    };
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevState => ({
@@ -117,6 +138,8 @@ function JoinerDetailsForm({packageId, packageDetail}) {
             [name]: value.trimStart()
         }));
     };
+
+    
     // Handle the checkbox for terms acceptance
     const handleTermsChange = () => {
         setFormData(prevState => ({
@@ -239,8 +262,8 @@ function JoinerDetailsForm({packageId, packageDetail}) {
             // Submit booking data to the server
             const response = await axios.post(`${baseUrl}/api/booking`, bookingData, {
                 headers: {
-                    Authorization: `Bearer ${token}`
-                }
+                    Authorization: `Bearer ${token}`,
+                },
             });
     
             const { booking, message } = response.data;
@@ -380,13 +403,28 @@ function JoinerDetailsForm({packageId, packageDetail}) {
                     />  
                 </div>
                 <div className="relative w-full">
-                    <Input
+                    <Select
                         label="Pick-up Location"
                         name="pickupLocation"
-                        value={formData.pickupLocation}
-                        onChange={handleInputChange}
-                        className="w-full"
-                    />
+                        defaultValue={formData.pickupLocation || ""}
+                        onChange={(value) => {
+                            handleSelectChange(value);
+                            setDropdownOpen(false); // Close dropdown after selection
+                        }}
+                        onOpen={() => setDropdownOpen(true)} // Open dropdown
+                        onClose={() => setDropdownOpen(false)} // Close dropdown
+                        open={dropdownOpen} // Control dropdown open state
+                    >
+                        {locations.length > 0 ? (
+                            locations.map((location, index) => (
+                                <Option key={index} value={location}>
+                                    {location}
+                                </Option>
+                            ))
+                        ) : (
+                            <Option value="" disabled>Select a pick-up location</Option>
+                        )}
+                    </Select>
                 </div>
                 <div className="relative w-full">
                     <Input
@@ -481,6 +519,8 @@ function JoinerDetailsForm({packageId, packageDetail}) {
                     <Option className='text-black' value='Downpayment'>Downpayment</Option>
                     <Option className='text-black' value='Full Payment'>Full Payment</Option>
                 </Select>
+
+                
             </div>
             <ReactSortable
                 list={proofPaymentImages}
