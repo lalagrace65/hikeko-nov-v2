@@ -30,12 +30,14 @@ export function Advertisement() {
         style={{ transform: `translateX(-${activeIndex * 100}%)` }}
       >
         {images.map((image, index) => (
-          <div key={index} className="w-full flex-shrink-0 h-[20rem]">
+          <div
+            key={index}
+            className="w-full flex-shrink-0 h-[20rem] sm:h-[15rem] md:h-[18rem] lg:h-[25rem] relative"
+          >
             <img
               src={image}
               alt={`slide ${index + 1}`}
-              className="h-full w-full object-cover"
-              style={{ maxWidth: "100%", maxHeight: "100%" }}
+              className="absolute inset-0 w-full h-full object-contain"
             />
           </div>
         ))}
