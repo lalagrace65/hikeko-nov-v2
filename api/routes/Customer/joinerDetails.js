@@ -98,6 +98,7 @@ router.post('/booking', async (req, res) => {
             return res.status(400).send('Proof of payment is required if points do not cover full price.');
         }
 
+        const rewardPointsEarned = Math.floor(packagePrice / 50); // Adjust rate as needed
         // Create the booking
         const bookingDoc = await Booking.create({
             joinerName, 
@@ -119,7 +120,8 @@ router.post('/booking', async (req, res) => {
             packageId, 
             rewardPointsRedeemed, 
             finalBookingAmount: finalPrice, 
-            companions
+            companions,
+            earnedPoints: rewardPointsEarned,
         });
 
         // Increment the booking count in the package
@@ -130,7 +132,7 @@ router.post('/booking', async (req, res) => {
         );
 
         // Calculate reward points earned (if applicable)
-        const rewardPointsEarned = Math.floor(packagePrice / 50); // Adjust rate as needed
+        
         await User.findByIdAndUpdate(
             userData.id,
             { $inc: { rewardPoints: rewardPointsEarned } },

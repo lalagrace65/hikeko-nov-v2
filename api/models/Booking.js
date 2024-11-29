@@ -19,6 +19,7 @@ const BookingSchema = new mongoose.Schema({
     termsAccepted: {type: Boolean, required: true},
     referenceCode: { type: String, unique: true },
     rewardPointsRedeemed: { type: Number, default: 0 },
+    earnedPoints: { type: Number, default: 0 },
     finalBookingAmount: { type: Number, required: true },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     travelAgency: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
