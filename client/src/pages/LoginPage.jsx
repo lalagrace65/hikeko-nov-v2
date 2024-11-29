@@ -24,13 +24,12 @@ export default function LoginPage() {
             setUser(decodedToken || parsedUser);  // Use one source of truth
 
             console.log('Decoded Token:', decodedToken);
-            
-    
+
             setRedirect(true);
     
             // Set the redirect path based on the user's role
             if (parsedUser.role === 'admin') {
-                setRedirectPath('/admin/dashboard/analytics');
+                setRedirectPath('/admin/dashboard');
             } else if (parsedUser.role === 'staff') {
                 setRedirectPath('/staff-db');
             } else if (parsedUser.role === 'user') {
@@ -59,11 +58,11 @@ export default function LoginPage() {
 
             toast.success('Login successful');
             if (data.role === 'admin') {
-                setRedirectPath('/admin/dashboard/analytics');
+                setRedirectPath('/admin/dashboard');
             } else if (data.role === 'staff') {
                 setRedirectPath('/staff-db');
             } else if (data.role === 'user') {
-                setRedirectPath('/');
+                window.location.href = '/';
             } else {
                 setRedirectPath('/login');
             }

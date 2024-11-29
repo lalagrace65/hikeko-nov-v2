@@ -223,7 +223,7 @@ export default function RegisterPage() {
     };
 
     return (
-    <div className="mt-10 grow flex items-center justify-center">
+    <div className="mt-10 mb-10 grow flex items-center justify-center">
         <Card className="mx-auto w-full max-w-[30rem] border">
             <CardBody className="flex flex-col gap-4">
                 <Typography variant="h6" className="text-2xl text-center">Register</Typography>
