@@ -8,6 +8,9 @@ import { PiMountainsThin } from "react-icons/pi";
 function GoogleMapView({ trails }) {
     const [selectedTrail, setSelectedTrail] = useState(null);
     const [filter, setFilter] = useState("");
+    const [regionFilter, setRegionFilter] = useState("");
+    const [trailClassFilter, setTrailClassFilter] = useState(null);
+    const [difficultyFilter, setDifficultyFilter] = useState(null);
     const [filteredTrails, setFilteredTrails] = useState(trails);
     const [suggestions, setSuggestions] = useState([]);
     const [centerCoordinates, setCenterCoordinates] = useState({
@@ -15,64 +18,85 @@ function GoogleMapView({ trails }) {
         lng: 121.429,
     });
 
-    const inputRef = useRef(null); // Reference for the input field
+    const inputRef = useRef(null);
 
     const containerStyle = {
-        width: '100%',
-        height: '70vh',
+        width: "100%",
+        height: "70vh",
     };
 
-    // Filter trails based on user input
+    // Filter trails based on dropdown selections and search input
     useEffect(() => {
-        const processedFilter = filter.toLowerCase().replace(/\./g, ""); // Remove periods and convert to lowercase
-        const matchingTrails = trails.filter((trail) =>
-            trail.title.toLowerCase().replace(/\./g, "").includes(processedFilter)
-        );
-        setFilteredTrails(matchingTrails);
-
-        // Update suggestions for the dropdown (limit to 5)
+        let filtered = trails;
+    
         if (filter) {
-            setSuggestions(
-                trails
-                    .filter((trail) =>
-                        trail.title.toLowerCase().replace(/\./g, "").includes(processedFilter)
-                    )
-                    .slice(0, 5) // Limit to 5 suggestions
+            const processedFilter = filter.toLowerCase().replace(/\./g, "");
+            filtered = filtered.filter((trail) =>
+                trail.title.toLowerCase().replace(/\./g, "").includes(processedFilter)
             );
+        }
+        if (regionFilter) {
+            filtered = filtered.filter((trail) => trail.region === regionFilter);
+        }
+        if (trailClassFilter) { // Now checking for non-empty value
+            filtered = filtered.filter((trail) => trail.trailClass === trailClassFilter);
+        }
+        if (difficultyFilter) { // Now checking for non-empty value
+            filtered = filtered.filter((trail) => trail.difficultyLevel === difficultyFilter);
+        }
+    
+        // Ensure only trails with valid coordinates are displayed
+        const validTrails = filtered.filter(
+            (trail) => trail.coordinates?.lat && trail.coordinates?.lng
+        );
+    
+        setFilteredTrails(validTrails);
+    
+        // Update suggestions only when filter is non-empty
+        if (filter.trim()) {
+            setSuggestions(validTrails.slice(0, 5));
         } else {
-            setSuggestions([]);
+            setSuggestions([]); // Clear suggestions if filter is empty
         }
-
-        // Automatically center map on the first matching trail
-        if (matchingTrails.length === 1) {
-            const firstTrail = matchingTrails[0];
-            if (firstTrail.coordinates?.lat && firstTrail.coordinates?.lng) {
-                setCenterCoordinates({
-                    lat: firstTrail.coordinates.lat,
-                    lng: firstTrail.coordinates.lng,
-                });
-            }
+    
+        // Center map on the first valid trail if only one remains
+        if (validTrails.length === 1) {
+            const firstTrail = validTrails[0];
+            setCenterCoordinates({
+                lat: firstTrail.coordinates.lat,
+                lng: firstTrail.coordinates.lng,
+            });
         }
-    }, [filter, trails]);
+    }, [filter, regionFilter, trailClassFilter, difficultyFilter, trails]);
+    
 
     const handleMarkerClick = (trail) => {
-        setSelectedTrail(trail); // Set the selected trail
+        setSelectedTrail(trail);
     };
 
     const handleCloseInfoWindow = () => {
-        setSelectedTrail(null); // Close the info window
+        setSelectedTrail(null);
     };
 
     const handleSuggestionClick = (suggestion) => {
-        setFilter(suggestion.title); // Set the clicked suggestion's title as the filter
-        setSuggestions([]); // Clear suggestions after selection
+        setFilter(suggestion.title);
+        setTimeout(() => {
+            setSuggestions([]);  // Clear the suggestions dropdown after a brief delay
+        }, 50); 
     };
+
+    // Extract unique filter options
+    const uniqueRegions = [...new Set(trails.map((trail) => trail.region))];
+    const uniqueTrailClasses = [...new Set(trails.map((trail) => trail.trailClass))];
+    const uniqueDifficultyLevels = [
+        ...new Set(trails.map((trail) => trail.difficultyLevel)),
+    ];
 
     // Close suggestions when clicking outside the dropdown
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (inputRef.current && !inputRef.current.contains(event.target)) {
-                setSuggestions([]); // Clear suggestions
+                setSuggestions([]);
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
@@ -83,7 +107,7 @@ function GoogleMapView({ trails }) {
 
     return (
         <div>
-            <div className="relative py-4 px-4 flex items-center gap-3">
+            <div className="relative py-4 px-4 flex gap-3">
                 <MdLocationSearching className="w-8 h-8 text-primary" />
                 <div ref={inputRef} className="relative w-full">
                     <input
@@ -93,6 +117,51 @@ function GoogleMapView({ trails }) {
                         onChange={(e) => setFilter(e.target.value)}
                         className="p-2 border rounded w-full outline-none"
                     />
+
+                     {/* Dropdown Filters */}
+                    <div className="flex gap-4 my-4">
+                        {/* Region Filter */}
+                        <select
+                            value={regionFilter || ""}
+                            onChange={(e) => setRegionFilter(e.target.value)}
+                            className="p-2 border rounded"
+                        >
+                            <option value="">All Regions</option>
+                            {uniqueRegions.map((region, index) => (
+                                <option key={index} value={region}>
+                                    {region}
+                                </option>
+                            ))}
+                        </select>
+
+                    {/* Trail Class Filter */}
+                    <select
+                        value={trailClassFilter || ""}
+                        onChange={(e) => setTrailClassFilter(Number(e.target.value))}
+                        className="p-2 border rounded"
+                    >
+                        <option value="">All Trail Classes</option>
+                        {uniqueTrailClasses.map((trailClass, index) => (
+                            <option key={index} value={trailClass}>
+                                Trail Class {trailClass}
+                            </option>
+                        ))}
+                    </select>
+
+                    {/* Difficulty Level Filter */}
+                    <select
+                        value={difficultyFilter || ""}
+                        onChange={(e) => setDifficultyFilter(Number(e.target.value))}
+                        className="p-2 border rounded"
+                    >
+                        <option value="">All Difficulty Levels</option>
+                        {uniqueDifficultyLevels.map((level, index) => (
+                            <option key={index} value={level}>
+                                Difficulty {level}
+                            </option>
+                        ))}
+                    </select>
+                </div>
                     {/* Suggestions Dropdown */}
                     {suggestions.length > 0 && (
                         <ul className="absolute left-0 right-0 bg-white overflow-hidden rounded-xl shadow-lg z-10 top-full mt-1">
