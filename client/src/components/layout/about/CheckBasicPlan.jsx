@@ -85,14 +85,14 @@ export default function CheckBasicPlan() {
                         <Typography>
                             Join the Basic Plan today and start exploring with exclusive content and discounts tailored for adventurers like you!
                         </Typography>
-                        <Typography>
+                        <div>
                             With the Basic Plan, enjoy:
                             <ul className="mt-2 list-disc list-inside">
                                 <li>Access to curated trail guides</li>
                                 <li>Regular updates on new trails and events</li>
                                 <li>Discounts on selected tours and gear</li>
                             </ul>
-                        </Typography>
+                        </div>
 
                         <div className="mt-4">
                            
@@ -114,10 +114,9 @@ export default function CheckBasicPlan() {
                     <CardFooter className="pt-0">
                         <Button 
                             disabled={!isTermsChecked} 
-                            className="w-full"
+                            className="w-full bg-primary cursor-pointer"
                             onClick={handleSubmit}
                         >
-                            
                                 Submit
                         </Button>
                     </CardFooter>
@@ -131,7 +130,7 @@ export default function CheckBasicPlan() {
                     Join the Basic Plan on Hikeko
                 </Typography>
 
-                <Typography variant="body1" className="mt-4">
+                <Typography variant="h6" className="mt-4">
                     Are you ready to unlock exclusive trail guides, exciting updates, and special discounts? 
                     Join the <strong>Basic Plan</strong> today and embark on your next adventure with all the benefits Hikeko has to offer.
                 </Typography>
@@ -141,9 +140,9 @@ export default function CheckBasicPlan() {
                     <strong>With the Basic Plan, you get:</strong>
                     </Typography>
                     <ul className="mt-2 list-disc list-inside">
-                    <li><strong>Exclusive Access</strong> to curated trail guides</li>
-                    <li><strong>Regular Updates</strong> on new trails, events, and tours</li>
-                    <li><strong>Discounts</strong> on selected tours and adventure gear</li>
+                        <li><strong>Exclusive Access</strong> to curated trail guides</li>
+                        <li><strong>Regular Updates</strong> on new trails, events, and tours</li>
+                        <li><strong>Discounts</strong> on selected tours and adventure gear</li>
                     </ul>
                 </div>
 
@@ -152,10 +151,10 @@ export default function CheckBasicPlan() {
                     <strong>Terms of Service (Short Summary)</strong>
                     </Typography>
                     <ul className="mt-2 list-disc list-inside">
-                    <li><strong>Subscription Period</strong>: You will be charged <strong>monthly</strong> based on your selected plan.</li>
-                    <li><strong>Cancellation</strong>: You can cancel anytime, and your access will continue until the end of the billing cycle.</li>
-                    <li><strong>Renewal</strong>: Your subscription will automatically renew unless canceled prior to the renewal date.</li>
-                    <li><strong>Refunds</strong>: No refunds will be issued after the renewal period starts.</li>
+                        <li><strong>Subscription Period</strong>: You will be charged <strong>monthly</strong> based on your selected plan.</li>
+                        <li><strong>Cancellation</strong>: You can cancel anytime, and your access will continue until the end of the billing cycle.</li>
+                        <li><strong>Renewal</strong>: Your subscription will automatically renew unless canceled prior to the renewal date.</li>
+                        <li><strong>Refunds</strong>: No refunds will be issued after the renewal period starts.</li>
                     </ul>
                 </div>
 
@@ -163,20 +162,20 @@ export default function CheckBasicPlan() {
                     <Typography variant="h6" color="blue-gray">
                     <strong>How It Works</strong>
                     </Typography>
-                    <Typography variant="body2" className="mt-2">
+                    <Typography variant="h6" className="mt-2">
                     By confirming, you agree to subscribe to the Basic Plan, which includes the benefits listed above. You will have full access to exclusive content and discounts tailored for adventurers like you.
                     </Typography>
                 </div>
 
                 <div className="mt-6">
-                    <Typography variant="body2" className="text-center">
+                    <Typography variant="h6" className="text-center">
                     By joining, you agree to the <strong>Terms of Service</strong> and <strong>Privacy Policy</strong> of Hikeko.
                     </Typography>
                 </div>
             </DialogBody>
                 <DialogFooter>
                     <Button
-                        color="primary"
+                        className='bg-primary text-white border-none'
                         onClick={() => setIsModalOpen(false)}
                     >
                         Close
