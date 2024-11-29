@@ -2,6 +2,7 @@ import { Card, Typography, List, ListItem, ListItemPrefix, ListItemSuffix, Chip,
 import { PresentationChartBarIcon, Cog6ToothIcon, InboxIcon, PowerIcon, } from "@heroicons/react/24/solid";
 import { Avatar } from "@material-tailwind/react";
 import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
+import { BiSolidReport } from "react-icons/bi";
 import { MdTour } from "react-icons/md";
 import { RiBookletFill } from "react-icons/ri";
 import { FaUserGroup } from "react-icons/fa6";
@@ -12,6 +13,7 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "@/UserContext";
 import { baseUrl } from "@/Url";
+import toast from "react-hot-toast";
 
 export function MultiLevelSidebar() {
   const [open, setOpen] = React.useState(0);
@@ -62,6 +64,7 @@ export function MultiLevelSidebar() {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       setUser(null);
+      toast.success('Logged out successfully.');
       navigate('/');
     } catch (error) {
       console.error('Error logging out:', error);
@@ -72,9 +75,8 @@ export function MultiLevelSidebar() {
     setSidebarOpen(!sidebarOpen);
   };
 
-  const handleAnalytics = () => navigate('/admin/dashboard/analytics');
+  const handleAnalytics = () => navigate('/admin/dashboard');
   const handleReports = () => navigate('/admin/dashboard/reports');
-  const handleProjects = () => navigate('/admin/dashboard/projects');
   const handleEvent = () => navigate('/admin/events');
   const handlePackage = () => navigate('/admin/add-package');
   const handleBookingList = () => navigate('/admin/bookings');
@@ -112,47 +114,27 @@ export function MultiLevelSidebar() {
                 src={logo || "/default-logo.jpg"}  // Fallback to a default logo if the fetched logo is null
                 alt="Logo"
               />
-              {user.businessName ? user.businessName : `Incremented ID: ${user.incrementId}`}
+              {user.businessName ? user.businessName : `${user.incrementId}`}
             </Typography>
             </div>
           </div>
           <List>
-            {user && user.role === 'admin' && (
-              <Accordion open={open === 1} icon={<ChevronDownIcon strokeWidth={2.5} className={`mx-auto h-4 w-4 transition-transform ${open === 1 ? "rotate-180" : ""}`} />}>
-                <ListItem className="p-0" selected={open === 1}>
-                  <AccordionHeader onClick={() => handleOpen(1)} className="bg-transparent border-b-0 p-3">
-                    <ListItemPrefix>
-                      <PresentationChartBarIcon className="h-6 w-6 mr-2" />
-                    </ListItemPrefix>
-                    <Typography color="blue-gray" className="mr-auto font-normal">
-                      Dashboard
-                    </Typography>
-                  </AccordionHeader>
-                </ListItem>
-                <AccordionBody className="py-1">
-                  <List className="p-0">
-                    <ListItem onClick={handleAnalytics}>
-                      <ListItemPrefix>
-                        <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                      </ListItemPrefix>
-                      Analytics
-                    </ListItem>
-                    <ListItem onClick={handleReports}>
-                      <ListItemPrefix>
-                        <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                      </ListItemPrefix>
-                      Reports
-                    </ListItem>
-                    <ListItem onClick={handleProjects}>
-                      <ListItemPrefix>
-                        <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                      </ListItemPrefix>
-                      Projects
-                    </ListItem>
-                  </List>
-                </AccordionBody>
-              </Accordion>
-            )}
+          {user && user.role === 'admin' && (
+            <ListItem onClick={handleAnalytics}>
+              <ListItemPrefix>
+                <PresentationChartBarIcon className="h-6 w-6 mr-2" />
+              </ListItemPrefix>
+                Dashboard
+            </ListItem>
+          )}
+          {user && user.role === 'admin' && (
+            <ListItem onClick={handleReports}>
+              <ListItemPrefix>
+                <BiSolidReport  className="h-6 w-6 mr-2" />
+              </ListItemPrefix>
+                Reports
+            </ListItem>
+          )}
           <Accordion
             open={open === 2}
             icon={
@@ -273,15 +255,6 @@ export function MultiLevelSidebar() {
             </Accordion>
           )}
           
-          <ListItem onClick={handlePayment}>
-            <ListItemPrefix>
-              <InboxIcon className="h-5 w-5 mr-2" />
-            </ListItemPrefix>
-              Payments
-            <ListItemSuffix>
-              <Chip value="14" size="sm" variant="ghost" color="blue-gray" className="rounded-full" />
-            </ListItemSuffix>
-          </ListItem>
           {user && user.role === 'admin' && (
             <ListItem onClick={handleSettings}>
               <ListItemPrefix>
