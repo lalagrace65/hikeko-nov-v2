@@ -108,7 +108,7 @@ export function MultiLevelSidebar() {
           <div className="mb-2 p-4">
             <div className="flex items-center gap-2 cursor-pointer">
             <Typography variant="h5" color="blue-gray"
-              onClick={() => navigate('/admin/dashboard/analytics')}
+              onClick={() => navigate('/admin/dashboard')}
             >
               <Avatar
                 src={logo || "/default-logo.jpg"}  // Fallback to a default logo if the fetched logo is null
