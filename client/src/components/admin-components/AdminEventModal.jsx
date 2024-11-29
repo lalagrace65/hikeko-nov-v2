@@ -105,7 +105,7 @@ const PackageModal = ({ open, handleClose, packageData }) => {
             handler={handleClose}
             className="bg-transparent shadow-none flex items-center justify-center"
         >
-            <Card className="border h-[700px] w-[1000px] relative">
+            <Card className="border h-[700px] w-[1000px] relative ">
                 <button 
                     onClick={handleClose} 
                     className="absolute top-4 right-4 bg-transparent p-2">
@@ -115,7 +115,7 @@ const PackageModal = ({ open, handleClose, packageData }) => {
                 </button>
                 <CardBody className="grid grid-cols-[1fr_2fr] gap-4 mt-10">
                     {/* Left Side: Package Details */}
-                    <div className="p-4 border rounded-xl bg-adminModal">
+                    <div className="p-4 border rounded-xl bg-adminModal h-[500px] overflow-y-auto">
                         <Typography className="mb-4" variant="h4" color="blue-gray">
                             Package Details
                         </Typography>
