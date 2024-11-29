@@ -59,7 +59,7 @@ router.get('/profile', requireRole(['user']), async (req, res) => {
 });
 
 
-/*router.put('/profile/update', requireRole(['user']), async (req, res) => {
+router.put('/profile/update', requireRole(['user']), async (req, res) => {
     const token = req.cookies.token;
 
     if (!token) {
@@ -106,6 +106,6 @@ router.get('/profile', requireRole(['user']), async (req, res) => {
         console.error("Error updating user profile:", err);
         return res.status(500).json({ message: "Server error" });
     }
-});*/
+});
 
 module.exports = router;
