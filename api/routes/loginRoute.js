@@ -91,9 +91,11 @@ router.post('/login', async (req, res) => {
             // Log the activity
             let description;
 
-                // Construct the description dynamically based on role
-                if (userDoc.role === 'admin' || userDoc.role === 'staff') {
+                 // Construct the description dynamically based on role
+                 if (userDoc.role === 'admin') {
                     description = `(${userDoc.businessName}) is logged in as ${userDoc.role}`;
+                } else if (userDoc.role === 'staff') {
+                    description = `${userDoc.firstName} ${userDoc.lastName} is logged in as ${userDoc.role}`;
                 } else {
                     description = `${userDoc.firstName} ${userDoc.lastName} is logged in as ${userDoc.role}`;
                 }

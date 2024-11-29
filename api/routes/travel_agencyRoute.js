@@ -6,12 +6,13 @@ const User = require('../models/User');
 const { bcryptSalt } = require('../middleware/auth'); 
 const { requireRole } = require('../middleware/auth');
 const { jwtSecret } = require('../middleware/auth');
+const Activity = require('../models/Activity');
 
 const router = express.Router();
 
 router.post('/create-staff', requireRole(['admin']), async(req, res) => {
     console.log('Received request:', req.body); 
-    const { name, email, password, address, contactNo } = req.body;
+    const { firstName, lastName, email, password, address, contactNo } = req.body;
 
     const { token } = req.cookies;
 
@@ -22,7 +23,8 @@ router.post('/create-staff', requireRole(['admin']), async(req, res) => {
         try {
             const hashedPassword = bcrypt.hashSync(password, bcryptSalt);
             const userDoc = await User.create({
-                name,
+                firstName,
+                lastName,
                 email,
                 password: hashedPassword,
                 address,
@@ -31,6 +33,18 @@ router.post('/create-staff', requireRole(['admin']), async(req, res) => {
                 suspended: false,
                 adminId: userData.id // Save the admin's ID who created the staff
             });
+
+            // Log success
+            console.log('Created user:', userDoc);
+
+            const activityLog = new Activity({
+                user: userData.id,
+                description: `Staff member ${firstName} ${lastName} created with email ${email} by admin.`,
+                type: 'User Registration',
+            });
+
+            await activityLog.save();
+            console.log('Activity logged successfully');
 
             console.log('Created user:', userDoc);
             res.json(userDoc);
