@@ -106,9 +106,9 @@ export default function LoginPage() {
                                     required
                                 />
                             </div>
-                            <div>
+                            <div className="relative mt-4">
                                 <Input 
-                                    type="password"
+                                    type={showPassword ? "text" : "password"}
                                     label="Password"
                                     value={password}
                                     onChange={ev => setPassword(ev.target.value)}
