@@ -71,43 +71,6 @@ router.get('/create-staff', requireRole(['admin']), async (req, res) => {
     });
 });
 
-router.put('/create-staff/:id', requireRole(['admin']), async (req, res) => {
-    const { id } = req.params;
-    const { name, email, oldPassword, newPassword, address, contactNo } = req.body;
-
-    try {
-        const updateData = { name, email, address, contactNo };
-
-        // Find the staff member in the database
-        const user = await User.findById(id);
-
-        if (!user) {
-            return res.status(404).json({ message: 'Staff not found' });
-        }
-
-        // If old password is provided, verify it
-        if (oldPassword) {
-            const isPasswordValid = bcrypt.compareSync(oldPassword, user.password);
-            if (!isPasswordValid) {
-                return res.status(400).json({ message: 'Old password is incorrect' });
-            }
-
-            // If old password is valid and new password is provided, hash the new password
-            if (newPassword) {
-                const hashedNewPassword = bcrypt.hashSync(newPassword, bcryptSalt);
-                updateData.password = hashedNewPassword;
-            }
-        }
-
-        // Update staff details
-        const updatedStaff = await User.findByIdAndUpdate(id, updateData, { new: true });
-        res.json(updatedStaff);
-    } catch (err) {
-        console.error('Error updating staff:', err);
-        res.status(500).json({ message: 'Error updating staff', error: err.message });
-    }
-});
-
 // Suspend Staff
 router.put('/create-staff/suspend/:id', async (req, res) => {
     try {
