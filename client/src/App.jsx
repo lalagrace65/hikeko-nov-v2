@@ -34,12 +34,9 @@ import CheckBasicPlan from "./components/layout/about/CheckBasicPlan";
 import Forum from "./pages/forum-page/forum";
 import HikingFAQs from "./components/layout/index/HikingFAQs";
 import AdminDetails from "./pages/admin-page/SettingsPage";
-import Dashboard_Projects from "./pages/admin-page/Dashboard_Projects";
 import Dashboard_Reports from "./pages/admin-page/Dashboard_Reports";
-import Dashboard_AnalyticsPage from "./pages/admin-page/Dashboard_AnalyticsPage";
 import NotificationsPage from "./pages/forum-page/NotificationsPage";
 import TrackPageVisit from "./TrackPageVisit";
-import PaymentPage from "./pages/admin-page/PaymentPage";
 
 // Set default axios settings
 axios.defaults.baseURL = `${baseUrl}`;
@@ -86,58 +83,18 @@ function App() {
               }
             />
             <Route
-              path="/admin/dashboard/analytics"
+              path="/admin/dashboard"
               element={
                 <ProtectRoute>
                   <AdminPage />
                 </ProtectRoute>
               }
             />
-            {/*<Route
-              path="/admin/dashboard/analytics"
-              element={
-                <ProtectRoute>
-                  <Dashboard_AnalyticsPage />
-                </ProtectRoute>
-              }
-            />*/}
             <Route
               path="/admin/dashboard/reports"
               element={
                 <ProtectRoute>
                   <Dashboard_Reports />
-                </ProtectRoute>
-              }
-            />
-            <Route
-              path="/admin/dashboard/projects"
-              element={
-                <ProtectRoute>
-                  <Dashboard_Projects />
-                </ProtectRoute>
-              }
-            />
-            <Route
-              path="/admin/dashboard/analytics"
-              element={
-                <ProtectRoute>
-                  <Dashboard_AnalyticsPage />
-                </ProtectRoute>
-              }
-            />
-            <Route
-              path="/admin/dashboard/reports"
-              element={
-                <ProtectRoute>
-                  <Dashboard_Reports />
-                </ProtectRoute>
-              }
-            />
-            <Route
-              path="/admin/dashboard/projects"
-              element={
-                <ProtectRoute>
-                  <Dashboard_Projects />
                 </ProtectRoute>
               }
             />
@@ -202,14 +159,6 @@ function App() {
               element={
                 <ProtectRoute>
                   <CreateStaffAccount />
-                </ProtectRoute>
-              }
-            />
-            <Route
-              path="/admin/payments"
-              element={
-                <ProtectRoute>
-                  <PaymentPage />
                 </ProtectRoute>
               }
             />
