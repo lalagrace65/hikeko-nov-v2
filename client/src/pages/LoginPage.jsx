@@ -4,6 +4,7 @@ import { Button, Card, CardBody, CardFooter, Input, Typography } from "@material
 import { Link, Navigate } from "react-router-dom";
 import { UserContext } from "../UserContext.jsx";
 import { baseUrl } from "@/Url.jsx";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import toast from "react-hot-toast";
 
 export default function LoginPage() {
@@ -12,6 +13,8 @@ export default function LoginPage() {
     const [redirect, setRedirect] = useState(false);
     const [redirectPath, setRedirectPath] = useState('/');
     const { setUser } = useContext(UserContext);
+
+    const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
 
     useEffect(() => {
         // Check if the token exists in the cookies
@@ -111,6 +114,12 @@ export default function LoginPage() {
                                     onChange={ev => setPassword(ev.target.value)}
                                     required
                                 />
+                                <div
+                                    className="absolute top-3 right-3 cursor-pointer text-gray-600"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
+                                </div>
                             </div>
                             <Button className="primary mt-4" type="submit">Login</Button>
                         </form>

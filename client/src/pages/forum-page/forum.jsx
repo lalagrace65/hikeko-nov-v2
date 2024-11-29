@@ -22,25 +22,25 @@ export default function Forum() {
   const [expandedPosts, setExpandedPosts] = useState([]); // Tracks which posts have expanded comments
   
   const MAX_CONTENT_LENGTH = 280;
+  
+  const fetchPosts = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}/api/getForumPosts`);
+      console.log(response.data); 
+      setPosts(response.data);
+    } catch (error) {
+      console.error('Failed to fetch posts:', error);
+    }
+  };
 
   useEffect(() => {
-    // Check if there's a valid JWT token
-    const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, "$1");
+    const token = localStorage.getItem('token');
+
     if (token) {
       setIsAuthenticated(true);
     } else {
       setIsAuthenticated(false);
     }
-
-    const fetchPosts = async () => {
-      try {
-        const response = await axios.get(`${baseUrl}/api/getForumPosts`);
-        console.log(response.data); 
-        setPosts(response.data);
-      } catch (error) {
-        console.error('Failed to fetch posts:', error);
-      }
-    };
     fetchPosts();
   }, []);
 
@@ -109,25 +109,36 @@ const handleContentChange = (e) => {
       setTitle("");
       setContent("");
       setForumImages([]);// Clear uploaded images after submission
+      fetchPosts();
       
     } catch (error) {
       console.error('Failed to create post:', error);
     }
   };
 
-  const handleLikePost = async (postId) => {
+  const handleLikePost = async (postId, userId) => {
     try {
-      const response = await axios.patch(`${baseUrl}/api/likePost/${postId}`);
-      setPosts(posts.map(post => post._id === postId ? { ...post, likes: response.data.likes } : post));
+      const response = await axios.patch(
+        `${baseUrl}/api/likePost/${postId}`,
+        { userId }  // Send the userId in the request body
+      );
+      console.log(response.data);
+      // Update the posts state with the new like count
+      setPosts(posts.map(post =>
+        post._id === postId
+          ? { ...post, likes: response.data.likes } 
+          : post
+      ));
     } catch (error) {
       console.error('Failed to like post:', error);
     }
   };
-
+  
   const handleAddComment = async (postId, commentText) => {
     try {
       // Extract token and decode userId
-      const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, "$1");
+      const token = localStorage.getItem('token');
+
       if (!token) {
         console.error("Token is missing.");
         toast.error("You must be logged in to comment.");
@@ -148,12 +159,10 @@ const handleContentChange = (e) => {
         userId, // Pass userId correctly
         comment: commentText,
       });
-  
-      // Update posts state with new comments
-      setPosts(posts.map(post =>
-        post._id === postId ? { ...post, comments: response.data.comments } : post
-      ));
+
+      fetchPosts();
       toast.success("Comment added successfully!");
+      
     } catch (error) {
       console.error("Failed to add comment:", error);
       toast.error("Failed to add comment. Please try again.");
@@ -298,7 +307,7 @@ const handleContentChange = (e) => {
                   <IconButton color="red" variant="text" onClick={() => handleLikePost(post._id)}>
                     <FaHeart />
                   </IconButton>
-                  <Typography variant="h6" className="mr-4">{post.likes || 0}</Typography>
+                  <Typography variant="h6" className="mr-4">{post.likes.length || 0}</Typography>
                 </div>
 
                 {/* Comment Section */}

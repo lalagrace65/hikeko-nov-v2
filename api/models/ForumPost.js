@@ -14,7 +14,7 @@ const ForumPostSchema = new mongoose.Schema({
     userAvatar: { type: String },
     avatar: { type: String },
     tags: [{ type: String }],
-    likes: { type: Number, default: 0 },  // For upvotes/downvotes
+    likes: [{type: String, default: [] } ],
     dateCreated: { type: Date, required: true },
     comments: [CommentSchema],
   });
