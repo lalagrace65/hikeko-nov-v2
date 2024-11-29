@@ -12,6 +12,7 @@ export default function CreateStaffAccount() {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [password, setPassword] = useState('');
+    const [address, setAddress] = useState('');
     const [email, setEmail] = useState('');
     const [contactNo, setContactNo] = useState('');
     const [role] = useState('staff');
@@ -72,7 +73,7 @@ export default function CreateStaffAccount() {
     };
 
     const validateForm = () => {
-        if (!firstName || !lastName || !email || !contactNo || !password) {
+        if (!firstName || !lastName || !address || !email || !contactNo || !password) {
             toast.error("Please fill in all the fields.");
             return false;
         }
@@ -94,6 +95,7 @@ export default function CreateStaffAccount() {
         const createStaffData = {
                 firstName,
                 lastName,
+                address,
                 email,
                 password,
                 contactNo,
@@ -109,6 +111,7 @@ export default function CreateStaffAccount() {
                 to_staffEmail: email,
                 to_staffFirstName: firstName,
                 to_staffLastName: lastName,
+                to_staffAddress: address,
                 to_staffPassword: password,
                 to_businessName: adminData.businessName,
                 to_agencyContact: adminData.businessContactNo,
@@ -121,6 +124,7 @@ export default function CreateStaffAccount() {
             setFirstName('');
             setLastName('');
             setPassword('');
+            setAddress('');
             setEmail('');
             setContactNo('');  
             toast.success('Staff Account Created Successfully!'); 
@@ -180,6 +184,16 @@ export default function CreateStaffAccount() {
                             </div>
                         </div>
 
+                        {preInput('Address', 'Input staff address')}
+                        <input
+                            type="address"
+                            name="address"
+                            className="w-full p-2 border border-gray-300 rounded"
+                            placeholder="Address"
+                            value={address}
+                            onChange={ev => setAddress(ev.target.value)}
+                        />
+
                         {preInput('Phone number', 'Input staff phone number')}
                         <PhoneInput
                             className="phone-input-container mt-2 mb-2 w-full px-3 py-2 border border-gray-300 rounded-2xl"
@@ -197,7 +211,7 @@ export default function CreateStaffAccount() {
                             type="email"
                             name="email"
                             className="w-full p-2 border border-gray-300 rounded"
-                            placeholder="your@email.com"
+                            placeholder="staff@email.com"
                             value={email}
                             onChange={ev => setEmail(ev.target.value)}
                         />
