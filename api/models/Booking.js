@@ -30,8 +30,8 @@ const BookingSchema = new mongoose.Schema({
       default: 'Pending' 
     },
     companions: [{ // New field for companions
-      name: { type: String, required: true },
-      age: { type: String, required: true }
+      name: { type: String },
+      age: { type: String}
     }],
   }, 
 {timestamps: true}
