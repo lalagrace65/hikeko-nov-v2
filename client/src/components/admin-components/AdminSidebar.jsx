@@ -84,7 +84,6 @@ export function MultiLevelSidebar() {
   const handleEventArchives = () => navigate('/admin/archives');
   const handleStaffList = () => navigate('/admin/staff-list');
   const handleAddStaff = () => navigate('/admin/add-staff');
-  const handlePayment = () => navigate('/admin/payments');
   const handleSettings = () => navigate('/admin/settings');
 
   return (
@@ -111,7 +110,7 @@ export function MultiLevelSidebar() {
               onClick={() => navigate('/admin/dashboard')}
             >
               <Avatar
-                src={logo || "/default-logo.jpg"}  // Fallback to a default logo if the fetched logo is null
+                src={logo || "/GUEST-PROFILE.png"}  // Fallback to a default logo if the fetched logo is null
                 alt="Logo"
               />
               {user.businessName ? user.businessName : `${user.incrementId}`}

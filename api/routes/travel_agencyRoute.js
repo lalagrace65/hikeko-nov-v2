@@ -55,7 +55,7 @@ router.post('/create-staff', requireRole(['admin']), async(req, res) => {
     });
 });
 
-router.get('/create-staff', requireRole(['admin']), async (req, res) => {
+router.get('/create-staff', requireRole(['admin', 'staff']), async (req, res) => {
     const { token } = req.cookies;
 
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {

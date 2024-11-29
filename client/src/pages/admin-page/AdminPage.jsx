@@ -7,6 +7,7 @@ import axios from "axios";
 import MonthlyBookingsTravelAgency from "@/components/admin-components/MonthlyBookingsTravelAgency";
 import AdminRecentActivity from "@/components/admin-components/AdminRecentActivity";
 import { UserContext } from "@/UserContext";
+import { baseUrl } from "@/Url";
 
 export default function AdminPage() {
   const { user, setUser } = useContext(UserContext);

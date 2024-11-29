@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import UpdateStaff_Admin from "../../components/admin-components/UpdateStaff_Admin";
 import { MultiLevelSidebar } from "@/components/admin-components/AdminSidebar";
 import { baseUrl } from "@/Url";
 import toast from "react-hot-toast";

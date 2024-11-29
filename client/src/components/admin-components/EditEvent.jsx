@@ -152,15 +152,6 @@ export default function EditEvent({ updatedData, setUpdatedData, setEditMode, pa
                 />
             </div>
             <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">Pickup Location</label>
-                <input 
-                    type="text" 
-                    value={updatedData.pickupLocation || ''}
-                    className="w-full px-3 py-2 border rounded-md" 
-                    disabled 
-                />
-            </div>
-            <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">Max Guests</label>
                 <input 
                     type="text" 
