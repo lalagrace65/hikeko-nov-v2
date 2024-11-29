@@ -259,12 +259,12 @@ export default function Header() {
                                                 </MenuItem>
                                             ))}
                                             <MenuItem className="text-center">
-                                                <button
+                                                <div
                                                     className="w-full py-1 px-2 bg-primary text-white rounded-md hover:bg-primary-dark"
                                                     onClick={() => setNotifications([])} // Clear notifications
                                                 >
                                                     Mark all as read
-                                                </button>
+                                                </div>
                                             </MenuItem>
                                         </MenuList>
                                     </Menu>
