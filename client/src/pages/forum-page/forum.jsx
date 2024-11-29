@@ -201,7 +201,7 @@ const handleContentChange = (e) => {
                 onChange={handleContentChange} 
                 required 
                 maxLength={MAX_CONTENT_LENGTH} // Enforce character limit
-                helperText={`${content.length}/${MAX_CONTENT_LENGTH} characters`}
+                helpertext={`${content.length}/${MAX_CONTENT_LENGTH} characters`}
                 className="w-full"
               />
               <div className="absolute top-0 right-0 text-sm text-gray-500 mt-2 mr-2">
@@ -269,10 +269,10 @@ const handleContentChange = (e) => {
           {posts.map((post) => (
             <Card key={post._id} className="p-4">
               <div className="flex items-start mb-4">
-                <Avatar src={post.userId?.avatar} alt="Profile" size="lg" className="mr-4" />
+                <Avatar src={post.userId?.avatar || "/GUEST-PROFILE.png"} alt="Profile" size="lg" className="mr-4" />
                 <div className="flex-1">
                   <div className="flex justify-between">
-                    <Typography variant="h6" className="font-extralight">
+                    <Typography variant="h6" className="font-normal">
                       {post.userId?.firstName || "Anonymous"}
                     </Typography>
                     <span className="text-sm text-gray-500">
@@ -326,10 +326,10 @@ const handleContentChange = (e) => {
                     <div key={index} className="flex items-center space-x-2 mb-2">
                       <Avatar src={comment.userId?.avatar} alt="Profile" size="sm" />
                       <div>
-                        <Typography variant="body2" className="font-bold">
+                        <Typography className="font-semibold text-sm">
                           {comment.userId?.firstName || "Anonymous"}
                         </Typography>
-                        <Typography variant="body2">{comment.comment}</Typography>
+                        <Typography className="font-light text-sm">{comment.comment}</Typography>
                       </div>
                     </div>
                   ))}
