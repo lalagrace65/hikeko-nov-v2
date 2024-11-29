@@ -357,7 +357,7 @@ function JoinerDetailsForm({packageId, packageDetail}) {
     }
 
     return (
-        <div className="bg-cardPrice p-8 text-primary">
+        <div className="py-8 px-4 md:px-6 lg:px-60 bg-cardPrice text-primary">
         <form ref={form}>
             <div className="relative w-full">
             <Checkbox
@@ -368,7 +368,7 @@ function JoinerDetailsForm({packageId, packageDetail}) {
             </div>
              {/* Form Fields */}
             <h2 className="text-2xl font-bold mb-6">JOINER DETAILS:</h2>
-            <div className="grid grid-cols-3 gap-6 mb-4 items-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-4 items-center">
                 <div className="relative w-full">
                     <Input
                         label="Joiner Name(s)"
@@ -509,7 +509,7 @@ function JoinerDetailsForm({packageId, packageDetail}) {
                     </Select>
                 </div>
             </div>
-            <div className="grid grid-cols-3 gap-6 mb-4 items-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-4 items-center">
                 <div className="flex items-center">
                     <p className="text-lg mr-4">PAYMENT:</p>
                     <input
