@@ -22,12 +22,6 @@ export default function AboutPage() {
                 <h5 className="text-white font-bold text-5xl">DISCOVER THE WONDERS OF NATURE WITH HIKEKO</h5>
             </div>
             <AboutContents />
-            <div className="text-center p-2">
-                <h4 className="mt-10 mb-2 text-4xl font-bold text-primary">
-                    OUR HIKING PARTNER
-                </h4>
-            </div>
-            <Partners />
             {/* Container with responsive margin */}
             <div className="flex flex-col lg:flex-row justify-between items-center mx-4 lg:mx-60 mt-10 gap-10 bg-profileContainer p-10 rounded-md">
                 {/* Left Side - Basic Plan */}
@@ -35,7 +29,7 @@ export default function AboutPage() {
                     <h1 className="text-xl font-bold mb-4">
                         Basic Plan
                         <br />
-                        "Get Started with Our Basic Plan!"
+                        Get Started with Our Basic Plan!
                     </h1>
                     <div className="text-sm">
                         <span className="block mb-4">
@@ -55,7 +49,7 @@ export default function AboutPage() {
                     <h1 className="mt-4 text-xl font-bold mb-4">
                         Premium Plan
                         <br />
-                        "Unlock Maximum Visibility with Our Premium Plan!"
+                        Unlock Maximum Visibility with Our Premium Plan!
                     </h1>
                     <div className="text-sm">
                         <span className="block mb-4">
@@ -75,6 +69,13 @@ export default function AboutPage() {
                     <PricingCard />
                 </div>
             </div>
+            {/*hiking partners*/}
+            <div className="text-center p-2">
+                <h4 className="mt-10 mb-2 text-4xl font-bold text-primary">
+                    OUR HIKING PARTNER
+                </h4>
+            </div>
+            <Partners />
         </div>
     );
    

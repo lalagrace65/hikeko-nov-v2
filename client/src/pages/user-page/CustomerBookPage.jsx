@@ -44,8 +44,27 @@ export default function CustomerBookPage() {
     setExpandedBookingId(prevId => (prevId === bookingId ? null : bookingId));
   };
 
+  const packageNames = {
+    vanTransfer: 'Van Transfer',
+    registrationFee: 'Registration Fee',
+    coordinatorFee: "Coordinator's Fee",
+    tourGuideFee: 'Tour Guide Fee',
+    environmentalFee: 'Environmental Fee',
+    parkingFee: 'Parking Fee',
+    bagTag: 'Bag Tag',
+    driverFee: "Driver's Fee",
+    droneService: 'Drone Shot Service',
+  }; 
+
+  function formatCurrency(amount, currency = 'PHP') {
+    return new Intl.NumberFormat('en-PH', {
+        style: 'currency',
+        currency,
+    }).format(amount);
+  }; 
+
   return (
-    <div className="flex flex-col items-center w-full">
+    <div className="flex flex-col items-center w-full mb-10">
       {/* Header Section */}
       <div className="relative w-full text-center bg-gray-100 pb-20">
         {/* Semi-circle Wave Header */}
@@ -82,14 +101,14 @@ export default function CustomerBookPage() {
                   {booking?.packageId?.travelAgency?.businessName || "No Business Name"} 
                 </Typography>
                 <Typography>
-                  {booking?.joinerName || "No Joiner Name"} 
+                  Joiner Name: {booking?.joinerName || "No Joiner Name"} 
                   <br />
-                  {booking?.email || "No Email"} 
+                  Email: {booking?.email || "No Email"} 
                 </Typography>
                 <Typography>
-                  {formatDate(booking?.packageId?.date) || "No Date Available"}
+                  Event Date: {formatDate(booking?.packageId?.date) || "No Date Available"}
                   <br />
-                  {booking?.packageId?.price || "No Price Available"}
+                  Price: {formatCurrency(booking?.packageId?.price) || booking?.packageId?.price || "No Price Available"}
                 </Typography>
   
                 {/* Conditionally render additional details */}
@@ -103,7 +122,7 @@ export default function CustomerBookPage() {
                         booking.packageId.packages.map((pkg, index) => (
                           <li key={index} className="flex items-start">
                             <span className="mr-2">🟠</span> {/* Bullet point */}
-                            {pkg || "No Package Name"} {/* Display the package name */}
+                            {packageNames[pkg] || "No Package Name"} {/* Display the package name */}
                           </li>
                         ))
                       ) : (
@@ -114,7 +133,7 @@ export default function CustomerBookPage() {
                 )}
               </CardBody>
               <CardFooter className="pt-0 flex justify-end">
-                <Button onClick={() => toggleDetails(booking?._id)}>
+                <Button onClick={() => toggleDetails(booking?._id)} className='bg-primary'>
                   {expandedBookingId === booking?._id ? 'Hide Details' : 'Read More'}
                 </Button>
               </CardFooter>

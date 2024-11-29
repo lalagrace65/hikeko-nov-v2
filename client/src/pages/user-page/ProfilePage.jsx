@@ -125,7 +125,7 @@ const ProfilePage = () => {
     return (
         <div className="flex flex-wrap md:flex-row lg:flex-row grow bg-profileContainer justify-center items-start gap-6 p-20">
             {/* Left Column */}
-            <div className="bg-white p-6 rounded-xl md:w-1/4 lg:w-1/6 relative shadow-xl">
+            <div className="bg-white p-6 rounded-xl w-full sm:w-1/2 md:w-1/4 lg:w-1/6 relative shadow-xl">
             {/* Content */}
             <div className="flex mb-4">
                     <Tooltip  content="Change Image" className="bg-gray-700 text-xs">
@@ -133,7 +133,7 @@ const ProfilePage = () => {
                             <img
                                 src={user.avatar}
                                 onClick={handleImageClick}
-                                className="w-40 h-40 rounded-full object-cover cursor-pointer hover:opacity-80"
+                                className="w-60 h-60 lg:w-40 lg:h-40 rounded-full object-cover cursor-pointer hover:opacity-80"
                                 alt="User Avatar"
                             />
                         ) : (
