@@ -46,6 +46,40 @@ router.get('/admin/activities', async (req, res) => {
     }
 });
 
+router.get('/admin/package-activities', async (req, res) => {
+    const { adminId } = req.query; // Admin ID passed as a query parameter
+
+    if (!adminId || !mongoose.Types.ObjectId.isValid(adminId)) {
+        return res.status(400).send('Invalid admin ID.');
+    }
+
+    try {
+        // Fetch all package IDs created by this admin
+        const adminPackages = await Package.find({ travelAgency: adminId }).select('_id');
+
+        if (!adminPackages.length) {
+            return res.status(200).json({ activities: [] });
+        }
+
+        const packageIds = adminPackages.map(pkg => pkg._id);
+
+        // Fetch activity logs related to package creation (Post type)
+        const packageCreationActivities = await Activity.find({
+            type: 'Post',
+            packageId: { $in: packageIds } // Filter activities by package ID
+        })
+            .populate('user', 'firstName lastName email') // Populate user info
+            .sort({ createdAt: -1 }) // Sort by most recent
+            .limit(20);
+
+        res.json({ activities: packageCreationActivities });
+    } catch (err) {
+        console.error('Error fetching package creation activities:', err.message);
+        res.status(500).send('Error fetching activities.');
+    }
+});
+
+
 
 module.exports = router;
   

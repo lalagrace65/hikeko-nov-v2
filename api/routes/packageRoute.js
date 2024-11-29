@@ -5,6 +5,7 @@ const Package = require('../models/Package.js');
 const User = require('../models/User');
 const { jwtSecret } = require('../middleware/auth');
 const { requireRole } = require('../middleware/auth');
+const Activity = require('../models/Activity');
 
 const router = express.Router();
 
@@ -41,19 +42,21 @@ router.post('/packages', requireRole(['admin', 'staff']), (req, res) => {
 
         try {
             let adminId;
+            let staffId = null;
 
             // If user is staff, retrieve the admin ID from the staff document
             if (userData.role === 'staff') {
                 const staffUser = await User.findById(userData.id);
                 if (!staffUser) return res.status(404).json({ message: 'Staff user not found' });
                 adminId = staffUser.adminId; // Assuming the staff document has an adminId field
+                staffId = userData.id;
             } else {
                 adminId = userData.id; // Admin creating the package
             }
 
             // Fetch the business name from the User model to ensure admin exists
-            const travelAgency = await User.findById(adminId).select('businessName');
-            if (!travelAgency || !travelAgency.businessName) {
+            const travelAgency = await User.findById(adminId).select('businessName firstName lastName');
+            if (!travelAgency) {
                 return res.status(404).json({ message: 'Travel agency not found' });
             }
 
@@ -75,8 +78,32 @@ router.post('/packages', requireRole(['admin', 'staff']), (req, res) => {
                 maxGuests,
                 date: new Date(date), 
                 dateCreated: new Date(dateCreated), // Save the timestamp
-                packageImages
+                packageImages,
+                creator: `${userData.firstName} ${userData.lastName}`, // Full name of creator
+                createdBy: staffId,  // Staff ID who created the package (if staff)
+                createdByAdmin: adminId,  // Admin ID who oversees the staff
             });
+
+            // Log who created the package
+            console.log(`Package created by Staff ID: ${staffId || 'N/A'}, Admin ID: ${adminId}`);
+            console.log(`Created by Staff Name: ${userData.firstName} ${userData.lastName}, Admin Name: ${travelAgency.firstName} ${travelAgency.lastName}`);
+
+            // Log this activity in the Activity model
+            const activityLog = new Activity({
+                user: staffId || adminId, // The user who created the package (staff or admin)
+                packageCreatedBy: userData 
+                    ? `${userData.firstName} ${userData.lastName}` 
+                    : `${travelAgency.firstName} ${travelAgency.lastName}(${businessName})`,
+                travelAgency: adminId, // The admin's travel agency
+                description: `Package created: ${packages}`, // Description of the activity
+                type: 'Package', // Activity type indicating package creation
+                packageId: packageDoc._id, // Reference to the newly created package
+                ip: req.ip, // Log the IP address of the request
+            });
+
+            // Save the activity log
+            await activityLog.save();
+            console.log('Activity logged: Package created');
 
             res.status(201).json(packageDoc);
         } catch (error) {

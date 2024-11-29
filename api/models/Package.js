@@ -8,6 +8,7 @@ const timeSchema = new mongoose.Schema({
 const packageSchema = mongoose.Schema({
     travelAgency: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     trailId: { type: mongoose.Schema.Types.ObjectId, ref: 'Trails'},
+    packageCreatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     packages: { type: [String], required: true},
     additionalPackages: { type: String, required: false},
     exclusions: {type: String, required: false},
