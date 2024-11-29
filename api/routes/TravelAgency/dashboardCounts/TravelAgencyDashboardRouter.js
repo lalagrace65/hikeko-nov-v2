@@ -14,9 +14,16 @@ router.get('/staff-count', requireRole(['admin']), async (req, res) => {
       if (err) return res.status(403).json({ message: 'Unauthorized' });
 
       try {
-          // Find staff where adminId matches the logged-in admin's ID and count them
-          const staffCount = await User.countDocuments({ role: 'staff', adminId: userData.id });
-          res.json({ totalStaff: staffCount });
+          // Count active and suspended staff
+          const activeStaffCount = await User.countDocuments({ role: 'staff', adminId: userData.id, suspended: false });
+          const suspendedStaffCount = await User.countDocuments({ role: 'staff', adminId: userData.id, suspended: true });
+          const totalStaff = activeStaffCount + suspendedStaffCount;
+
+          res.json({ 
+            totalStaff, 
+            active: activeStaffCount, 
+            suspended: suspendedStaffCount 
+          });
       } catch (error) {
           res.status(500).json({ message: 'Error fetching staff count', error: error.message });
       }
