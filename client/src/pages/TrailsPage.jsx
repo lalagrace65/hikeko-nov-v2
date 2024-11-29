@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 
-import GlobalApi from "@/Shared/GlobalApi";
+
 import TrailList from "@/components/maps/TrailList";
 import MyDatePicker from "@/components/maps/MyDatePicker";
+import { baseUrl } from "@/Url";
+import axios from "axios";
 export default function TrailsPage() {
 
   const [trailList, setTrailList] = useState([]);
@@ -17,13 +19,16 @@ export default function TrailsPage() {
     getGooglePlace();
   },[])
 
-  const getGooglePlace=()=>{
-    setLoading(true)
-  GlobalApi.getGooglePlace().then((res)=>{
-    setTrailList(res.data.product.results)
-    setLoading(false)
-  })
-}
+  const getGooglePlace = async () => {
+    try {
+        const response = await axios.get(`${baseUrl}/api/trails`);  // Make sure this is the correct endpoint
+        setTrailList(response.data.results);  // Assuming this is the correct data structure
+        setLoading(false);
+    } catch (error) {
+        console.error(error);
+    }
+};
+
 
   return (
       <div>

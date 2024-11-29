@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import GlobalApi from "@/Shared/GlobalApi";
+
 import GoogleMapView from "@/components/maps/GoogleMapView";
 import AdminTrailList from "@/components/maps/AdminTrailList";
 export default function AddPackageTrails() {
@@ -13,15 +13,17 @@ export default function AddPackageTrails() {
 
 useEffect(()=>{
   getGooglePlace();
-},[category,radius])
+},[])
 
-  const getGooglePlace=()=>{
-    setLoading(true)
-  GlobalApi.getGooglePlace(category,radius).then((res)=>{
-    console.log(res.data.product.results);
-    setLoading(false)
-  })
+const getGooglePlace = async () => {
+  try {
+
+  setTrailList(response.data.product.results)
+  setLoading(false)
+} catch (error) {
+  console.error(error);
 }
+};
 
   return (
     <div className="grid grid-cols-1 h-screen md:grid-cols-4 justify-center">
