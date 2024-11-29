@@ -202,9 +202,9 @@ const handleBack = () => {
                     <div className="flex flex-col sm:flex-row sm:justify-between items-center mb-2">
                       {/* Avatar and Business Name */}
                       <div className="flex items-center space-x-3 mb-2 sm:mb-0">
-                        {pkg.travelAgency && pkg.travelAgency.logo ? (
+                        {pkg.travelAgency && pkg.travelAgency.avatar ? (
                           <img
-                            src={pkg.travelAgency.logo}
+                            src={pkg.travelAgency.avatar}
                             alt={`${pkg.travelAgency.businessName} Logo`}
                             className="w-12 h-12 lg:w-16 lg:h-16 object-cover rounded-full"
                           />
