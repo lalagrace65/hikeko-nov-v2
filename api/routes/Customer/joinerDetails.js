@@ -28,6 +28,7 @@ router.post('/booking', async (req, res) => {
         termsAccepted, 
         packageId, 
         rewardPointsRedeemed,
+        customerBookingCount,
         companions
     } = req.body;
 
@@ -119,7 +120,8 @@ router.post('/booking', async (req, res) => {
             userId: userData.id,
             packageId, 
             rewardPointsRedeemed, 
-            finalBookingAmount: finalPrice, 
+            finalBookingAmount: finalPrice,
+            customerBookingCount, 
             companions,
             earnedPoints: rewardPointsEarned,
         });
@@ -138,7 +140,13 @@ router.post('/booking', async (req, res) => {
             { $inc: { rewardPoints: rewardPointsEarned } },
             { new: true }
         );
-
+        
+        // add customerBookingCount
+        await User.findByIdAndUpdate(
+            userData.id,
+            { $inc: { customerBookingCount: 1 } },
+            { new: true }
+        );
 
         // Log the activity
         const newActivity = new Activity({

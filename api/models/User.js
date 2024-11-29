@@ -22,6 +22,7 @@ const UserSchema = new mongoose.Schema({
   dateOfBirth: Date,
   avatar: { type: String },
   rewardPoints: { type: Number, default: 0 }, // for reward points system
+  customerBookingCount: { type: Number, default: 0 }, // for reward points system
   role: { type: String, enum: ['user', 'admin', 'staff'], default: 'user' },
   adminId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   staffId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
