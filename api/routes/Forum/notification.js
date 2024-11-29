@@ -2,10 +2,31 @@ const express = require('express');
 const router = express.Router();
 const Notification = require('../../models/Notification');
 const { requireRole } = require('../../middleware/auth');
+const jwt = require('jsonwebtoken');
+const bcryptSalt = 10; 
+const jwtSecret = 'wsdfghjkqisoaklfksld';
 
 router.get('/notifications', async (req, res) => {
+    let userId = ''; 
+    const token = req.cookies.token;
+
+    jwt.verify(token, jwtSecret, {}, (err, userData) => {
+      if (err) {
+          console.log('JWT verification error:', err);
+          return res.status(403).json({ message: 'Token expired or invalid'});
+      }
+      userId = userData.id;
+
+    });
+      if (!userId) {
+      return res.status(400).json({ message: 'User ID is required' });
+    }
+
     try {
-      const notifications = await Notification.find({ userId: req.userId });
+      const notifications = await Notification.find({ userId: userId })
+        .populate('userId', 'avatar')
+
+      console.log('Notifications:', notifications);
       res.json({ notifications });
     } catch (error) {
       console.error('Error fetching notifications:', error);

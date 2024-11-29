@@ -5,7 +5,7 @@ import axios from 'axios';
 import { baseUrl } from "./Url.jsx";
 import { Avatar, IconButton, Menu, MenuHandler, MenuList, MenuItem, Tooltip } from "@material-tailwind/react";
 import { IoNotificationsOutline } from "react-icons/io5";
-import toast from "react-hot-toast";
+import ProfilePage from "./pages/user-page/ProfilePage.jsx";
 
 export default function Header() {
     const { user, setUser } = useContext(UserContext);
@@ -32,28 +32,25 @@ export default function Header() {
             localStorage.removeItem('token');
             localStorage.removeItem('user'); // Clear local storage on logout
             setUser(null);
-            toast.success('Logged out successfully.');
             navigate('/');
         } catch (err) {
             console.error("Error during logout:", err);
         }
     }
-
+    const fetchUserProfile = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/profile`, { withCredentials: true });
+            setUser(response.data);
+        } catch (err) {
+            setError('Unable to fetch profile name.');
+            console.error(err);
+        } finally {
+            setLoading(false);  // Set loading to false once the fetch is done
+        }
+    };
     useEffect(() => {
-        const fetchUserProfile = async () => {
-            try {
-                const response = await axios.get(`${baseUrl}/profile`, { withCredentials: true });
-                setUser(response.data);
-            } catch (err) {
-                setError('Unable to fetch profile name.');
-                console.error(err);
-            } finally {
-                setLoading(false);  // Set loading to false once the fetch is done
-            }
-        };
-
         fetchUserProfile();
-    }, [setUser]);
+    }, []);
 
     // Handle closing user dropdown on clicking outside
     useEffect(() => {
@@ -250,7 +247,7 @@ export default function Header() {
                                                     className={`flex items-start gap-4 ${notification.isRead ? '' : 'bg-gray-100'}`}
                                                     onClick={() => handleNotificationClick(notification._id)}
                                                 >
-                                                    <Avatar src={notification.avatar || '/default-avatar.png'} alt="Notification Avatar" size="xs" />
+                                                    <Avatar src={notification.userId.avatar || '/default-avatar.png'} alt="Notification Avatar" size="xs" />
                                                     <div>{notification.message}</div>
                                                 </MenuItem>
                                             ))}
@@ -300,9 +297,12 @@ export default function Header() {
                                 )}
                             </div>
                         )}
+                    
                     </div>
+
                 </div>
             </header>
+
         </div>
     );
     

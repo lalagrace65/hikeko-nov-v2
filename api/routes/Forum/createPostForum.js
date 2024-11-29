@@ -5,6 +5,10 @@ const Notification = require('../../models/Notification');
 const Activity = require('../../models/Activity');
 const User = require('../../models/User');
 const { requireRole } = require('../../middleware/auth');
+const jwt = require('jsonwebtoken');
+const bcryptSalt = 10; 
+const jwtSecret = 'wsdfghjkqisoaklfksld';
+
 
 // POST endpoint to create a new forum post
 router.post('/createForumPost', requireRole(['user']), async (req, res) => {
@@ -62,23 +66,64 @@ router.post('/createForumPost', requireRole(['user']), async (req, res) => {
 
 //THIS IS FOR LIKES
 router.patch('/likePost/:id', async (req, res) => {
+  let userId = ''; 
+  const token = req.cookies.token;
+
+  jwt.verify(token, jwtSecret, {}, (err, userData) => {
+    if (err) {
+        console.log('JWT verification error:', err);
+        return res.status(403).json({ message: 'Token expired or invalid'});
+    }
+    userId = userData.id;
+    
+  });
+    if (!userId) {
+    return res.status(400).json({ message: 'User ID is required' });
+  }
   try {
-    const post = await ForumPost.findByIdAndUpdate(
-      req.params.id,
-      { $inc: { likes: 1 } },  // Increment the likes by 1
-      { new: true }
-    );
-    res.json({ likes: post.likes });  // Send only the likes value
+    // Find the post
+    const post = await ForumPost.findById(req.params.id);
+    // Check if the user has already liked the post
+    if (post.likes.includes(userId)) {
+      const index = post.likes.indexOf(userId);
+      post.likes.splice(index, 1);
+      await post.save();
+      return res.json({ likes: post.likes });
+    }
+    console.log('User ID:', userId);
+    // Add the user to the likes array
+    post.likes.push(userId);
+    await post.save();
+
+
+    // Return the updated likes array
+    return res.json({ likes: post.likes });  // Optionally return the length of the likes array
   } catch (error) {
     console.error('Error liking post:', error);
     res.status(500).json({ message: 'Failed to like post' });
   }
 });
 
+
 // Route to add a comment to a post
 router.post('/commentPost/:postId', async (req, res) => {
+
+  let userId = ''; 
+  const token = req.cookies.token;
+
+  jwt.verify(token, jwtSecret, {}, (err, userData) => {
+    if (err) {
+        console.log('JWT verification error:', err);
+        return res.status(403).json({ message: 'Token expired or invalid'});
+    }
+    userId = userData.id;
+    
+  });
+    if (!userId) {
+    return res.status(400).json({ message: 'User ID is required' });
+  }
   const { postId } = req.params;
-  const { comment, userId } = req.body; // Extract comment and userId from the request body
+  const { comment } = req.body; 
 
   try {
     // Find the forum post
@@ -112,14 +157,14 @@ router.post('/commentPost/:postId', async (req, res) => {
       createdAt: new Date(),
     });
 
+
     // Fetch the most recent activity
-    const recentActivity = await Activity.findOne({ user: req.userId })
+    const recentActivity = await Activity.findOne({ user: userId })
     .sort({ createdAt: -1 }) // Sort by most recent
     .select('description type createdAt') // Include only relevant fields
     .lean(); // Use lean to get a plain JS object
 
-   // Get the user's full name from req.user (ensure req.user is populated)
-   const userFullName = req.user ? `${req.user.firstName} ${req.user.lastName}` : 'Anonymous';
+   const userFullName = user ? `${user.firstName} ${user.lastName}` : 'Anonymous';
 
    // Debugging: Log the user's full name
    console.log('User Full Name:', userFullName);
