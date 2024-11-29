@@ -9,13 +9,11 @@ const LINKS = [
     items: [
       { label: "Hiking FAQs", link: "/hikingFAQs" },
       { label: "About us", link: "/about" },
-      { label: "News" },
     ],
   },
   {
     title: "Resource",
     items: [
-      { label: "Newsletter" },
       { label: "Explore",  link: "/trails" },
       { label: "Forum",  link: "/forum" },
     ],
