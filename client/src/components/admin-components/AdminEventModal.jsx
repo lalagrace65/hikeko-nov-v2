@@ -125,7 +125,7 @@ const PackageModal = ({ open, handleClose, packageData }) => {
                         <Typography className="custom-paragraph font-normal" variant="paragraph" color="gray">
                             <span><b>Event Status:</b> {packageData ? packageData.status : 'N/A'}</span>
                         </Typography>
-                        <Typography className="custom-paragraph font-normal" variant="paragraph" color="gray">
+                        <div className="custom-paragraph font-normal" color="gray">
                             <span><b>Packages:</b> </span>
                                 {packageData && packageData.packages.length > 0 ? (
                                     <ul className="list-disc list-inside ml-4">
@@ -136,7 +136,7 @@ const PackageModal = ({ open, handleClose, packageData }) => {
                                 ) : (
                                     <span>N/A</span>
                             )}
-                        </Typography> 
+                        </div> 
                         <Typography className="custom-paragraph font-normal" variant="paragraph" color="gray">
                             <span><b>Additional package inclusions:</b> {packageData ? packageData.additionalPackages : 'N/A'} </span>
                         </Typography> 

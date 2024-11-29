@@ -69,10 +69,10 @@ const AdminRecentActivity = () => {
           <ul className="list-none p-0 m-0">
             {recentActivities.map((activity, index) => (
               <li key={index} className="mb-4 border-b pb-2">
-                <Typography variant="body1" color="blue-gray">
+                <Typography className="font-light" color="blue-gray">
                   {activity.description || "No description available"}
                 </Typography>
-                <Typography variant="caption" color="textSecondary">
+                <Typography className="font-medium" color="blue-gray">
                   {activity.createdAt
                     ? new Date(activity.createdAt).toLocaleString()
                     : "Unknown time"}
