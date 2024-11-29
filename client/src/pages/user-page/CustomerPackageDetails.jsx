@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import JoinerDetailsForm from '@/components/forms/JoinerDetailsForm';
 import { Typography } from '@material-tailwind/react';
 import { baseUrl } from '@/Url';
 import { Carousel } from "@material-tailwind/react";
+import { IoArrowBackCircleOutline } from "react-icons/io5";
 
 function CustomerPackageDetails() {
+    const navigate = useNavigate();
     const { packageId } = useParams(); // Get package ID from the URL
     const [packageDetail, setPackageDetail] = useState(null);
+
+    const handleBack = () => {
+        navigate(-1);
+    };
 
     useEffect(() => {
         const fetchPackageDetail = async () => {
@@ -55,12 +61,31 @@ function CustomerPackageDetails() {
         return `${formattedCheckIn} - ${formattedCheckOut}`;
     };
 
+    const packageNames = {
+        vanTransfer: 'Van Transfer',
+        registrationFee: 'Registration Fee',
+        coordinatorFee: "Coordinator's Fee",
+        tourGuideFee: 'Tour Guide Fee',
+        environmentalFee: 'Environmental Fee',
+        parkingFee: 'Parking Fee',
+        bagTag: 'Bag Tag',
+        driverFee: "Driver's Fee",
+        droneService: 'Drone Shot Service',
+    }; 
+
+
     if (!packageDetail) return <p>Loading...</p>;
 
     return (
-        <>
+        <div>
+            <div className="flex items-center px-4 md:px-6 lg:px-60 space-x-2 flex-row  mt-5 " onClick={handleBack}>
+                <IoArrowBackCircleOutline className='text-4xl text-primary cursor-pointer'/>
+                <div className='flex text-primary font-semibold text-xl cursor-pointer' >
+                    Back
+                </div>
+            </div>
             {/* First Section: Details and Carousel in 2 Columns */}
-            <div className="p-4 grid grid-cols-2 gap-8">
+            <div className="px-4 md:px-6 lg:px-60 grid grid-cols-1 md:grid-cols-2 gap-8 mb-4">
                 {/* Left Side: Package Details */}
                 <div className="space-y-4">
                     <Typography variant="h2">{packageDetail.trailId.title}</Typography>
@@ -92,13 +117,16 @@ function CustomerPackageDetails() {
                     <p><strong>Coordinator:</strong> {packageDetail.coordinatorName}</p>
 
                     {/* 3-Column Layout for Inclusions, Exclusions, and Payment Details */}
-                    <div className="grid grid-cols-3 gap-4 mt-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
                         <div>
                             <h4 className="text-lg mb-2"><strong>Package Inclusions:</strong></h4>
-                            <ul className="list-disc pl-5">
+                            <ul className="list-none pl-5">
                                 {packageDetail.packages && packageDetail.packages.length > 0 ? (
                                     packageDetail.packages.map((inclusion, idx) => (
-                                        <li key={idx} className="mb-1">{inclusion}</li>
+                                        <li key={idx} className="mb-1">
+                                            <span className="mr-2">✔</span>
+                                            {packageNames[inclusion] ||inclusion}
+                                        </li>
                                     ))
                                 ) : (
                                     <p>No inclusions available.</p>
@@ -152,7 +180,7 @@ function CustomerPackageDetails() {
 
             {/* Joiner Form */}
             <JoinerDetailsForm packageId={packageId} packageDetail={packageDetail} />
-        </>
+        </div>
     );
 }
 
