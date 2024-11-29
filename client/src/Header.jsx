@@ -5,6 +5,7 @@ import axios from 'axios';
 import { baseUrl } from "./Url.jsx";
 import { Avatar, IconButton, Menu, MenuHandler, MenuList, MenuItem, Tooltip } from "@material-tailwind/react";
 import { IoNotificationsOutline } from "react-icons/io5";
+import toast from "react-hot-toast";
 
 export default function Header() {
     const { user, setUser } = useContext(UserContext);
@@ -31,6 +32,7 @@ export default function Header() {
             localStorage.removeItem('token');
             localStorage.removeItem('user'); // Clear local storage on logout
             setUser(null);
+            toast.success('Logged out successfully.');
             navigate('/');
         } catch (err) {
             console.error("Error during logout:", err);
