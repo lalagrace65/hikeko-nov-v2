@@ -24,7 +24,9 @@ router.get('/trails/:trailId/packages', async (req, res) => {
 router.get('/packages/:id', async (req, res) => {
     const { id } = req.params; // Extract package ID from params
     try {
-        const package = await Package.findById(id).populate('travelAgency', 'businessName avatar'); // Populate if needed
+        const package = await Package.findById(id)
+        .populate('travelAgency', 'businessName avatar')
+        .populate('trailId', 'title');  // Populate if needed
         console.log('Fetched package:', package);
         if (!package) {
             return res.status(404).json({ message: 'Package not found' });

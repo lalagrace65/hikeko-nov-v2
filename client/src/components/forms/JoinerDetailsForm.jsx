@@ -423,8 +423,8 @@ function JoinerDetailsForm({packageId, packageDetail}) {
                             handleSelectChange(value);
                             setDropdownOpen(false); // Close dropdown after selection
                         }}
-                        onOpen={() => setDropdownOpen(true)} // Open dropdown
-                        onClose={() => setDropdownOpen(false)} // Close dropdown
+                        onFocus={() => setDropdownOpen(true)} // Open dropdown
+                        onBlur={() => setDropdownOpen(false)} // Close dropdown
                         open={dropdownOpen} // Control dropdown open state
                     >
                         {locations.length > 0 ? (
@@ -457,7 +457,6 @@ function JoinerDetailsForm({packageId, packageDetail}) {
                 <div className="relative w-full">
                     <Select 
                         label="Have medical condition?" 
-                        color="black" 
                         onChange={(value) => setFormData({...formData, medicalCondition: value})}
                     >
                         <Option className='text-black' value='Yes'>Yes</Option>
@@ -499,7 +498,6 @@ function JoinerDetailsForm({packageId, packageDetail}) {
                 <div className="relative w-full">
                     <Select 
                         label="Relationship" 
-                        color="black" 
                         onChange={(value) => setFormData({...formData, relationship: value})}
                     >
                         <Option className='text-black' value='Self'>Self</Option>
@@ -525,7 +523,7 @@ function JoinerDetailsForm({packageId, packageDetail}) {
                 </label>
                 </div>
                     
-                <Select label="Type Payment" color="black" 
+                <Select label="Type Payment"
                 onChange={(value) => setFormData({...formData, paymentType: value})}
                 >
                     <Option className='text-black' value='Downpayment'>Downpayment</Option>

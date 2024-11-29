@@ -26,7 +26,7 @@ function CustomerPackageDetails() {
             }
         };
         fetchPackageDetail();
-    }, [packageId]);
+    }, [packageId,]);
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -88,7 +88,7 @@ function CustomerPackageDetails() {
             <div className="px-4 md:px-6 lg:px-60 grid grid-cols-1 md:grid-cols-2 gap-8 mb-4">
                 {/* Left Side: Package Details */}
                 <div className="space-y-4">
-                    <Typography variant="h2">{packageDetail.trailId.title}</Typography>
+                    <Typography variant="h2" className='mt-2'>{packageDetail.trailId.title}</Typography>
                     <Typography variant="h2" className="flex items-center space-x-3">
                         You are Booking to: 
                         <div className="flex items-center space-x-3">
@@ -96,14 +96,14 @@ function CustomerPackageDetails() {
                                 <img
                                     src={packageDetail.travelAgency.avatar}
                                     alt={`${packageDetail.travelAgency.name} Logo`}
-                                    className="w-12 h-12 object-cover rounded-full"
+                                    className="ml-2 w-12 h-12 object-cover rounded-full"
                                 />
                             ) : (
                                 <div className="w-12 h-12 bg-gray-200 rounded-full" /> // Placeholder for logo if none exists
                             )}
-                            <Typography variant="h4">{packageDetail.travelAgency.businessName}</Typography>
+                            <Typography className='font-semibold text-2xl'>{packageDetail.travelAgency.businessName}</Typography>
                         </div>
-                        <Typography variant="h3" className="text-right ml-14">
+                        <Typography className="font-semibold text-2xl text-right ml-14">
                             {formatCurrency(packageDetail.price, 'PHP')}
                         </Typography>
                     </Typography>
