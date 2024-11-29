@@ -7,9 +7,10 @@ import Packages from "../admin-components/Packages";
 import { MultiLevelSidebar } from "../admin-components/AdminSidebar";
 import toast from "react-hot-toast";
 import { baseUrl } from "@/Url";
-import { Typography, Spinner } from "@material-tailwind/react";
+import { Typography, Spinner, Button } from "@material-tailwind/react";
 import { FiUpload } from "react-icons/fi";
 import { ReactSortable } from 'react-sortablejs';
+import { FaPlus } from "react-icons/fa6";
 
 
 export default function PackageForm() {
@@ -23,7 +24,6 @@ export default function PackageForm() {
     const [exclusions, setExclusions] = useState('');
     const [pickupLocations, setPickupLocations] = useState('');
     const [pickupLocationInput, setPickupLocationInput] = useState("");
-
     const [extraInfo, setExtraInfo] = useState('');
     const [coordinatorName, setCoordinatorName] = useState([]);
     const [checkIn, setCheckIn] = useState('');
@@ -31,19 +31,20 @@ export default function PackageForm() {
     const [maxGuests, setMaxGuests] = useState('');
     const [dpPolicy, setDpPolicy] = useState('');
     const [selectedDate, setSelectedDate] = useState(null); 
-
     const [packageImages, setPackageImages] = useState([]);
     const [isUploading, setIsUploading] = useState(false);
 
     // Error states
     const [errors, setErrors] = useState({
         selectedTrail: "",
+        packages: "",
         price: "",
         dpPolicy: "",
         pickupLocation: "",
         coordinatorName: "",
         checkIn: "",
         checkOut: "",
+        selectedDate: "",
         maxGuests: "",
     });
 
@@ -51,14 +52,15 @@ export default function PackageForm() {
     const validate = () => {
         const newErrors = {};
         if (!selectedTrail) newErrors.selectedTrail = "Trail is required";
+        if (!packages) newErrors.packages = "Packages is required";
         if (!price || isNaN(parseFloat(price.replace(/[₱,]/g, "")))) newErrors.price = "Valid price is required";
         if (!dpPolicy || isNaN(parseFloat(dpPolicy.replace(/[₱,]/g, "")))) newErrors.dpPolicy = "Valid downpayment policy is required";
         if (!exclusions) newErrors.exclusions = "Package exclusions is required";
         if (!paymentOptions) newErrors.paymentOptions = "Payment details is required";
-        if (!pickupLocations) newErrors.pickupLocations = "Pickup location is required";
         if (!coordinatorName) newErrors.coordinatorName = "Coordinator name is required";
         if (!checkIn) newErrors.checkIn = "Check-in time is required";
         if (!checkOut) newErrors.checkOut = "Check-out time is required";
+        if (!selectedDate) newErrors.selectedDate = "Event Date is required";
         if (!maxGuests || isNaN(maxGuests)) newErrors.maxGuests = "Valid max guests number is required";
 
         setErrors(newErrors);
@@ -279,9 +281,9 @@ export default function PackageForm() {
         <div className="flex">
             <MultiLevelSidebar />
             <div className="flex-1 p-8">
-                <div className="flex justify-between">
-                    <div className="w-full md:w-8/12">
-                        <form onSubmit={addNewPackage}>
+                <div className="flex sm:flex-row flex-col justify-between">
+                    <div className="w-full sm:w-4/8 md:w-8/12">
+                        <form >
                             {preInput('Select Trail', 'Choose the trail for this package')}
                             <div className="relative">
                                 <div
@@ -293,23 +295,23 @@ export default function PackageForm() {
                                 {/* Dropdown container with scrollable list */}
                                 {showDropdown && (
                                     <div className="absolute w-full max-h-60 overflow-y-auto border bg-white z-10 rounded mt-1">
-                                    <ul>
-                                        <li 
-                                        className="p-2 hover:bg-gray-200 cursor-pointer"
-                                        onClick={() => { setSelectedTrail(""); setShowDropdown(false); }}
-                                        >
-                                        Select a trail
-                                        </li>
-                                        {trails.map((trail) => (
-                                        <li
-                                            key={trail._id}
+                                        <ul>
+                                            <li 
                                             className="p-2 hover:bg-gray-200 cursor-pointer"
-                                            onClick={() => { setSelectedTrail(trail._id); setShowDropdown(false); }}
-                                        >
-                                            {trail.title}
-                                        </li>
-                                        ))}
-                                    </ul>
+                                            onClick={() => { setSelectedTrail(""); setShowDropdown(false); }}
+                                            >
+                                            Select a trail
+                                            </li>
+                                            {trails.map((trail) => (
+                                            <li
+                                                key={trail._id}
+                                                className="p-2 hover:bg-gray-200 cursor-pointer"
+                                                onClick={() => { setSelectedTrail(trail._id); setShowDropdown(false); }}
+                                            >
+                                                {trail.title}
+                                            </li>
+                                            ))}
+                                        </ul>
                                     </div>
                                 )}
                                 {errors.selectedTrail && <p className="text-red-500 text-sm">{errors.selectedTrail}</p>}
@@ -319,8 +321,8 @@ export default function PackageForm() {
                             {preInput('Packages Inclusions', 'Select all packages available')}
                             <div className="mt-2">
                                 <Packages selected={packages} onChange={setPackages} />
-                                {errors.packages && <p className="text-red-500 text-sm">{errors.packages}</p>}
                             </div>
+                            {errors.packages && <p className="text-red-500 text-sm">{errors.packages}</p>}
 
                             {preInput('', 'Additional packages (Optional)')}
                             <textarea
@@ -357,6 +359,49 @@ export default function PackageForm() {
                                 className="w-full border mt-2 p-2 rounded"
                                 rows={5}
                             />
+                            {/* Pickup Locations */}
+                            <div>
+                            {preInput('Pickup Locations', 'Enter the pickup locations for this package')}
+                                <div className="flex items-center space-x-2 mt-2">
+                                    <input
+                                        type="text"
+                                        value={pickupLocationInput}
+                                        onChange={(e) => setPickupLocationInput(e.target.value)}
+                                        placeholder="Enter pickup location"
+                                        className="w-[500px] border p-2 rounded"
+                                    />
+                                    <Button
+                                        type="button"
+                                        onClick={addPickupLocation}
+                                        className="bg-blue-500 w-[200px] text-white p-3 rounded-lg flex items-center justify-center space-x-2"
+                                    >
+                                        <FaPlus />
+                                        <span>Add Pickup Location</span>
+                                    </Button>
+                                </div>
+
+
+                                <div className="mt-4">
+                                    {pickupLocations.length > 0 ? (
+                                        <ul>
+                                            {pickupLocations.map((location, index) => (
+                                                <li key={index} className="flex items-center w-[500px] justify-between border p-2 my-2 rounded">
+                                                    <span>{location}</span>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removePickupLocation(index)}
+                                                        className="text-red-500 bg-transparent"
+                                                    >
+                                                        Remove
+                                                    </button>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <p>No pickup locations added yet.</p>
+                                    )}
+                                </div>
+                            </div>
 
                             {/* Upload Photo */}
                             <div>
@@ -391,11 +436,10 @@ export default function PackageForm() {
                                     })}
                                 </ReactSortable>
                             </div>
-
-                            <button className="primary mt-4 w-full text-white rounded hover:shadow-xl transition-all duration-300 ease-in-out">Save</button>
                         </form>
                     </div>
-
+                    
+                    {/*Right column*/}   
                     <div className="flex flex-col self-start max-w-sm mt-6">
                         <div className="p-4 border rounded-2xl w-auto">
                             {preInput('Event Date', 'Select event date')}
@@ -406,6 +450,8 @@ export default function PackageForm() {
                                 disabled={{ before: new Date() }} 
                             />
                         </div>
+                        {errors.selectedDate && <p className="text-red-500 text-sm">{errors.selectedDate}</p>}            
+
                         {preInput('Event Time', 'Select the event time for this package')}
                             <div className="grid gap-1 sm:grid-cols-2">
                                 <div>
@@ -434,46 +480,6 @@ export default function PackageForm() {
                             />
                             {errors.maxGuests && <p className="text-red-500 text-sm">{errors.maxGuests}</p>}
                         </div> 
-                        
-                        {/* Pickup Locations */}
-                        <div>
-                            <h3>Pickup Locations</h3>
-                            <input
-                                type="text"
-                                value={pickupLocationInput}
-                                onChange={(e) => setPickupLocationInput(e.target.value)}
-                                placeholder="Enter pickup location"
-                                className="w-full border mt-2 p-2 rounded"
-                            />
-                            <button
-                                type="button"
-                                onClick={addPickupLocation}
-                                className="bg-blue-500 text-white p-2 rounded mt-2"
-                            >
-                                Add Pickup Location
-                            </button>
-
-                            <div className="mt-4">
-                                {pickupLocations.length > 0 ? (
-                                    <ul>
-                                        {pickupLocations.map((location, index) => (
-                                            <li key={index} className="flex items-center justify-between border p-2 my-2 rounded">
-                                                <span>{location}</span>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => removePickupLocation(index)}
-                                                    className="text-red-500"
-                                                >
-                                                    Remove
-                                                </button>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                ) : (
-                                    <p>No pickup locations added yet.</p>
-                                )}
-                            </div>
-                        </div>
                         <div>
                             {preInput('Coordinator Name')}
                             <input type="text"
@@ -504,8 +510,8 @@ export default function PackageForm() {
                             {errors.paymentOptions && <p className="text-red-500 text-sm">{errors.paymentOptions}</p>}
                         </div>
                     </div>
-                    
                 </div>
+                <button className="bg-orange-300 w-full lg:w-[1000px] p-3  mt-4 text-white rounded-full hover:shadow-xl transition-all duration-300 ease-in-out" onClick={addNewPackage}>Save</button>
             </div>
         </div>
     );    
