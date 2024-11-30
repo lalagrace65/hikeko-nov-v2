@@ -172,7 +172,7 @@ export default function UploadProofSubscription() {
                     <CardFooter className="pt-0">
                         <Button 
                             disabled={isUploading || !isTermsChecked} 
-                            className="w-full"
+                            className="w-full bg-primary"
                             onClick={handleSubmit}
                         >
                             {isUploading ? (

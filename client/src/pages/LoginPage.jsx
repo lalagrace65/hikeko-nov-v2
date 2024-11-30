@@ -6,6 +6,7 @@ import { UserContext } from "../UserContext.jsx";
 import { baseUrl } from "@/Url.jsx";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import toast from "react-hot-toast";
+import HikekoTermsOfService from "@/context/HikekoTermsService.jsx";
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -13,6 +14,7 @@ export default function LoginPage() {
     const [errorMessage, setErrorMessage] = useState(''); 
     const [redirect, setRedirect] = useState(false);
     const [redirectPath, setRedirectPath] = useState('/');
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
     const { setUser } = useContext(UserContext);
 
     const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
@@ -126,6 +128,11 @@ export default function LoginPage() {
                             {/* Error message display */}
                             {errorMessage && <div className="text-red-500 text-sm mt-2">{errorMessage}</div>}
                             <Button className="primary mt-4" type="submit">Login</Button>
+                            <HikekoTermsOfService
+                                isOpen={isDialogOpen}
+                                onClose={() => setIsDialogOpen(false)} // Close the dialog
+                            />
+
                         </form>
                     </div>
                 </CardBody>
@@ -134,6 +141,12 @@ export default function LoginPage() {
                         <Typography variant="small" className="font-normal mt-4">
                             Don't have an account? 
                             <Link className="text-black font-semibold" to={'/register'}> Register now</Link>
+                        </Typography>
+                        <Typography variant="small" className="font-normal mt-4">
+                            By continuing to use HikeKo, you agree to <br/>
+                            our <span className="text-primary hover:opacity-50 ease-in duration-200  underline cursor-pointer"
+                            onClick={() => setIsDialogOpen(true)}
+                            >Terms of Service</span>
                         </Typography>
                     </div>
                 </CardFooter>

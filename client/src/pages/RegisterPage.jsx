@@ -8,8 +8,10 @@ import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import emailjs from "@emailjs/browser";
+import HikekoTermsOfService from "@/context/HikekoTermsService";
 
 export default function RegisterPage() {
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -251,7 +253,7 @@ export default function RegisterPage() {
     };
 
     return (
-    <div className="mt-10 grow flex items-center justify-center">
+    <div className="mt-10 mb-10 grow flex items-center justify-center">
         <Card className="mx-auto w-full max-w-[30rem] border">
             <CardBody className="flex flex-col gap-4">
                 <Typography variant="h6" className="text-2xl text-center">Register</Typography>
@@ -388,6 +390,10 @@ export default function RegisterPage() {
                             </li>
                         </ul>
                     <Button className="primary mt-4" type="submit">Register</Button>
+                    <HikekoTermsOfService
+                                isOpen={isDialogOpen}
+                                onClose={() => setIsDialogOpen(false)} // Close the dialog
+                            />
                 </form>
             </CardBody>
             <CardFooter className="pt-0">
@@ -396,6 +402,12 @@ export default function RegisterPage() {
                         Already a member?
                         <Link className="text-black font-semibold" to="/login"> Login</Link>
                     </Typography>
+                    <Typography variant="small" className="font-normal mt-4">
+                            By continuing to use HikeKo, you agree to <br/>
+                            our <span className="text-primary hover:opacity-50 ease-in duration-200  underline cursor-pointer"
+                            onClick={() => setIsDialogOpen(true)}
+                            >Terms of Service</span>
+                        </Typography>
                 </div>
             </CardFooter>
         </Card>
