@@ -44,14 +44,6 @@ export default function Forum() {
     fetchPosts();
   }, []);
 
-  
-  const handleCommentSubmit = (postId) => {
-    if (comment.trim()) {
-      handleAddComment(postId, comment);
-      setComment(''); // Reset the input after comment is added
-    }
-  };
-
 //Sortable image upload
 async function uploadForumImages(ev){
   const files = ev.target?.files;
@@ -131,6 +123,31 @@ const handleContentChange = (e) => {
       ));
     } catch (error) {
       console.error('Failed to like post:', error);
+    }
+  };
+
+  const handleInputChange = (postId, value) => {
+    setComment((prevComments) => ({
+      ...prevComments,
+      [postId]: value, // Update the comment for this specific post
+    }));
+  };
+
+  const handleCommentSubmit = async (postId) => {
+    const commentText = comment[postId];
+    if (commentText.trim()) {
+      try {
+        await handleAddComment(postId, commentText);  // Add the comment
+        setComment((prevComments) => ({
+          ...prevComments,
+          [postId]: "",  // Reset the specific post's comment input
+        }));
+      } catch (error) {
+        console.error("Failed to add comment:", error);
+        toast.error("Failed to add comment. Please try again.");
+      }
+    } else {
+      toast.error("Comment cannot be empty.");
     }
   };
   
@@ -310,15 +327,30 @@ const handleContentChange = (e) => {
                   <Typography variant="h6" className="mr-4">{post.likes.length || 0}</Typography>
                 </div>
 
-                {/* Comment Section */}
-                <input
-                  type="text"
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                  placeholder="Add a comment..."
-                  className="border p-2 rounded-md w-full mt-2"
-                  onKeyDown={(e) => e.key === "Enter" && handleCommentSubmit(post._id)}
-                />
+                <div className="flex items-center gap-2 mt-2">
+                  {/* Input Field */}
+                  <input
+                    type="text"
+                    value={comment[post._id] || ""}
+                    onChange={(e) => handleInputChange(post._id, e.target.value)}
+                    placeholder="Add a comment..."
+                    className="border p-2 rounded-md w-full"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault(); // Prevent default Enter behavior (e.g., new line).
+                        handleCommentSubmit(post._id);
+                      }
+                    }}
+                  />
+
+                  {/* Submit Button */}
+                  <button
+                    onClick={() => handleCommentSubmit(post._id)}
+                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                  >
+                    Submit
+                  </button>
+                </div>
 
                 {/* Show Comments */}
                 <div className="mt-4">
