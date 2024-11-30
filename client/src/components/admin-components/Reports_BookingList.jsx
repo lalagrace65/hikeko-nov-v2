@@ -48,11 +48,41 @@ function Reports_BookingList() {
 
   // Excel Export Function
   const handleExcelExport = () => {
-    const ws = XLSX.utils.json_to_sheet(bookings);
+    // Get the table headers and rows
+    const table = document.getElementById("table-to-print");
+    const headers = table.querySelectorAll("th");
+    const rows = table.querySelectorAll("tr");
+
+    // Create an array to store table data
+    const data = [];
+    
+    // Get table headers
+    const headerRow = [];
+    headers.forEach(header => {
+        headerRow.push(header.innerText.trim());  // Collect text of headers
+    });
+    data.push(headerRow); // Add headers to the data array
+
+    // Get table rows (excluding the header row)
+    rows.forEach((row, rowIndex) => {
+        if (rowIndex > 0) { // Skip the header row
+            const rowData = [];
+            const cells = row.querySelectorAll("td");
+            cells.forEach(cell => {
+                rowData.push(cell.innerText.trim());  // Collect text of each cell
+            });
+            data.push(rowData); // Add row data to the data array
+        }
+    });
+
+    // Create a worksheet and workbook
+    const ws = XLSX.utils.aoa_to_sheet(data); // Convert the array to sheet
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Bookings");
+    XLSX.utils.book_append_sheet(wb, ws, "Bookings"); // Append the sheet to workbook
+
+    // Export to Excel
     XLSX.writeFile(wb, "Bookings_Report.xlsx");
-  };
+    };
 
   // PDF Export Function
   const handlePdfExport = () => {
@@ -91,9 +121,8 @@ function Reports_BookingList() {
   };
 
   return (
-    <div className="overflow-x-auto border bg-white shadow-lg rounded-xl p-6 mt-12">
-      <h2 className="text-xl mb-4">Top 5 Customers</h2>
-
+    <div className="overflow-x-auto border bg-white shadow-lg rounded-xl p-6">
+      <h2 className="text-xl mb-4">Customer List</h2>
       {/* Buttons for Print, Excel, and PDF export */}
       <div className="mb-4">
         <button
@@ -139,6 +168,18 @@ function Reports_BookingList() {
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                   Booking Count
                 </th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                  Date of Birth
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                  Home Address
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                  Contact No.
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                  Emergency Contact
+                </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -161,6 +202,18 @@ function Reports_BookingList() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                     {booking.customerBookingCount}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    {new Date(booking.dateOfBirth).toISOString().split("T")[0]}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    {booking.address}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    {booking.contactNo}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    {booking.emergencyContactNo}
                   </td>
                 </tr>
               ))}

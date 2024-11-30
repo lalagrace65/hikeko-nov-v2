@@ -78,7 +78,7 @@ function Reports_Staff() {
     };
 
     return (
-        <div className="overflow-x-auto border bg-white shadow-lg rounded-xl p-6 mt-12">
+        <div className="overflow-x-auto border bg-white shadow-lg rounded-xl p-6 ">
             <h2 className="text-xl mb-4">Staff Account List</h2>
             {/* Buttons for Print, Excel, and PDF export */}
             <div className="mb-4">
