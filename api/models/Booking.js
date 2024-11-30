@@ -6,7 +6,7 @@ const BookingSchema = new mongoose.Schema({
     joinerName:{type: String, required: true},
     email: {type: String, required: true},
     contactNumber: {type: String, required: true},
-    pickupLocation: {type: String, required: true},
+    pickupLocation: {type: String},
     age: {type: String, required: true},
     sex: {type: String, required: true},
     homeAddress: {type: String, required: true},
