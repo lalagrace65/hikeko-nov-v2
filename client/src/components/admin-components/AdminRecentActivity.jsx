@@ -46,7 +46,7 @@ const AdminRecentActivity = () => {
 
   return (
     <div className="recent-activities">
-      <Typography variant="h4" className="mb-4">
+      <Typography variant="h4" className="mb-4 mt-10">
         Recent Activities
       </Typography>
       {loading ? (
