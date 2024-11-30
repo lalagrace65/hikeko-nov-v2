@@ -56,20 +56,22 @@ export default function RegisterPage() {
         const calendarPrevMonthNav = datepicker.prevMonthNav;
         const calendarDaysContainer = datepicker.daysContainer;
 
-        calendarContainer.className +=
-            " bg-white p-4 border border-blue-gray-50 rounded-lg shadow-lg shadow-blue-gray-500/10 font-sans text-sm font-normal text-blue-gray-500 focus:outline-none break-words whitespace-normal";
+        console.log(datepicker.calendarContainer);
 
-        calendarMonthNav.className +=
-            " flex items-center justify-between mb-4 [&>div.flatpickr-month]:-translate-y-3";
+    //      calendarContainer?.className +=
+    //          " bg-white p-4 border border-blue-gray-50 rounded-lg shadow-lg shadow-blue-gray-500/10 font-sans text-sm font-normal text-blue-gray-500 focus:outline-none break-words whitespace-normal";
 
-        calendarNextMonthNav.className +=
-            " absolute !top-2.5 !right-1.5 h-6 w-6 bg-transparent hover:bg-blue-gray-50 !p-1 rounded-md transition-colors duration-300";
+    //      calendarMonthNav?.className +=
+    //          " flex items-center justify-between mb-4 [&>div.flatpickr-month]:-translate-y-3";
 
-        calendarPrevMonthNav.className +=
-            " absolute !top-2.5 !left-1.5 h-6 w-6 bg-transparent hover:bg-blue-gray-50 !p-1 rounded-md transition-colors duration-300";
+    //      calendarNextMonthNav?.className +=
+    //          " absolute !top-2.5 !right-1.5 h-6 w-6 bg-transparent hover:bg-blue-gray-50 !p-1 rounded-md transition-colors duration-300";
 
-        calendarDaysContainer.className +=
-            " [&_span.flatpickr-day]:!rounded-md [&_span.flatpickr-day.selected]:!bg-gray-900 [&_span.flatpickr-day.selected]:!border-gray-900";
+    //  calendarPrevMonthNav?.className +=
+    //          " absolute !top-2.5 !left-1.5 h-6 w-6 bg-transparent hover:bg-blue-gray-50 !p-1 rounded-md transition-colors duration-300";
+
+    //      calendarDaysContainer?.className +=
+    //          " [&_span.flatpickr-day]:!rounded-md [&_span.flatpickr-day.selected]:!bg-gray-900 [&_span.flatpickr-day.selected]:!border-gray-900";
 
         return () => datepicker.destroy(); // Cleanup on unmount
     }, []);
@@ -223,7 +225,7 @@ export default function RegisterPage() {
     };
 
     return (
-    <div className="mt-10 mb-10 grow flex items-center justify-center">
+    <div className="mt-10 grow flex items-center justify-center">
         <Card className="mx-auto w-full max-w-[30rem] border">
             <CardBody className="flex flex-col gap-4">
                 <Typography variant="h6" className="text-2xl text-center">Register</Typography>
