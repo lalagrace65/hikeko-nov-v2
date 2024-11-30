@@ -6,9 +6,11 @@ import { Typography } from '@material-tailwind/react';
 import { baseUrl } from '@/Url';
 import { Carousel } from "@material-tailwind/react";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
+import OpenTravelAgencyDetails from '@/context/OpenTravelAgencyDetails';
 
 function CustomerPackageDetails() {
     const navigate = useNavigate();
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
     const { packageId } = useParams(); // Get package ID from the URL
     const [packageDetail, setPackageDetail] = useState(null);
 
@@ -89,25 +91,30 @@ function CustomerPackageDetails() {
                 {/* Left Side: Package Details */}
                 <div className="space-y-4">
                     <Typography variant="h2" className='mt-2'>{packageDetail.trailId.title}</Typography>
-                    <Typography variant="h2" className="flex items-center space-x-3">
+                    <Typography variant="h2" className="flex flex-col sm:flex-row items-start sm:space-x-3">
                         You are Booking to: 
-                        <div className="flex items-center space-x-3">
-                            {packageDetail.travelAgency?.avatar? (
+                        <div className="flex flex-col sm:flex-row items-start sm:space-x-3 mt-2 sm:mt-0">
+                            {packageDetail.travelAgency?.avatar ? (
                                 <img
-                                    src={packageDetail.travelAgency.avatar}
-                                    alt={`${packageDetail.travelAgency.name} Logo`}
-                                    className="ml-2 w-12 h-12 object-cover rounded-full"
+                                src={packageDetail.travelAgency.avatar}
+                                alt={`${packageDetail.travelAgency.name} Logo`}
+                                className="w-12 h-12 object-cover rounded-full"
                                 />
                             ) : (
                                 <div className="w-12 h-12 bg-gray-200 rounded-full" /> // Placeholder for logo if none exists
                             )}
-                            <Typography className='font-semibold text-2xl'>{packageDetail.travelAgency.businessName}</Typography>
+                            <Typography className="font-semibold cursor-pointer text-2xl mt-2 sm:mt-0 text-primary" 
+                                onClick={() => setIsDialogOpen(true)}
+                            >
+                                {packageDetail.travelAgency.businessName}
+                            </Typography>
                         </div>
-                        <Typography className="font-semibold text-2xl text-right ml-14">
+                        <div className="flex sm:flex-row items-start mt-2 sm:mt-0">
+                            <Typography className="font-semibold text-2xl text-left sm:text-right">
                             {formatCurrency(packageDetail.price, 'PHP')}
+                            </Typography>
+                        </div>
                         </Typography>
-                    </Typography>
-
                     <Typography variant="h5" className="text-slate-500 italic">
                         Downpayment Policy:  ₱{packageDetail.dpPolicy}
                     </Typography>
@@ -177,6 +184,10 @@ function CustomerPackageDetails() {
                     )}
                 </div>
             </div>
+            <OpenTravelAgencyDetails
+                isOpen={isDialogOpen}
+                onClose={() => setIsDialogOpen(false)} // Close the dialog
+            />
 
             {/* Joiner Form */}
             <JoinerDetailsForm packageId={packageId} packageDetail={packageDetail} />
