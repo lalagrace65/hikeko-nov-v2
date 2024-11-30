@@ -123,7 +123,7 @@ router.get('/verify-email', async (req, res) => {
         if (!user) {
             return res.status(400).json({ message: "Invalid or expired token" });
         }
-        res.redirect('http://localhost:5173/verify-email');
+        res.redirect('https://hikeko.vercel.app/verify-email');
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Internal server error" });
