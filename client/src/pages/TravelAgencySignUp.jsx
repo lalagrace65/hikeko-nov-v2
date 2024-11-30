@@ -7,7 +7,7 @@ export default function TravelAgencySignUp() {
     window.scrollTo(0, 0);
   }, []);
   return (
-    <div>
+    <div className='min-h-screen'>
         <TravelAgencyCredentialsHome />
     </div>
   )

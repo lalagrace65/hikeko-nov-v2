@@ -14,7 +14,7 @@ export default function TravelAgencyCredentialsHome() {
   const [open, setOpen] = React.useState(0);
   const handleOpen = (value) => setOpen(open === value ? 0 : value);
   return (
-    <div className="relative min-h-screen flex flex-col ">
+    <div className="relative w-full min-h-screen flex flex-col ">
       {/* Cover photo and form */}
       <div className="relative flex-grow">
         {/* Cover photo */}
@@ -30,38 +30,38 @@ export default function TravelAgencyCredentialsHome() {
       </div>
 
       {/* Floating Text */}
-      <div className="absolute top-[6%] z-10 ml-60 mr-60">
-          <h1 className="text-4xl font-bold mb-2 text-white">
-            Boost your revenue with Us!
-          </h1>
-          <p className="text-lg mb-4 text-white">
-            Sign up now and start earning more with HikeKo.
-          </p>
-        </div>
+      <div className="absolute top-[6%] px-8 z-10 lg:px-60">
+        <h1 className="text-4xl font-bold mb-2 text-white">
+          Boost your revenue with Us!
+        </h1>
+        <p className="text-lg mb-4 text-white">
+          Sign up now and start earning more with HikeKo.
+        </p>
+      </div>
       {/* Form Container */}
-      <div className="absolute top-[15%] z-10 ml-60 mr-60">
+      <div className="absolute top-[12%] lg:top-[15%] flex z-10 w-full px-4 sm:px-8 lg:px-60">
           <div className="bg-white p-7 rounded-lg shadow-lg" style={{ width: '500px', minHeight: '500px' }}>
             <h2 className="text-2xl font-semibold mb-4">
               Ready to grow your business?
             </h2>
               <CredForm />
           </div>
-        </div>
-
-      {/* New Opportunities Section */}
-      <div className="bg-white p-8 text-center mt-40 mx-auto max-w-4xl relative">
-        <Typography className="text-6xl font-semibold text-primary">Bring new opportunities</Typography>
-        <p className="text-xl mt-10">
-          Expand your horizons and explore new business opportunities with HikeKo. Join us today and be part of something big!
-        </p>
       </div>
 
+        {/* New Opportunities Section */}
+        <div className="bg-white p-8 text-center mt-40 mx-auto max-w-4xl relative">
+          <Typography className="text-4xl md:5xl lg:text-6xl font-semibold text-primary">Bring new opportunities</Typography>
+          <p className="text-xl mt-10">
+            Expand your horizons and explore new business opportunities with HikeKo. Join us today and be part of something big!
+          </p>
+        </div>
+
       {/* Three Cards in a Row */}
-      <div className="flex justify-center mt-10 space-x-8 mb-20"> {/* Flexbox container for 3 cards */}
+      <div className="flex flex-col lg:flex-row justify-center mt-10 lg:space-x-8 space-y-6 lg:space-y-0 mb-20">
         {/* Card 1 */}
-        <Card className="mt-6 w-96 shadow-none">
+        <Card className="mt-6 w-full lg:w-96 shadow-none">
           <CardBody className="flex flex-col items-center justify-center">
-            <img src="hat.png" className='h-40 w-40'/>
+            <img src="hat.png" className="h-40 w-40" />
             <Typography variant="h5" color="blue-gray" className="mb-2">
               Connect With Hikers
             </Typography>
@@ -73,10 +73,10 @@ export default function TravelAgencyCredentialsHome() {
         </Card>
 
         {/* Card 2 */}
-        <Card className="mt-6 w-96 shadow-none">
+        <Card className="mt-6 w-full lg:w-96 shadow-none">
           <CardBody className="flex flex-col items-center justify-center">
-            <img src="key.png" className='h-40 w-40'/>
-            <Typography variant="h5" color="blue-gray" className="mb-2" >
+            <img src="key.png" className="h-40 w-40" />
+            <Typography variant="h5" color="blue-gray" className="mb-2">
               Unlock Revenue
             </Typography>
             <Typography align="center">
@@ -85,12 +85,13 @@ export default function TravelAgencyCredentialsHome() {
             </Typography>
           </CardBody>
         </Card>
+
         {/* Card 3 */}
-        <Card className="mt-6 w-96 shadow-none">
+        <Card className="mt-6 w-full lg:w-96 shadow-none">
           <CardBody className="flex flex-col items-center justify-center">
-            <img src="bag.png" className='h-40 w-40'/>
+            <img src="bag.png" className="h-40 w-40" />
             <Typography variant="h5" color="blue-gray" className="mb-2">
-              Build Stronger Connections 
+              Build Stronger Connections
             </Typography>
             <Typography align="center">
               Our platform lets you showcase your packages, 
@@ -100,6 +101,7 @@ export default function TravelAgencyCredentialsHome() {
           </CardBody>
         </Card>
       </div>
+
     </div>
   );
 }

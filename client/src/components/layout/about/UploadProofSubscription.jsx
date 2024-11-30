@@ -18,6 +18,7 @@ import axios from 'axios';
 import { baseUrl } from '@/Url';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export default function UploadProofSubscription() {
     const navigate = useNavigate();
@@ -105,7 +106,11 @@ export default function UploadProofSubscription() {
             toast.error('Failed to submit subscription');
         }
     };
-    
+
+    // Scroll to top when this component mounts
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);   
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-gray-100">

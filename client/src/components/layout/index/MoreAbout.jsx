@@ -1,11 +1,11 @@
-import {
-    Card,
-    CardHeader,
-    CardBody,
-    Typography,
-    Button,
-  } from "@material-tailwind/react";
-import { useNavigate } from "react-router-dom";
+    import {
+        Card,
+        CardHeader,
+        CardBody,
+        Typography,
+        Button,
+    } from "@material-tailwind/react";
+    import { useNavigate } from "react-router-dom";
    
   export function MoreAbout() {
     const navigate = useNavigate();
