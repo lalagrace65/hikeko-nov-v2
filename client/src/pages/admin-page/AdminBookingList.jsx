@@ -2,15 +2,22 @@ import React,{ useEffect, useState } from "react";
 import axios from "axios";
 import { MultiLevelSidebar } from "@/components/admin-components/AdminSidebar";
 import { baseUrl } from "@/Url";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@material-tailwind/react";
 
 export default function AdminBookingList() {
     const navigate = useNavigate(); 
+    const location = useLocation();
     const [bookings, setBookings] = useState([]);
     const [expandedRow, setExpandedRow] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
+
+    // Extract the highlighted incrementingId from the query parameter
+    const queryParams = new URLSearchParams(location.search);
+    const highlightedId = queryParams.get("highlighted");
+    const [highlightedReference, setHighlightedReference] = useState(highlightedId);
+
 
     const handleReferenceCodeClick = (referenceCode) => {
         // Navigate to AdminTransactionList page with the reference code as a query parameter
@@ -30,6 +37,7 @@ export default function AdminBookingList() {
         
 
     const toggleExpandedRow = (bookingId) => {
+        setHighlightedReference(null);
         setExpandedRow(expandedRow === bookingId ? null : bookingId);
     };
 
@@ -61,7 +69,16 @@ export default function AdminBookingList() {
                                             {currentBookings.map((booking, index) => (
                                                 <React.Fragment key={index}>
                                                     {/* Parent Row */}
-                                                    <tr key={index} className={expandedRow === index ? "bg-gray-200" : "bg-white"}>
+                                                    <tr
+                                                    key={index}
+                                                    className={`${
+                                                        booking.incrementingId === highlightedReference
+                                                            ? "bg-yellow-100" // Highlighted style
+                                                            : expandedRow === index
+                                                            ? "bg-gray-200"
+                                                            : "bg-white"
+                                                    }`}
+                                                >
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{booking.incrementingId}</td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{booking.firstName} {booking.lastName}</td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{booking.email}</td>   

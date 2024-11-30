@@ -8,6 +8,7 @@ import MonthlyBookingsTravelAgency from "@/components/admin-components/MonthlyBo
 import AdminRecentActivity from "@/components/admin-components/AdminRecentActivity";
 import { UserContext } from "@/UserContext";
 import { baseUrl } from "@/Url";
+import AdminCountCustomerBookings from "@/components/admin-components/AdminCountCustomerBookings";
 
 export default function AdminPage() {
   const { user, setUser } = useContext(UserContext);
@@ -280,6 +281,9 @@ export default function AdminPage() {
                         <div className="flex w-1/3">
                             <AdminRecentActivity adminId={adminId} />
                         </div>
+                    </div>
+                    <div>
+                      <AdminCountCustomerBookings />
                     </div>
                 </div>
             )}
