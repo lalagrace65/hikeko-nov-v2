@@ -98,7 +98,7 @@ router.get('/booking-count', requireRole(['admin', 'staff']), async (req, res) =
         // Fetch all packages that are 'ended' and belong to the travel agency
         const endedPackages = await Package.find({ 
           travelAgency: userData.id,
-          status: 'ended' 
+          status: { $in: ['ongoing', 'upcoming', 'ended'] }
         });
   
         // Initialize total earnings variable
@@ -109,7 +109,7 @@ router.get('/booking-count', requireRole(['admin', 'staff']), async (req, res) =
           // Fetch bookings for this package where the payment status is 'Completed'
           const bookings = await Booking.find({
             packageId: packageData._id,
-            paymentStatus: 'Completed'
+            paymentStatus: { $in: [ 'Confirmed','Completed'] }
           });
   
           // Sum the earnings for the bookings

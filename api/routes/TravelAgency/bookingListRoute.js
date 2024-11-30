@@ -14,12 +14,12 @@ router.get('/booking-list', requireRole(['admin', 'staff']), async (req, res) =>
     // Check the user's role (admin or staff)
     if (req.userData.role === 'admin') {
       // If admin, fetch all bookings for the travel agency they belong to
-      bookings = await Booking.find({ travelAgency: userId }).populate('userId', 'incrementingId firstName lastName email address contactNo emergencyContactNo dateOfBirth');
+      bookings = await Booking.find({ travelAgency: userId }).populate('userId', 'incrementingId firstName lastName customerBookingCount email address contactNo emergencyContactNo dateOfBirth');
     } else if (req.userData.role === 'staff') {
       // If staff, find the admin they are assigned to (adminId)
       const admin = await User.findById(userId).select('adminId');
       // Fetch all bookings related to the admin the staff member works for
-      bookings = await Booking.find({ travelAgency: admin.adminId }).populate('userId', 'incrementingId firstName lastName email address contactNo emergencyContactNo dateOfBirth');
+      bookings = await Booking.find({ travelAgency: admin.adminId }).populate('userId', 'incrementingId firstName lastName customerBookingCount email address contactNo emergencyContactNo dateOfBirth');
     } else {
       return res.status(403).json({ message: 'Access denied' });
     }
@@ -28,6 +28,7 @@ router.get('/booking-list', requireRole(['admin', 'staff']), async (req, res) =>
     const groupedBookings = bookings.reduce((acc, booking) => {
       const { userId } = booking;
       const incrementingId = userId ? userId.incrementingId : 'N/A'; 
+      const customerBookingCount = userId ? userId.customerBookingCount : 'N/A'; 
       const firstName = userId ? userId.firstName : 'N/A'; 
       const lastName = userId ? userId.lastName : 'N/A'; 
       const email = userId ? userId.email : 'N/A'; 
@@ -39,6 +40,7 @@ router.get('/booking-list', requireRole(['admin', 'staff']), async (req, res) =>
       if (!acc[userId._id]) {  
         acc[userId._id] = {
           incrementingId,
+          customerBookingCount,
           firstName,
           lastName,
           email,
