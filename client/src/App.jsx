@@ -37,6 +37,7 @@ import AdminDetails from "./pages/admin-page/SettingsPage";
 import Dashboard_Reports from "./pages/admin-page/Dashboard_Reports";
 import NotificationsPage from "./pages/forum-page/NotificationsPage";
 import TrackPageVisit from "./TrackPageVisit";
+import VerifyEmail from "./pages/VerifyEmail";
 
 // Set default axios settings
 axios.defaults.baseURL = `${baseUrl}`;
@@ -68,6 +69,7 @@ function App() {
             <Route path="/uploadProofSubscription" element={<UploadProofSubscription />} />
             <Route path="/basicPlanSubscription" element={<CheckBasicPlan />} />
 
+            <Route path="/verify-email" element={<VerifyEmail />} />
             {/*  Customer with Account Routes */}
             <Route path="/profile" element={<ProfilePage />}/>
             <Route path="/book" element={<CustomerBookPage />}/>

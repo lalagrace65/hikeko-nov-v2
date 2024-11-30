@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState(''); 
     const [redirect, setRedirect] = useState(false);
     const [redirectPath, setRedirectPath] = useState('/');
     const { setUser } = useContext(UserContext);
@@ -49,6 +50,7 @@ export default function LoginPage() {
 
     async function handleLoginSubmit(ev) {
         ev.preventDefault();
+        setErrorMessage('');
         try {
             const { data } = await axios.post(`${baseUrl}/login`, { email, password },{withCredentials: true });
             
@@ -72,15 +74,15 @@ export default function LoginPage() {
             setRedirect(true);
         } catch (e) {
             if (e.response && e.response.status === 403) {
-                toast.error('Your account is suspended');
+                setErrorMessage('Your account is suspended');
             } else if (e.response && e.response.status === 401) {
-                toast.error('Account not verified');
+                setErrorMessage('Account not verified');
             } else if (e.response && e.response.status === 422) {
-                toast.error('Invalid email or password');
+                setErrorMessage('Invalid email or password');
             } else if (e.response && e.response.status === 404) {
-                toast.error('User not found');
+                setErrorMessage('User not found');
             } else {
-                toast.error('Login failed');
+                setErrorMessage('Login failed');
             }
         }
     }    
@@ -121,6 +123,8 @@ export default function LoginPage() {
                                     {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
                                 </div>
                             </div>
+                            {/* Error message display */}
+                            {errorMessage && <div className="text-red-500 text-sm mt-2">{errorMessage}</div>}
                             <Button className="primary mt-4" type="submit">Login</Button>
                         </form>
                     </div>

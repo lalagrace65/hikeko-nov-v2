@@ -48,6 +48,10 @@ router.post('/login', async (req, res) => {
                 console.log('User account suspended');
                 return res.status(403).json('Account is suspended. Please contact support.');
             }
+            if (!userDoc.emailVerified) {
+                console.log('User email not verified');
+                return res.status(401).json('Email not verified. Please verify your email.');
+            }
         } else {
             console.log('Invalid role detected:', userDoc.role);
             return res.status(403).json('Invalid user role. Access denied.');

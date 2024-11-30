@@ -43,7 +43,7 @@ const UserSchema = new mongoose.Schema({
   mayorsPermitDocu: [{ type: String }],
   termsAccepted: { type: Boolean, default: false },
   status: { type: String, enum: ['Pending Verification', 'Approved', 'Rejected'], default: 'Pending Verification' },
-  emailVerified: { type: Boolean, default: true },
+  emailVerified: { type: Boolean, default: false },
 
   // Temporary password for first-time login
   temporaryPassword: { type: String, unique: true },

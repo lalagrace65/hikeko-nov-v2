@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import emailjs from "@emailjs/browser";
-import StyledInput from "@/components/icons/InputField";
 
 export default function RegisterPage() {
     const [formData, setFormData] = useState({
@@ -61,17 +60,17 @@ export default function RegisterPage() {
     //      calendarContainer?.className +=
     //          " bg-white p-4 border border-blue-gray-50 rounded-lg shadow-lg shadow-blue-gray-500/10 font-sans text-sm font-normal text-blue-gray-500 focus:outline-none break-words whitespace-normal";
 
-    //      calendarMonthNav?.className +=
-    //          " flex items-center justify-between mb-4 [&>div.flatpickr-month]:-translate-y-3";
+        // calendarMonthNav.className +=
+        //     " flex items-center justify-between mb-4 [&>div.flatpickr-month]:-translate-y-3";
 
-    //      calendarNextMonthNav?.className +=
-    //          " absolute !top-2.5 !right-1.5 h-6 w-6 bg-transparent hover:bg-blue-gray-50 !p-1 rounded-md transition-colors duration-300";
+        // calendarNextMonthNav.className +=
+        //     " absolute !top-2.5 !right-1.5 h-6 w-6 bg-transparent hover:bg-blue-gray-50 !p-1 rounded-md transition-colors duration-300";
 
-    //  calendarPrevMonthNav?.className +=
-    //          " absolute !top-2.5 !left-1.5 h-6 w-6 bg-transparent hover:bg-blue-gray-50 !p-1 rounded-md transition-colors duration-300";
+        // calendarPrevMonthNav.className +=
+        //     " absolute !top-2.5 !left-1.5 h-6 w-6 bg-transparent hover:bg-blue-gray-50 !p-1 rounded-md transition-colors duration-300";
 
-    //      calendarDaysContainer?.className +=
-    //          " [&_span.flatpickr-day]:!rounded-md [&_span.flatpickr-day.selected]:!bg-gray-900 [&_span.flatpickr-day.selected]:!border-gray-900";
+        // calendarDaysContainer.className +=
+        //     " [&_span.flatpickr-day]:!rounded-md [&_span.flatpickr-day.selected]:!bg-gray-900 [&_span.flatpickr-day.selected]:!border-gray-900";
 
         return () => datepicker.destroy(); // Cleanup on unmount
     }, []);
@@ -168,36 +167,63 @@ export default function RegisterPage() {
         return Object.keys(newErrors).length === 0; // Return true if no errors
     };
 
+
+    const sendVerificationEmail = async (user, token) => {
+        try {
+          const emailData = {
+            to_name: user.firstName, // Name for EmailJS
+            to_email: user.email, // Email for EmailJS
+            to_mobileNum: user.contactNo, // Mobile Number for EmailJS
+            to_address: user.address, // Address for EmailJS
+            verification_link: `${baseUrl}/verify-email?token=${token}`, // Verification link for EmailJS
+            to_dob: user.dateOfBirth, // Date of Birth for EmailJS
+          };
+      
+         await emailjs.send(
+            'service_yjbwkqk', // Email service ID
+            'template_lyrpfqj', // Email template ID
+            emailData, // Email data
+            'Dm5FV3SaKG6JVjSyM' // Email service API key
+          );
+      
+          console.log("Email sent successfully!", emailData);
+        } catch (error) {
+          console.error("Error sending email:", error);
+        }
+      };
+
     const registerUser = async (ev) => {
         ev.preventDefault();
 
         if (!validateForm()) return; // Stop submission if form is invalid
+        const sessionId = document.cookie 
 
         const submissionData = {
             ...formData,
-            role: "staff",
+            role: "user",
+            sessionId,
         };
         console.log("Preparing to submit:", submissionData);
 
-        const emailData = {
-            to_name: formData.firstName, // Name for EmailJS
-            to_email: formData.email, // Email for EmailJS
-            to_mobileNum: formData.contactNo, // Mobile Number for EmailJS
-            to_address: formData.address, // Address for EmailJS
-            to_dob: formData.dateOfBirth, // Date of Birth for EmailJS
-        };
-
         try {
-            console.log("Preparing to send email...");
-            //await emailjs.send('service_ehzzg2c', 'template_xc2nmxt', emailData, 'XczVijVc-NaoUCGic');
-            await emailjs.send('service_yjbwkqk', 'template_lyrpfqj', emailData, 'Dm5FV3SaKG6JVjSyM');
-            console.log("Email sent successfully!");
 
-            const signupResult = await axios.post(`${baseUrl}/register`, {
+            const response = await axios.post(`${baseUrl}/register`, {
                 ...formData,
-                role: "staff",
+                role: "user",
             });
-            console.log("Signup successful:", signupResult.data);
+            console.log("Signup successful:", response.data);
+
+             // Call sendVerificationEmail here
+            const user = response.data.user;
+            const token = response.data.token;
+            if (user && user.firstName) {
+                await sendVerificationEmail(user, token);
+              } else {
+                console.error("User object is undefined or does not contain the firstName property");
+              }
+            await sendVerificationEmail(user, token);
+
+
             toast.success("Registration Successful!");
 
             setFormData({
