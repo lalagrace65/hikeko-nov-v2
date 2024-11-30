@@ -28,7 +28,7 @@ function AdminCountCustomerBookings() {
   }, []);
 
   return (
-    <div className="overflow-x-auto border bg-white shadow-lg rounded-xl p-6">
+    <div className="overflow-x-auto border bg-white shadow-lg rounded-xl p-6 mt-12">
       <h2 className="text-xl mb-4">Top 5 Customers</h2>
       {bookings.length > 0 ? (
         <div>
