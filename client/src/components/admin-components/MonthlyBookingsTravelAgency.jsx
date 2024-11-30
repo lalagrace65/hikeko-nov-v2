@@ -38,7 +38,7 @@ const MonthlyBookingsTravelAgency = () => {
 
   return (
     <BarChart
-      width={1000}
+      width={700}
       height={300}
       data={data}
       margin={{
