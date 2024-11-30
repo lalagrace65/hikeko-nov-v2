@@ -9,6 +9,8 @@ import AdminRecentActivity from "@/components/admin-components/AdminRecentActivi
 import { UserContext } from "@/UserContext";
 import { baseUrl } from "@/Url";
 import AdminCountCustomerBookings from "@/components/admin-components/AdminCountCustomerBookings";
+import DailyBookingsTravelAgency from "@/components/admin-components/DailyBookingsTravelAgency";
+import YearlyBookingsTravelAgency from "@/components/admin-components/YearlyBookingTravelAgency";
 
 export default function AdminPage() {
   const { user, setUser } = useContext(UserContext);
@@ -132,7 +134,7 @@ export default function AdminPage() {
   }  
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-[150vh]">
       <MultiLevelSidebar />
       <div className="flex-1 p-6 sm:p-10">
         <div className="flex gap-2 items-center">
@@ -273,17 +275,40 @@ export default function AdminPage() {
                             </CardBody>
                         </Card>
                     </div>
-                    <div className="mt-4 flex flex-row space-x-4">
-                        <div className="flex flex-col w-2/3">
-                            <Typography variant="h4" className="flex mb-4">Monthly Bookings</Typography>
-                            <MonthlyBookingsTravelAgency />
-                        </div>
-                        <div className="flex w-1/3">
-                            <AdminRecentActivity adminId={adminId} />
-                        </div>
+                    <Typography variant="h6" className="mb-2 mt-4">Sales Report</Typography>
+                    <div className=" flex flex-row p-4 border mb-4">
+                      {/* Daily Bookings Section */}
+                      <div className="flex flex-col w-1/4">
+                        <Typography variant="h4" className="mb-4 ml-16">
+                          Daily Bookings
+                        </Typography>
+                        <DailyBookingsTravelAgency />
+                      </div>
+
+                      {/* Monthly Bookings Section */}
+                      <div className="flex flex-col w-1/2">
+                        <Typography variant="h4" className="mb-4 ml-16">
+                          Monthly Bookings
+                        </Typography>
+                        <MonthlyBookingsTravelAgency />
+                      </div>
+                      {/* Yearly Bookings Section */}
+                      <div className="flex flex-col w-1/3">
+                        <Typography variant="h4" className="mb-4 ml-16">
+                          Yearly Bookings
+                        </Typography>
+                        <YearlyBookingsTravelAgency />
+                      </div>
                     </div>
-                    <div>
-                      <AdminCountCustomerBookings />
+
+                    
+                    <div className="flex flex-row">
+                      <div className="flex w-1/2">
+                        <AdminCountCustomerBookings />
+                      </div>
+                      <div className="flex w-1/3">
+                          <AdminRecentActivity adminId={adminId} />
+                      </div>
                     </div>
                 </div>
             )}
