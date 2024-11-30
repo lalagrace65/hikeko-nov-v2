@@ -92,6 +92,7 @@ const ProfilePage = () => {
             toast.error('Failed to update profile');
         } finally {
             setIsSaving(false);
+            window.location.reload();
         }
     };
 
