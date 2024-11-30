@@ -175,13 +175,18 @@ export default function Header() {
                     {/* Dropdown menu for small screens */}
                     {hamburgerOpen && (
                         <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 border z-50 ">
-                            <Link to="/" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Home</Link>
-                            <Link to="/trails" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Tour & Packages</Link>
-                            <Link to="/forum" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Community</Link>
+                            <Link to="/" onClick={() => setHamburgerOpen(false)}
+                                className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Home</Link>
+                            <Link to="/trails" onClick={() => setHamburgerOpen(false)}
+                                className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Tour & Packages</Link>
+                            <Link to="/forum" onClick={() => setHamburgerOpen(false)}
+                                className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Community</Link>
                             {user && (
-                                <Link to="/book" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Bookings</Link>
+                                <Link to="/book" onClick={() => setHamburgerOpen(false)}
+                                    className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Bookings</Link>
                             )}
-                            <Link to="/about" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">About</Link>
+                            <Link to="/about" onClick={() => setHamburgerOpen(false)}
+                                className="block px-4 py-2 text-gray-700 hover:bg-gray-200">About</Link>
                             {!!user ? (
                                 <div>
                                     <Link to="/profile" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Profile</Link>
@@ -194,8 +199,10 @@ export default function Header() {
                                 </div>
                             ) : (
                                 <div>
-                                    <Link to="/login" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Login</Link>
-                                    <Link to="/register" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Register</Link>
+                                    <Link to="/login" onClick={() => setHamburgerOpen(false)}
+                                        className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Login</Link>
+                                    <Link to="/register" onClick={() => setHamburgerOpen(false)}
+                                        className="block px-4 py-2 text-gray-700 hover:bg-gray-200">Register</Link>
                                 </div>
                             )}
                         </div>
