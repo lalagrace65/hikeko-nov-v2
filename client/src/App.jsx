@@ -38,6 +38,9 @@ import Dashboard_Reports from "./pages/admin-page/Dashboard_Reports";
 import NotificationsPage from "./pages/forum-page/NotificationsPage";
 import TrackPageVisit from "./TrackPageVisit";
 import VerifyEmail from "./pages/VerifyEmail";
+import StaffDetails from "./pages/staff-page/StaffSettings";
+import StaffEventsPage from "./pages/staff-page/StaffEventsPage";
+import StaffCreateEventPage from "./pages/staff-page/StaffCreateEventPage";
 
 // Set default axios settings
 axios.defaults.baseURL = `${baseUrl}`;
@@ -74,13 +77,36 @@ function App() {
             <Route path="/profile" element={<ProfilePage />}/>
             <Route path="/book" element={<CustomerBookPage />}/>
             
-
             {/* Protect Admin Routes and Staff Routes*/}
             <Route 
               path="/staff-db" 
               element={
                 <ProtectRoute>
                   <Dashboard_StaffPage />
+                </ProtectRoute>
+              }
+            />
+            <Route 
+              path="/staff/Events" 
+              element={
+                <ProtectRoute>
+                  <StaffEventsPage />
+                </ProtectRoute>
+              }
+            />
+            <Route 
+              path="/staff/add-package" 
+              element={
+                <ProtectRoute>
+                  <StaffCreateEventPage />
+                </ProtectRoute>
+              }
+            />
+            <Route 
+              path="/staff/settings" 
+              element={
+                <ProtectRoute>
+                  <StaffDetails />
                 </ProtectRoute>
               }
             />
