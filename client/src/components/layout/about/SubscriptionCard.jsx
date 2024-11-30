@@ -53,7 +53,7 @@ return (
                     variant="h1"
                     className="mt-6 flex justify-center gap-1 text-7xl font-normal"
                 >
-                    <span className="mt-2 text-4xl">₱</span>0{" "}
+                    <span className="mt-2 text-4xl">₱</span>450{" "}
                     <span className="self-end text-4xl"></span>
                 </Typography>
             </CardHeader>
@@ -81,7 +81,7 @@ return (
                         <span className="rounded-full border border-white/20 bg-primary p-1 text-white">
                             <CheckIcon />
                         </span>
-                        <Typography className="font-normal">3 months free plan</Typography>
+                        <Typography className="font-normal">3 months plan</Typography>
                     </li>
                 </ul>
             </CardBody>
@@ -111,8 +111,7 @@ return (
                     variant="h1"
                     className="mt-6 flex justify-center gap-1 text-7xl font-normal"
                 >
-                    <span className="mt-2 text-4xl">₱</span>120{" "}
-                    <span className="self-end text-sm">/6 months</span>
+                    <span className="mt-2 text-4xl">₱</span>1,800{" "}
                 </Typography>
             </CardHeader>
             <CardBody className="p-0">
@@ -139,7 +138,7 @@ return (
                         <span className="rounded-full border border-white/20 bg-primary p-1 text-white">
                             <CheckIcon />
                         </span>
-                        <Typography className="font-normal whitespace-nowrap">2 Ads per month</Typography>
+                        <Typography className="font-normal whitespace-nowrap">6 months plan</Typography>
                     </li>
                 </ul>
             </CardBody>
