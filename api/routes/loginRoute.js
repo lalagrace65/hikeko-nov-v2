@@ -31,10 +31,6 @@ router.post('/login', async (req, res) => {
                 console.log('Admin account not approved');
                 return res.status(401).json('Account not approved. Please contact support.');
             }
-            if (!userDoc.emailVerified) {
-                console.log('Admin email not verified');
-                return res.status(401).json('Email not verified. Please verify your email.');
-            }
         } else if (userDoc.role === 'staff') {
             console.log('Staff role detected');
             // Add check for staff account suspension
