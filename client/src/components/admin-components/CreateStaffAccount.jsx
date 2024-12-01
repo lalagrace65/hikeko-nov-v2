@@ -19,6 +19,7 @@ export default function CreateStaffAccount() {
     const [error, setError] = useState('');  
     const [isPasswordGenerated, setIsPasswordGenerated] = useState(false);
     const [adminData, setAdminData] = useState(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const form = React.useRef();
     function inputHeader(text) {
         return (
@@ -90,9 +91,33 @@ export default function CreateStaffAccount() {
     async function addNewStaff(ev) {
         ev.preventDefault();
 
-        if (!validateForm()) return;
+        if (isSubmitting) return;  // Prevent further submission
+        setIsSubmitting(true);
 
-        const createStaffData = {
+        if (!validateForm()) {
+            setIsSubmitting(false);
+            return;
+        }
+
+    try {
+        // Fetch current staff count
+            const response = await axios.get(`${baseUrl}/getStaffCount`, { params: { adminId: adminData._id }});
+
+            // Log the response data to ensure it's being received correctly
+            console.log('Response data:', response.data);
+
+            const { staffCount, subscriptionPlan } = response.data;
+            const staffLimit = subscriptionPlan === 'Premium' ? 5 : 3;
+
+            // Check if the limit is reached
+            if (staffCount >= staffLimit) {
+                toast.error(
+                    `Staff account creation limit reached for the ${subscriptionPlan} plan.`
+                );
+                return;
+            }
+
+            const createStaffData = {
                 firstName,
                 lastName,
                 address,
@@ -100,12 +125,11 @@ export default function CreateStaffAccount() {
                 password,
                 contactNo,
                 suspended: false,
-                role 
-        };
+                role : 'staff',
+            };
+            const staffResponse = await axios.post(`${baseUrl}/create-staff`, createStaffData);
+            toast.success('Staff Account Created Successfully!');
 
-        try {
-            const response = await axios.post(`${baseUrl}/create-staff`, createStaffData);
-            console.log(response.data);
             // Prepare the email data
             const emailData = {
                 to_staffEmail: email,
@@ -116,8 +140,8 @@ export default function CreateStaffAccount() {
                 to_businessName: adminData.businessName,
                 to_agencyContact: adminData.businessContactNo,
                 to_businessEmail: adminData.email,
+                
             };    
-            console.log('Sending email with the following data:', emailData);
             const result  = await emailjs.send('service_yjbwkqk', 'template_a0hez62', emailData, 'Dm5FV3SaKG6JVjSyM');
             console.log('Email sent successfully', result);
             
@@ -127,14 +151,28 @@ export default function CreateStaffAccount() {
             setAddress('');
             setEmail('');
             setContactNo('');  
-            toast.success('Staff Account Created Successfully!'); 
+            setIsSubmitting(false);
         } catch (e) {
-            // Handle errors and provide feedback
-            if (e.response && e.response.data) {
-                toast.error(`Error: ${e.response.data.message}`);
-            } else {
-                toast.error('Staff Account Creation failed.');
-            }
+            setIsSubmitting(false);
+            toast.error('Staff Account Creation failed.');
+            
+            setFirstName('');
+            setLastName('');
+            setPassword('');
+            setAddress('');
+            setEmail('');
+            setContactNo('');
+            setError('');  // Clear any error messages
+            setIsPasswordGenerated(false);  // Reset password generation flag
+        } finally {
+            setIsSubmitting(false);
+            setFirstName('');
+            setLastName('');
+            setPassword('');
+            setAddress('');
+            setEmail('');
+            setContactNo('');
+            setError(''); 
         }
     }
 
@@ -236,7 +274,13 @@ export default function CreateStaffAccount() {
                             </button>
                         </div>
                         
-                        <button onClick={addNewStaff} className="w-full mt-4 p-2 bg-primary text-white rounded-2xl"> Create Account </button>
+                            <button 
+                                onClick={addNewStaff} 
+                                className="w-full mt-4 p-2 bg-primary text-white rounded-2xl" 
+                                disabled={isSubmitting}
+                            >
+                                {isSubmitting ? 'Creating...' : 'Create Account'}
+                            </button>
                     </div>
                 </div>
             </div>

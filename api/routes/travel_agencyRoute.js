@@ -7,20 +7,52 @@ const { bcryptSalt } = require('../middleware/auth');
 const { requireRole } = require('../middleware/auth');
 const { jwtSecret } = require('../middleware/auth');
 const Activity = require('../models/Activity');
+const Subscription = require('../models/Subscription');
 
 const router = express.Router();
 
-router.post('/create-staff', requireRole(['admin']), async(req, res) => {
-    console.log('Received request:', req.body); 
-    const { firstName, lastName, email, password, address, contactNo } = req.body;
+router.post('/create-staff', requireRole(['admin']), async (req, res) => {
+    console.log('Received request:', req.body); // Log the request body
 
-    const { token } = req.cookies;
+    const { firstName, lastName, email, password, address, contactNo } = req.body;
+    const { token } = req.cookies;  
 
     // Verify the JWT token to get the admin's user data
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-        if (err) return res.status(403).json({ message: 'Unauthorized' });
+        if (err) {
+            console.log('Token verification failed:', err);
+            return res.status(403).json({ message: 'Unauthorized' });
+        }
 
         try {
+            const admin = await User.findById(userData.id);
+            if (!admin) {
+                console.log('Admin not found');
+                return res.status(404).json({ message: "Admin not found" });
+            }
+
+            console.log('Admin data:', admin);
+
+            // Fetch subscription plan
+            const subscriptionPlan = admin.subscriptionId ? await Subscription.findById(admin.subscriptionId) : { plan: 'Basic' };
+            console.log('Admin subscription plan:', subscriptionPlan);
+
+            // Get staff count and staff limit based on the plan
+            const staffCount = await User.countDocuments({ adminId: userData.id, role: 'staff' });
+            console.log('Current staff count:', staffCount);
+
+            const staffLimit = subscriptionPlan.plan === 'Premium' ? 5 : 3;
+            console.log('Staff limit for current subscription plan:', staffLimit);
+
+            // Check if staff count exceeds the limit based on the plan
+            if (staffCount >= staffLimit) {
+                console.log('Staff limit reached for this plan');
+                return res.status(400).json({
+                    message: `Staff limit reached for the ${subscriptionPlan.plan} plan. Upgrade your plan to add more staff.`
+                });
+            }
+
+            // Hash the password and create the new staff user
             const hashedPassword = bcrypt.hashSync(password, bcryptSalt);
             const userDoc = await User.create({
                 firstName,
@@ -46,14 +78,52 @@ router.post('/create-staff', requireRole(['admin']), async(req, res) => {
             await activityLog.save();
             console.log('Activity logged successfully');
 
-            console.log('Created user:', userDoc);
             res.json(userDoc);
         } catch (e) {
-            console.error('Error creating staff:', e); 
+            console.error('Error creating staff:', e); // Log any errors during the staff creation process
             res.status(422).json(e);
         }
     });
 });
+
+// Get current staff count and limit based on subscription plan
+router.get('/getStaffCount', async (req, res) => {
+    console.log('Received staff count request');
+    try {
+        const { adminId } = req.query;
+        console.log('Fetching staff count for adminId:', adminId);
+
+        const admin = await User.findById(adminId);
+        if (!admin) {
+            console.log('Admin not found');
+            return res.status(404).json({ message: "Admin not found" });
+        }
+
+        console.log('Admin data:', admin);
+
+        // Fetch subscription plan
+        const subscriptionPlan = admin.subscriptionId ? await Subscription.findById(admin.subscriptionId) : { plan: 'Basic' };
+        console.log('Admin subscription plan:', subscriptionPlan);
+
+        // Get staff count and staff limit based on the plan
+        const staffCount = await User.countDocuments({ adminId: adminId, role: 'staff' });
+        console.log('Current staff count:', staffCount);
+
+        const staffLimit = subscriptionPlan.plan === 'Premium' ? 5 : 3;
+        console.log('Staff limit for current subscription plan:', staffLimit);
+
+        res.status(200).json({
+            staffCount,
+            subscriptionPlan: subscriptionPlan.plan,
+            staffLimit,  // Include the limit for staff
+        });
+    } catch (error) {
+        console.error('Error fetching staff count:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+
 
 router.get('/create-staff', requireRole(['admin', 'staff']), async (req, res) => {
     const { token } = req.cookies;
