@@ -7,6 +7,8 @@ import 'react-phone-number-input/style.css';
 import axios from 'axios';
 import {Button} from "@material-tailwind/react";
 import toast from 'react-hot-toast';
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+
 
 export default function AdminDetails() {
   const [adminDetails, setAdminDetails] = useState(null);
@@ -17,6 +19,9 @@ export default function AdminDetails() {
   const [error, setError] = useState(''); // Define error state here
   const { updateUserRequiresPasswordChange } = useContext(UserContext);
   const { user, ready  } = useContext(UserContext);
+
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+
 
   const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -250,15 +255,24 @@ export default function AdminDetails() {
                 value={adminDetails.email}
                 disabled
               />
-              
-            {preInput('Set new password')}
-            <input
-              type="password"
-              className="w-full p-2 border border-gray-300 rounded mt-2"
-              placeholder="Enter new password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
+
+            <div className="relative mt-4">
+              {preInput('Set new password')}
+              <input
+                type={showPassword ? "text" : "password"}
+                className="w-full p-2 border border-gray-300 rounded mt-2"
+                placeholder="Enter new password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+              <div
+                  className="absolute bottom-3 right-3 cursor-pointer text-gray-600"
+                  onClick={() => setShowPassword(!showPassword)}
+              >
+                  {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
+              </div>
+            </div>  
+            
             {passwordError && <p className="text-red-500 text-sm">{passwordError}</p>}
             {/* Button to update password */}
             {/* Success or error message */}
