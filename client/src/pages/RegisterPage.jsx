@@ -79,6 +79,20 @@ export default function RegisterPage() {
     const handleChange = (field, value) => {
         setFormData({ ...formData, [field]: value.trimStart() });
 
+        // Check for empty fields and set errors
+        if (!value.trim()) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                [field]: `${field.charAt(0).toUpperCase() + field.slice(1)} is required.`,
+            }));
+        } else {
+            // Clear error if input is valid
+            setErrors((prevErrors) => {
+                const { [field]: _, ...rest } = prevErrors; // Remove specific error
+                return rest;
+            });
+        }
+
         // Validate password on input
         if (field === "password") {
             setPasswordValidation({
