@@ -40,7 +40,6 @@ import TrackPageVisit from "./TrackPageVisit";
 import VerifyEmail from "./pages/VerifyEmail";
 import StaffDetails from "./pages/staff-page/StaffSettings";
 import StaffEventsPage from "./pages/staff-page/StaffEventsPage";
-import StaffCreateEventPage from "./pages/staff-page/StaffCreateEventPage";
 
 // Set default axios settings
 axios.defaults.baseURL = `${baseUrl}`;
@@ -95,14 +94,7 @@ function App() {
                 </ProtectRoute>
               }
             />
-            <Route 
-              path="/staff/add-package" 
-              element={
-                <ProtectRoute>
-                  <StaffCreateEventPage />
-                </ProtectRoute>
-              }
-            />
+            
             <Route 
               path="/staff/settings" 
               element={
