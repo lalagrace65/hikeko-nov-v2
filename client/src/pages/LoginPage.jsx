@@ -107,7 +107,7 @@ export default function LoginPage() {
                                     label="Email"
                                     value={email}
                                     onChange={ev => setEmail(ev.target.value)}
-                                    required
+                                    
                                 />
                             </div>
                             <div className="relative mt-4">
@@ -116,7 +116,7 @@ export default function LoginPage() {
                                     label="Password"
                                     value={password}
                                     onChange={ev => setPassword(ev.target.value)}
-                                    required
+                                    
                                 />
                                 <div
                                     className="absolute top-3 right-3 cursor-pointer text-gray-600"
