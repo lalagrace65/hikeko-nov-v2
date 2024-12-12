@@ -51,6 +51,7 @@ function App() {
     <UserContextProvider>
       <UserLocationProvider>
         <Toaster />
+        
         <TrackPageVisit />
         <Routes>
           <Route path="/" element={<Layout />}>
