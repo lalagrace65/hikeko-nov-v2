@@ -147,6 +147,38 @@ function CustomerPackageDetails() {
                         <div>
                             <h4 className="text-lg mb-2"><strong>Payment Details:</strong></h4>
                             <p>{packageDetail.paymentOptions || 'No payment details provided.'}</p>
+                            {/* Carousel for QR Photos */}
+                            <div className="mt-4">
+                                {packageDetail.qrPhotos && packageDetail.qrPhotos.length > 0 ? (
+                                    <Carousel
+                                        className="rounded-xl mt-4"
+                                        navigation={({ setActiveIndex, activeIndex, length }) => (
+                                            <div className="absolute bottom-2 left-2/4 z-50 flex -translate-x-2/4 gap-2">
+                                                {new Array(length).fill("").map((_, i) => (
+                                                    <span
+                                                        key={i}
+                                                        className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
+                                                            activeIndex === i ? "w-8 bg-blue-500" : "w-4 bg-blue-200"
+                                                        }`}
+                                                        onClick={() => setActiveIndex(i)}
+                                                    />
+                                                ))}
+                                            </div>
+                                        )}
+                                    >
+                                        {packageDetail.qrPhotos.map((qrImage, idx) => (
+                                            <img
+                                                key={idx}
+                                                src={qrImage}
+                                                alt={`QR Photo ${idx + 1}`}
+                                                className="w-full h-[500px] object-cover rounded-lg"
+                                            />
+                                        ))}
+                                    </Carousel>
+                                ) : (
+                                    <p className="mt-4 text-gray-500">No QR photos available for this package.</p>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -175,7 +207,7 @@ function CustomerPackageDetails() {
                                     key={idx}
                                     src={image}
                                     alt={`Package image ${idx + 1}`}
-                                    className="w-full h-64 object-cover rounded"
+                                    className="w-full h-[450px]  object-cover rounded"
                                 />
                             ))}
                         </Carousel>
