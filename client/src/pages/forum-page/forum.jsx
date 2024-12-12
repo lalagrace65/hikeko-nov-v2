@@ -44,16 +44,23 @@ export default function Forum() {
     fetchPosts();
   }, []);
 
-//Sortable image upload
-async function uploadForumImages(ev){
+//Media Upload
+async function uploadForumMedia(ev){
   const files = ev.target?.files;
   if (files?.length > 0) {
     const file = files[0];
-    if (file.size > 12 * 1024 * 1024) { // 12MB limit
-      setImageError("File size exceeds the 12MB limit.");
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'video/mov', 'video/avi'];
+    
+    if (!allowedTypes.includes(file.type)) {
+      setImageError("Invalid file type. Please upload an image or video.");
       return;
-    } else {
-      setImageError(""); // Clear error message if file size is acceptable
+    }
+
+    // Check file size (12MB limit)
+    const maxSize = 12 * 1024 * 1024; // 12MB in bytes
+    if (file.size > maxSize) {
+      setImageError("File size exceeds 12MB. Please upload a smaller file.");
+      return;
     }
 
       setIsUploading(true);
@@ -67,7 +74,7 @@ async function uploadForumImages(ev){
               return [...oldImages, ...res.data.links];
           });
       } catch (error) {
-          toast.error("Failed to upload image.");
+          toast.error("Failed to upload media.");
 
       } finally {
           setIsUploading(false);
@@ -209,14 +216,13 @@ const handleContentChange = (e) => {
             <Input 
               label="Post Title" 
               value={title} 
-              onChange={(e) => setTitle(e.target.value)} required 
+              onChange={(e) => setTitle(e.target.value)} 
               />
             <div className="relative">
               <Textarea 
                 label="Post Content" 
                 value={content} 
                 onChange={handleContentChange} 
-                required 
                 maxLength={MAX_CONTENT_LENGTH} // Enforce character limit
                 helpertext={`${content.length}/${MAX_CONTENT_LENGTH} characters`}
                 className="w-full"
@@ -231,13 +237,13 @@ const handleContentChange = (e) => {
           {/* Upload Photo */}
           <div>
             <Typography variant="h4" className="my-2">
-                Upload Photo
+                Upload Media
             </Typography>
             {/* File Upload */}
             <input
                 type="file" 
-                onChange={uploadForumImages}
-                accept="image/*"  
+                onChange={uploadForumMedia}
+                accept="image/*,video/*"  
                 id="file-upload"
                 className="hidden " // Hide the actual file input
             />
@@ -256,18 +262,26 @@ const handleContentChange = (e) => {
             {/* Carousel */}
               {forumImages.length > 0 ? (
                 <Carousel className="mt-4 rounded-xl h-64 overflow-hidden">
-                  {forumImages.map((image, index) => (
-                    <img
-                      key={index}
-                      src={image}
-                      alt={`Uploaded image ${index + 1}`}
-                      className="h-full w-full object-contain"
-                    />
-                  ))}
+                  {forumImages.map((media, index) => (
+                    <div key={index} className="h-full w-full flex justify-center items-center">
+                      {media.endsWith('.mp4') || media.endsWith('.mov') || media.endsWith('.avi') ? (
+                        <video controls className="h-full w-full object-contain">
+                          <source src={media} type="video/mp4" />
+                          Your browser does not support the video tag.
+                        </video>
+                      ) : (
+                        <img
+                          src={media}
+                          alt={`Uploaded media ${index + 1}`}
+                          className="h-full w-full object-contain"
+                        />
+                      )}
+                    </div>
+                  ))}         
                 </Carousel>
               ) : (
                 <Typography className="mt-4 text-gray-500 text-center">
-                  No images uploaded yet.
+                  No media uploaded yet.
                 </Typography>
               )}
           </div>
@@ -307,15 +321,24 @@ const handleContentChange = (e) => {
                   {/* Uploaded Images Carousel */}
                   {post.uploadPic && post.uploadPic.length > 0 && (
                     <Carousel className="rounded-xl h-64 lg:h-[780px]">
-                      {post.uploadPic.map((image, index) => (
-                        <img
-                          key={index}
-                          src={image}
-                          alt={`Post image ${index + 1}`}
-                          className="h-full w-full object-contain"
-                        />
-                      ))}
-                    </Carousel>
+                    {post.uploadPic.map((media, index) => (
+                      <div key={index} className="h-full w-full flex justify-center items-center">
+                        {/* Check if the media is a video or image */}
+                        {media.endsWith('.mp4') || media.endsWith('.mov') || media.endsWith('.avi') ? (
+                          <video controls className="h-full w-full object-contain">
+                            <source src={media} type="video/mp4" />
+                            Your browser does not support the video tag.
+                          </video>
+                        ) : (
+                          <img
+                            src={media}
+                            alt={`Uploaded media ${index + 1}`}
+                            className="h-full w-full object-contain"
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </Carousel>
                   )}
                 </div>
 
