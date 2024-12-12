@@ -15,6 +15,7 @@ const packageSchema = mongoose.Schema({
     pickupLocations: [{type: String, required: false}],
     price: {type: String, required: true},
     paymentOptions: {type: String, required: true},
+    qrPhotos: [{type: String, required: false}],
     extraInfo: {type: String, required: false},
     dpPolicy: {type: String, required: false},
     coordinatorName: {type: String, required: true},   

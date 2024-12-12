@@ -32,7 +32,9 @@ export default function PackageForm() {
     const [dpPolicy, setDpPolicy] = useState('');
     const [selectedDate, setSelectedDate] = useState(null); 
     const [packageImages, setPackageImages] = useState([]);
-    const [isUploading, setIsUploading] = useState(false);
+    const [qrPhotos, setQrPhotos] = useState([]);
+    const [isUploadingPackage, setIsUploadingPackage] = useState(false);
+    const [isUploadingQR, setIsUploadingQR] = useState(false);
 
     // Error states
     const [errors, setErrors] = useState({
@@ -208,6 +210,7 @@ export default function PackageForm() {
                 date: formattedDate,
                 dateCreated: dateCreated,
                 packageImages: packageImages,
+                qrPhotos: qrPhotos,
             }, { withCredentials: true });
 
             console.log("Package creation response:", response);
@@ -229,6 +232,7 @@ export default function PackageForm() {
             setSelectedDate(null);
             setSelectedTrail(''); 
             setPackageImages([]);
+            setQrPhotos([]);
         } catch (err) {
             toast.error('Failed to post package.');
             console.error('Error posting package:', err);     
@@ -248,12 +252,19 @@ export default function PackageForm() {
         fetchTrails();
     }, []);
 
-    //Sortable image upload
-    async function uploadPackageImages(ev){
+    // Generalized image upload function
+    async function handleImageUpload(ev, uploadType){
         const files = ev.target?.files;
         if(files?.length > 0){
             console.log("Files selected for upload:", files);
-            setIsUploading(true);
+            // Set loading state based on the upload type
+        if (uploadType === 'PackageImages') {
+            setIsUploadingPackage(true);
+        } else if (uploadType === 'QRPhotos') {
+            setIsUploadingQR(true);
+        }
+
+
             const data = new FormData();
             for (const file of files){
                 data.append('file', file);
@@ -262,14 +273,21 @@ export default function PackageForm() {
                 console.log("Sending files to the server...");
                 const res = await axios.post('/api/upload', data);
                 console.log("Upload response:", res);
-                setPackageImages(oldImages => {
-                    return [...oldImages, ...res.data.links];
-                });
+
+               // Update the state based on the upload type
+                if (uploadType === 'PackageImages') {
+                    setPackageImages((oldImages) => [...oldImages, ...res.data.links]);
+                } else if (uploadType === 'QRPhotos') {
+                    setQrPhotos((oldPhotos) => [...oldPhotos, ...res.data.links]);
+                }
+                toast.success(`${uploadType} uploaded successfully.`);
+
             } catch (error) {
                 toast.error("Failed to upload image.");
 
             } finally {
-                setIsUploading(false);
+                setIsUploadingPackage(false);
+                setIsUploadingQR(false);
             }
         }
     }
@@ -413,14 +431,14 @@ export default function PackageForm() {
                                 </Typography>
                                 <input
                                     type="file" 
-                                    onChange={uploadPackageImages}
+                                    onChange={(ev) => handleImageUpload(ev, 'PackageImages')}
                                     accept="image/*"  
-                                    id="file-upload"
+                                    id="package-upload"
                                     className="hidden " // Hide the actual file input
                                 />
-                                <label htmlFor="file-upload" className="flex items-center w-1/2 px-4 py-2 border border-gray-300 text-black rounded-2xl cursor-pointer">
+                                <label htmlFor="package-upload" className="flex items-center w-1/2 px-4 py-2 border border-gray-300 text-black rounded-2xl cursor-pointer">
                                     <FiUpload className='w-5 h-5 mr-4' />
-                                    <span>{isUploading ? <Spinner size="sm" /> : "Upload Package Images"}</span>
+                                    <span>{isUploadingPackage ? <Spinner size="sm" /> : "Upload Package Images"}</span>
                                 </label>
 
                                 <ReactSortable
@@ -509,6 +527,48 @@ export default function PackageForm() {
                             />
                             {errors.paymentOptions && <p className="text-red-500 text-sm">{errors.paymentOptions}</p>}
                         </div>
+                        {/* Upload QR Photo */}
+                            <div className="mt-6">
+                                <Typography variant="h4" className="my-2">
+                                    Upload QR Photo
+                                </Typography>
+                                
+                                <input
+                                    type="file" 
+                                    onChange={(ev) => handleImageUpload(ev, 'QRPhotos')}
+                                    accept="image/*"  
+                                    id="qr-upload"
+                                    className="hidden " // Hide the actual file input
+                                />
+                                <label htmlFor="qr-upload" className="flex items-center w-1/2 px-4 py-2 border border-gray-300 text-black rounded-2xl cursor-pointer">
+                                    <FiUpload className='w-5 h-5 mr-4' />
+                                    <span>{isUploadingQR ? <Spinner size="sm" /> : "Upload QR Photo"}</span>
+                                </label>
+
+                                <ReactSortable
+                                    list={qrPhotos}
+                                    className="flex flex-wrap w-full mt-4"
+                                    setList={setQrPhotos}>
+                                    {!!qrPhotos?.length && qrPhotos.map(link => {
+                                        return(
+                                            <div key={link} className=" w-36 h-36 mr-2 mt-2 relative group">
+                                                <img src ={link} alt="" className="w-full h-full object-cover rounded-lg"/>
+                                                {/* Delete Button */}
+                                                <button
+                                                    onClick={() =>
+                                                        setQrPhotos((prev) =>
+                                                            prev.filter((photo) => photo !== link)
+                                                        )
+                                                    }
+                                                    className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                                >
+                                                    ×
+                                                </button>
+                                            </div>
+                                        );
+                                    })}
+                                </ReactSortable>
+                            </div>
                     </div>
                 </div>
                 <button className="bg-orange-300 w-full lg:w-[1000px] p-3  mt-4 text-white rounded-full hover:shadow-xl transition-all duration-300 ease-in-out" onClick={addNewPackage}>Save</button>

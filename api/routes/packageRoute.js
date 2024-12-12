@@ -29,7 +29,8 @@ router.post('/packages', requireRole(['admin', 'staff']), (req, res) => {
         maxGuests, 
         date, 
         dateCreated,
-        packageImages
+        packageImages,
+        qrPhotos,
     } = req.body;
 
     // Check for required fields
@@ -79,6 +80,7 @@ router.post('/packages', requireRole(['admin', 'staff']), (req, res) => {
                 date: new Date(date), 
                 dateCreated: new Date(dateCreated), // Save the timestamp
                 packageImages,
+                qrPhotos,
                 creator: `${userData.firstName} ${userData.lastName}`, // Full name of creator
                 createdBy: staffId,  // Staff ID who created the package (if staff)
                 createdByAdmin: adminId,  // Admin ID who oversees the staff
