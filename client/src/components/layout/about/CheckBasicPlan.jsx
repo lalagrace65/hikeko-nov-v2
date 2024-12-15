@@ -23,11 +23,45 @@ export default function CheckBasicPlan() {
     const navigate = useNavigate();
     const [isTermsChecked, setIsTermsChecked] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-
+    const [isUploading, setIsUploading] = useState(false);
+    const [formData, setFormData] = useState({
+        proof: { link: '', name: '' },
+    });
     const handleCheckboxChange = () => {
         setIsTermsChecked(prev => !prev);
     };
-
+    const handleFileChange = async (ev, type) => {
+        const files = ev.target.files;
+        if (files?.length === 1) {
+            const file = files[0]; // Get the selected file
+            const data = new FormData();
+            data.append('file', file);
+  
+            setIsUploading(true);
+            try {
+                const response = await axios.post('/api/upload', data, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+  
+                // Update the appropriate state based on the type
+                const link = response.data.links;  // This will be the URL of the uploaded file
+                setFormData(prev => ({
+                    ...prev,
+                    [type]: { link, name: file.name }
+                }));
+  
+                // Show success toast
+                toast.success('Upload complete');
+            } catch (error) {
+                console.error('Upload failed:', error);
+                toast.error('Upload failed');
+            } finally {
+                setIsUploading(false);
+            }
+        }
+    };
     const handleSubmit = async (event) => {
         event.preventDefault();
         
@@ -100,7 +134,29 @@ export default function CheckBasicPlan() {
                         </div>
 
                         <div className="mt-4">
-                           
+                            <Input 
+                                id="proof" 
+                                type="file" 
+                                onChange={(ev) => handleFileChange(ev, 'proof')} 
+                                accept="image/*" 
+                                label="Upload Proof" 
+                            />
+                            {isUploading ? (
+                                <div className="flex justify-center items-center mt-4">
+                                    <Spinner className="text-blue-500" />
+                                </div>
+                            ) : formData.proof.link ? (
+                                <div className="mt-4">
+                                    <Typography className="text-green-500 text-sm">
+                                        Uploaded Proof:
+                                    </Typography>
+                                    <img 
+                                        src={formData.proof.link} 
+                                        alt="Uploaded Proof" 
+                                        className="mt-2 max-w-full h-[200px] object-cover"
+                                    />
+                                </div>
+                            ) : null}
                         </div>
 
                         <div className="mt-4 flex items-center">

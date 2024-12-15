@@ -53,7 +53,7 @@ return (
                     variant="h1"
                     className="mt-6 flex justify-center gap-1 text-7xl font-normal"
                 >
-                    <span className="mt-2 text-4xl">₱</span>450{" "}
+                    <span className="mt-2 text-4xl">₱</span>150{" "}
                     <span className="self-end text-4xl"></span>
                 </Typography>
             </CardHeader>
@@ -81,7 +81,7 @@ return (
                         <span className="rounded-full border border-white/20 bg-primary p-1 text-white">
                             <CheckIcon />
                         </span>
-                        <Typography className="font-normal">3 months plan</Typography>
+                        <Typography className="font-normal">1 month plan</Typography>
                     </li>
                 </ul>
             </CardBody>
@@ -138,7 +138,7 @@ return (
                         <span className="rounded-full border border-white/20 bg-primary p-1 text-white">
                             <CheckIcon />
                         </span>
-                        <Typography className="font-normal whitespace-nowrap">6 months plan</Typography>
+                        <Typography className="font-normal whitespace-nowrap">1 year plan</Typography>
                     </li>
                 </ul>
             </CardBody>
@@ -156,6 +156,5 @@ return (
         </Card>
     </div>
 );
-
 
 }

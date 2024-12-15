@@ -107,6 +107,7 @@ export default function UploadProofSubscription() {
         }
     };
 
+
     // Scroll to top when this component mounts
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -127,8 +128,16 @@ export default function UploadProofSubscription() {
                             Hikeko Premium Plan Subscription
                         </Typography>
                         <Typography>
-                            Lorem ipsum odor amet, consectetuer adipiscing elit.
+                            Join the Premium Plan today and start exploring with exclusive content and discounts tailored for adventurers like you!
                         </Typography>
+                        <div>
+                            With the Premium Plan, enjoy:
+                            <ul className="mt-2 list-disc list-inside">
+                                <li>Access to curated trail guides</li>
+                                <li>Regular updates on new trails and events</li>
+                                <li>Discounts on selected tours and gear</li>
+                            </ul>
+                        </div>
 
                         <div className="mt-4">
                             <Input 
@@ -155,6 +164,7 @@ export default function UploadProofSubscription() {
                                 </div>
                             ) : null}
                         </div>
+                        
 
                         <div className="mt-4 flex items-center">
                             <Checkbox 
@@ -171,15 +181,11 @@ export default function UploadProofSubscription() {
                     </CardBody>
                     <CardFooter className="pt-0">
                         <Button 
-                            disabled={isUploading || !isTermsChecked} 
+                            disabled={!stripe || isProcessingPayment || isUploading || !isTermsChecked}
                             className="w-full bg-primary"
-                            onClick={handleSubmit}
+                            onClick={handlePayment}
                         >
-                            {isUploading ? (
-                                <span className="loader"></span>  // You can use a spinner or animation here
-                            ) : (
-                                'Submit'
-                            )}
+                            {isProcessingPayment ? <Spinner /> : 'Pay & Submit'}
                         </Button>
                     </CardFooter>
                 </Card>
@@ -187,16 +193,57 @@ export default function UploadProofSubscription() {
 
             {/* Modal for Terms and Conditions */}
             <Dialog open={isModalOpen} handler={() => setIsModalOpen(false)}>
-                <DialogHeader>Terms and Conditions</DialogHeader>
-                <DialogBody>
-                    <Typography>
-                        {/* Terms and Conditions content here */}
-                        By proceeding, you agree to the terms and conditions of our service.
+            <DialogBody style={{ maxHeight: '400px', overflowY: 'auto', padding: '16px' }}>
+                <Typography variant="h5" color="blue-gray">
+                    Join the Premium Plan on Hikeko
+                </Typography>
+
+                <Typography variant="h6" className="mt-4">
+                    Are you ready to unlock exclusive trail guides, exciting updates, and special discounts? 
+                    Join the <strong>Basic Plan</strong> today and embark on your next adventure with all the benefits Hikeko has to offer.
+                </Typography>
+
+                <div className="mt-4">
+                    <Typography variant="h6" color="blue-gray">
+                    <strong>With the Premium Plan, you get:</strong>
                     </Typography>
-                </DialogBody>
+                    <ul className="mt-2 list-disc list-inside">
+                        <li><strong>Exclusive Access</strong> to curated trail guides</li>
+                        <li><strong>Regular Updates</strong> on new trails, events, and tours</li>
+                        <li><strong>Discounts</strong> on selected tours and adventure gear</li>
+                    </ul>
+                </div>
+
+                <div className="mt-6">
+                    <Typography variant="h6" color="blue-gray">
+                    <strong>Terms of Service (Short Summary)</strong>
+                    </Typography>
+                    <ul className="mt-2 list-disc list-inside">
+                        <li><strong>Subscription Period</strong>: You will be charged <strong>anually</strong> based on your selected plan.</li>
+                        <li><strong>Cancellation</strong>: You can cancel anytime, and your access will continue until the end of the billing cycle.</li>
+                        <li><strong>Renewal</strong>: Your subscription will automatically renew unless canceled prior to the renewal date.</li>
+                        <li><strong>Refunds</strong>: No refunds will be issued after the renewal period starts.</li>
+                    </ul>
+                </div>
+
+                <div className="mt-6">
+                    <Typography variant="h6" color="blue-gray">
+                    <strong>How It Works</strong>
+                    </Typography>
+                    <Typography variant="h6" className="mt-2">
+                    By confirming, you agree to subscribe to the Premium Plan, which includes the benefits listed above. You will have full access to exclusive content and discounts tailored for adventurers like you.
+                    </Typography>
+                </div>
+
+                <div className="mt-6">
+                    <Typography variant="h6" className="text-center">
+                    By joining, you agree to the <strong>Terms of Service</strong> and <strong>Privacy Policy</strong> of Hikeko.
+                    </Typography>
+                </div>
+            </DialogBody>
                 <DialogFooter>
                     <Button
-                        color="red"
+                        className='bg-primary text-white border-none'
                         onClick={() => setIsModalOpen(false)}
                     >
                         Close
